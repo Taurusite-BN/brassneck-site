@@ -16,7 +16,30 @@
 </head>
 <body>
 
-  <canvas id="field" aria-hidden="true"></canvas>
+  <div id="gate">
+  <form class="gate-card" id="gate-form" novalidate>
+    <span class="gate-mark">
+          <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <g transform="translate(3,7)">
+          <path d="M52 29A23 23 0 1 0 59 64" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+          <path d="M50 21C63 21 71 16 82 7 78.5 20 78.5 39 82 52 71 43 62 36 50 36Z" fill="currentColor"/>
+        </g>
+      </svg>
+      <span><b>Brassneck</b><i>STUDIO</i></span>
+    </span>
+    <span class="gate-plate">In construction</span>
+    <p class="gate-line">This preview is for the studio and the people reviewing it. It is unfinished, and it is not public yet.</p>
+    <label class="gate-field">
+      <span class="gate-label">Password</span>
+      <input type="password" id="gate-input" name="preview" autocomplete="current-password" autocapitalize="off" spellcheck="false">
+    </label>
+    <button class="gate-go" type="submit">Enter</button>
+    <p class="gate-error" id="gate-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<script>try{if(sessionStorage.getItem("bn-preview")==="open"){document.documentElement.classList.add("is-unlocked");}}catch(e){}</script>
+
+<canvas id="field" aria-hidden="true"></canvas>
 
   <!-- ======================= HOME (inside the camera) ======================= -->
   <div id="camera">
@@ -32,7 +55,7 @@
           <span><b>Brassneck</b><i>STUDIO</i></span>
         </button>
         <nav class="nav">
-          <button type="button" data-go="work">Work</button>
+          <button type="button" data-go="websites">Websites</button>
           <button type="button" data-go="games">Games</button>
         </nav>
       </header>
@@ -50,8 +73,8 @@
 
       <div class="stage">
 
-        <button class="portal-btn" type="button" data-go="work">
-          <span class="door" data-side="work" id="door-work">
+        <button class="portal-btn" type="button" data-go="websites">
+          <span class="door" data-side="websites" id="door-websites">
             <span class="contact"></span>
             <span class="architrave"></span>
             <span class="aperture">
@@ -61,7 +84,7 @@
             <span class="leaf-wrap">
               <span class="leaf-front">
                 <span class="panel upper"></span>
-                <span class="rail"><span class="nameplate">Work</span></span>
+                <span class="rail"><span class="nameplate">Websites</span></span>
                 <span class="panel lower"></span>
                 <span class="lever"></span>
                 <span class="leaf-shade"></span>
@@ -73,7 +96,7 @@
             <span class="sill"></span>
           </span>
           <span class="caption">
-            <span class="cap-title">Work</span>
+            <span class="cap-title">Websites</span>
             <span class="cap-line">Sites that earn their keep.</span>
           </span>
         </button>
@@ -118,7 +141,7 @@
   </div>
 
   <!-- ======================= WORK ======================= -->
-  <div class="page" id="page-work">
+  <div class="page" id="page-websites">
     <div class="shell">
       <header class="masthead">
         <button class="wordmark" type="button" data-go="home">
@@ -137,7 +160,7 @@
       </header>
 
       <div class="page-head">
-        <p class="eyebrow">Work</p>
+        <p class="eyebrow">Websites</p>
         <h1>Websites that earn their keep.</h1>
         <p class="lede">Every project here is written up the same way, and it ends with what actually changed afterwards. That last part is the one most freelance sites leave out.</p>
       </div>
@@ -145,74 +168,47 @@
       <section class="band">
         <h2 class="band-title">Selected projects</h2>
         <div class="cases">
-          <article class="case is-ready">
-            <span class="idx">01</span>
-            <div>
-              <h3>Project one</h3>
-              <p class="status">Template filled — pending real client sign-off</p>
-              <ul class="steps">
-                <li><b>Who</b><span class="want">Client name, trade, size.</span></li>
-                <li><b>The problem</b><span class="want">What was costing them — in their words, not yours.</span></li>
-                <li><b>What we did</b><span class="want">Two or three sentences. Decisions, not features.</span></li>
-                <li class="key"><b>What happened</b><span class="want">Enquiries, bookings, time saved — with a number and a period.</span></li>
-                <li><b>Built with</b><span class="want">Astro, plain CSS, Cloudflare Pages.</span></li>
-                <li><b>They said</b><span class="want">One sentence, attributed.</span></li>
-              </ul>
-            </div>
-          </article>
-          <article class="case">
-            <span class="idx">02</span>
-            <div>
-              <h3>Project two</h3>
-              <p class="status">Drafting — waiting on outcome numbers</p>
-              <ul class="steps">
-                <li><b>Who</b><span class="want">Written.</span></li>
-                <li><b>The problem</b><span class="want">Written.</span></li>
-                <li><b>What we did</b><span class="want">Written.</span></li>
-                <li class="key"><b>What happened</b><span class="want">Blocked — email the client and ask what changed.</span></li>
-                <li><b>Built with</b><span class="want">Written.</span></li>
-                <li><b>They said</b><span class="want">Not asked for yet.</span></li>
-              </ul>
-            </div>
-          </article>
-          <article class="case">
-            <span class="idx">03</span>
-            <div>
-              <h3>Project three</h3>
-              <p class="status">Empty — pick the third project</p>
-              <ul class="steps">
-                <li><b>Who</b><span class="want">—</span></li>
-                <li class="key"><b>What happened</b><span class="want">Choose the project with the best outcome, not the prettiest design.</span></li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </section>
+        <article class="case is-ready">
+          <span class="idx">01</span>
+          <div>
+            <h3>Ember8 <span class="host">ember8.nl</span></h3>
+            <p class="status">Live — first large project</p>
+            <ul class="steps">
+              <li><b>Who</b><span>Trauma release therapy and breathwork coaching, based in the Netherlands. Works with individuals and with teams inside organisations.</span></li>
+              <li><b>What it needed</b><span>To be found and read in two languages, to get people as far as booking a first session, and to carry the disclaimers a health practice has to carry without those pages feeling like a warning.</span></li>
+              <li><b>What I built</b><span>A hand-written static site, no CMS to be taught. Every page in Dutch and English, a booking route, and the legal set — terms, medical disclaimer, privacy. Umami for analytics.</span></li>
+              <li class="key"><b>What happened</b><span class="want">Umami has been recording since launch. Pull bookings and enquiries for the first six months and this line writes itself.</span></li>
+              <li><b>Built with</b><span>Plain HTML, CSS and JavaScript. No framework.</span></li>
+              <li><b>They said</b><span class="want">Worth asking for one sentence, attributed.</span></li>
+            </ul>
+          </div>
+        </article>
 
-      <section class="band">
-        <h2 class="band-title">What I do</h2>
-        <div class="three">
-          <div><h3>Web design</h3><p>Layout, type and structure for small businesses who need to be found and believed.</p></div>
-          <div><h3>Web development</h3><p>Fast static sites — Astro, plain CSS, deployed on Cloudflare Pages. No CMS you have to be taught.</p></div>
-          <div><h3>Game development</h3><p>The other half of the studio. Behind the second door.</p></div>
-        </div>
-      </section>
+        <article class="case">
+          <span class="idx">02</span>
+          <div>
+            <h3>Aura Hygiene &amp; Facilities Group</h3>
+            <p class="status">Ongoing</p>
+            <ul class="steps">
+              <li><b>Who</b><span>Event, stadium and commercial cleaning across the UK, working at full-venue scale.</span></li>
+              <li><b>What it needed</b><span>To read like an operator a stadium would trust with a full house, and to put the accreditations where a procurement team looks first.</span></li>
+              <li><b>What I built</b><span class="want">In progress — home, about and contact are up, accreditations section in place. Describe the decisions once the build settles.</span></li>
+              <li class="key"><b>What happened</b><span class="want">Too early. Agree with them now what gets measured, so there is a number to report later.</span></li>
+              <li><b>Built with</b><span>Plain HTML, CSS and JavaScript.</span></li>
+            </ul>
+          </div>
+        </article>
 
-      <section class="band">
-        <h2 class="band-title">Who's behind it</h2>
-        <p class="prose">I'm Oliver. I design and build the websites myself, and bring in people I trust — an illustrator, an audio designer, another dev — when a project needs more hands.</p>
-      </section>
-
-      <section class="band">
-        <div class="availability">
-          <strong>Taking work from October.</strong>
-          <span>Usually replies within a day — <a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a></span>
-        </div>
-      </section>
-
-      <div class="footnote">
-        <span>Work — Brassneck Studio</span>
-        <button class="backlink" type="button" data-go="home">← Back through the door</button>
+        <article class="case">
+          <span class="idx">03</span>
+          <div>
+            <h3>Next project</h3>
+            <p class="status">Open</p>
+            <ul class="steps">
+              <li class="key"><b>What happened</b><span class="want">Three is the number that reads as a practice rather than a portfolio. Pick the one with the best outcome, not the prettiest design.</span></li>
+            </ul>
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -231,7 +227,7 @@
           <span><b>Brassneck</b><i>STUDIO</i></span>
         </button>
         <nav class="nav">
-          <button type="button" data-go="work">Work</button>
+          <button type="button" data-go="websites">Websites</button>
           <button type="button" class="backlink" data-go="home">← Back through the door</button>
         </nav>
       </header>
@@ -245,18 +241,18 @@
       <section class="band">
         <div class="reel">
           <div>
-            <span>Twenty seconds of footage</span>
-            <em>Above the fold, autoplaying, muted, looping. This slot is the whole page — everything below it is caption.</em>
+            <span>Articles — footage slot</span>
+            <em>Twenty seconds of Articles, above the fold, autoplaying, muted, looping. This slot is the whole page — everything below it is caption.</em>
           </div>
         </div>
-        <h2 class="band-title" style="margin-bottom:.6rem">First title — unnamed</h2>
-        <p class="prose">One line that says what it actually is: genre, the verb you spend the most time doing, and the feeling. Not a story synopsis.</p>
-        <dl class="meta">
-          <div><dt>Status</dt><dd>In development — no date promised</dd></div>
-          <div><dt>Platform</dt><dd>To be decided</dd></div>
-          <div><dt>Follow</dt><dd>itch.io · Bluesky — handles to claim</dd></div>
-          <div><dt>Devlog</dt><dd>Monthly, once the cadence is real</dd></div>
-        </dl>
+        <h2 class="band-title" style="margin-bottom:.6rem">Articles</h2>
+      <p class="prose">A visual novel, in development. <span class="want">One line here on what it actually is — the setting, the choice the player keeps making, and the feeling. Not a plot synopsis.</span></p>
+      <dl class="meta">
+        <div><dt>Form</dt><dd>Visual novel</dd></div>
+        <div><dt>Status</dt><dd>In development — no date promised</dd></div>
+        <div><dt>Platform</dt><dd>To be decided</dd></div>
+        <div><dt>Follow</dt><dd>itch.io · Bluesky — handles to claim</dd></div>
+      </dl>
       </section>
 
       <section class="band">

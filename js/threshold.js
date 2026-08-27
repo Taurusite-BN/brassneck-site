@@ -3,6 +3,74 @@
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+
+  /* ================================================================ *
+   * 0. Preview gate
+   *
+   * This keeps the unfinished site off the open web while it is being
+   * reviewed. It is a doormat, not a lock: the markup is still in the
+   * file for anyone who opens dev tools. Real access control belongs
+   * on the host — see the README.
+   * ================================================================ */
+
+  const GATE_SHA = "b14ac78a46e90b7137f90518d51ce3677cf078db540d60d17097b6c40e25abf2";
+  const GATE_FNV = "5190b83e";
+
+  function fnv1a(str) {
+    let h = 0x811c9dc5;
+    const bytes = new TextEncoder().encode(str);
+    for (const b of bytes) {
+      h ^= b;
+      h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return h.toString(16).padStart(8, "0");
+  }
+
+  async function digest(str) {
+    if (window.crypto && crypto.subtle && window.isSecureContext) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+    return null;
+  }
+
+  function initGate() {
+    const gate = document.getElementById("gate");
+    if (!gate) return;
+    const form  = document.getElementById("gate-form");
+    const input = document.getElementById("gate-input");
+    const err   = document.getElementById("gate-error");
+
+    let already = false;
+    try { already = sessionStorage.getItem("bn-preview") === "open"; } catch (e) {}
+    if (already) { gate.remove(); document.documentElement.classList.add("is-unlocked"); return; }
+
+    setTimeout(() => input.focus(), 60);
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const value = input.value.trim();
+      const sha = await digest(value);
+      const ok = sha ? sha === GATE_SHA : fnv1a(value) === GATE_FNV;
+
+      if (!ok) {
+        err.textContent = "That is not it.";
+        gate.classList.add("is-wrong");
+        setTimeout(() => gate.classList.remove("is-wrong"), 500);
+        input.select();
+        return;
+      }
+
+      try { sessionStorage.setItem("bn-preview", "open"); } catch (e) {}
+      err.textContent = "";
+      document.documentElement.classList.add("is-unlocked");
+      gate.classList.add("is-open");
+      setTimeout(() => gate.remove(), 620);
+      measureHero();
+      measureGlyphs();
+    });
+  }
+
   /* ================================================================ *
    * 1. The particle field
    * ================================================================ */
@@ -251,12 +319,12 @@
 
   const camera = document.getElementById("camera");
   const pages = {
-    work:  document.getElementById("page-work"),
-    games: document.getElementById("page-games")
+    websites: document.getElementById("page-websites"),
+    games:    document.getElementById("page-games")
   };
   const doors = {
-    work:  document.getElementById("door-work"),
-    games: document.getElementById("door-games")
+    websites: document.getElementById("door-websites"),
+    games:    document.getElementById("door-games")
   };
 
   let route = "home";
@@ -292,8 +360,8 @@
     const ox = ap.left + ap.width / 2 - cam.left;
     const oy = ap.top + ap.height / 2 - cam.top;
 
-    // 1.03 pushes the brass reveal just past the viewport edge
-    const scale = Math.max(vw / ap.width, vh / ap.height) * 1.03;
+    // overshoot so the casing has cleared the frame well before the end
+    const scale = Math.max(vw / ap.width, vh / ap.height) * 1.26;
     const dx = vw / 2 - (ap.left + ap.width / 2);
     const dy = vh / 2 - (ap.top + ap.height / 2);
 
@@ -328,7 +396,8 @@
 
     // lock the scroll before anything moves, so no rect can shift mid-flight
     document.documentElement.classList.add("is-locked");
-    door.classList.add("is-open");
+    wake(door);
+    requestAnimationFrame(() => door.classList.add("is-open"));
 
     // give the compositor a frame to promote the layer before it matters
     camera.style.willChange = "transform";
@@ -341,13 +410,16 @@
       door.querySelector(".room-glow").style.transform = "scale(0.82)";
       door.querySelector(".room-floor").style.transform = "scaleY(1.35)";
       requestAnimationFrame(() => { camera.style.transform = t.transform; });
+      // you are past the leaf now — take it out of shot rather than
+      // letting it hang at the frame edge until the page swap
+      after(180, () => door.classList.add("is-through"));
 
       onSettled(camera, "transform", ms(FLY), () => {
         // the screen is now the inside of the doorway — fade the page onto it
         page.classList.add("is-active");
         route = side;
         setInert(true);
-        document.title = side === "work" ? "Work — Brassneck Studio" : "Games — Brassneck Studio";
+        document.title = side === "websites" ? "Websites — Brassneck Studio" : "Games — Brassneck Studio";
 
         after(FADE + 40, () => {
           // hidden behind an opaque page: stand the camera back down
@@ -355,7 +427,8 @@
           camera.style.transform = "";
           camera.style.transformOrigin = "";
           camera.style.willChange = "auto";
-          door.classList.remove("is-open");
+          shutFlat(door);
+          door.classList.remove("is-through");
           door.querySelector(".room-glow").style.transform = "";
           door.querySelector(".room-floor").style.transform = "";
           diving = false;
@@ -380,7 +453,9 @@
     const page = pages[side];
 
     // re-enter the scene exactly where we left it: door open, camera inside
+    wake(door);
     door.classList.add("is-open");
+    door.classList.add("is-through");
     camera.style.willChange = "transform";
     camera.style.transition = "none";
     const t = apertureTransform(door);
@@ -406,7 +481,8 @@
       });
 
       onSettled(camera, "transform", ms(FLY + 80), () => {
-        door.classList.remove("is-open");
+        shutFlat(door);
+        requestAnimationFrame(() => door.classList.remove("is-through"));
         camera.style.transition = "none";
         camera.style.transformOrigin = "";
         camera.style.willChange = "auto";
@@ -432,12 +508,32 @@
     backOut(() => after(120, () => diveTo(dest)));
   }
 
-  document.querySelectorAll("[data-go]").forEach(el => {
-    el.addEventListener("click", () => go(el.dataset.go));
-    // promote the layer on approach, not on click
-    el.addEventListener("pointerenter", () => {
+  // The leaf is a flat element at rest and while teasing open — only the full
+  // swing needs a real 3D box, and it is torn down again the moment the door
+  // is shut. Nothing ever sits still in a preserve-3d state.
+  function wake(door) { if (door) door.classList.add("is-live"); }
+
+  // Shut the leaf with no transition at all and drop it back to a flat 2D
+  // element. Called only while the leaf is out of shot, so the snap is unseen —
+  // and it avoids leaving a compositor animation running across the moment the
+  // camera layer is torn down, which strands the leaf mid-swing.
+  function shutFlat(door) {
+    if (!door) return;
+    door.classList.add("no-swing");
+    door.classList.remove("is-open");
+    door.classList.remove("is-live");
+    void door.offsetWidth;
+    door.classList.remove("no-swing");
+  }
+
+  document.querySelectorAll(".portal-btn").forEach(btn => {
+    btn.addEventListener("pointerenter", () => {
       if (route === "home" && phase === "idle") camera.style.willChange = "transform";
     });
+  });
+
+  document.querySelectorAll("[data-go]").forEach(el => {
+    el.addEventListener("click", () => go(el.dataset.go));
   });
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && route !== "home") go("home");
@@ -486,14 +582,26 @@
   bind("c-magnetic", "magnetic");
   bind("c-dust", "dust");
 
+  // Some engines skip the first paint of a backface-hidden child inside an
+  // untransformed preserve-3d parent — the door then only appears once a hover
+  // dirties it. Nudge each leaf by a hair and put it straight back.
+  function kickLeaves() {
+    document.querySelectorAll(".leaf-front").forEach(el => { void el.offsetWidth; });
+  }
+
   let booted = false;
   function boot() {
     if (booted) return;
     booted = true;
     sizeField(); measureHero(); sampleWord(); makeDust(); splitMagnetic();
+    kickLeaves();
+    initGate();
     requestAnimationFrame(tick);
     requestAnimationFrame(glyphTick);
   }
+
+  // late webfont swaps and slow first paints get a second nudge
+  window.addEventListener("load", kickLeaves);
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(boot);

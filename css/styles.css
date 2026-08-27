@@ -24,7 +24,7 @@
 
     --ease:  cubic-bezier(.62,.02,.2,1);
     --swing: cubic-bezier(.34,.01,.18,1);
-    --push:  cubic-bezier(.66,0,.86,.30);
+    --push:  cubic-bezier(.42,0,.72,.34);
     --pull:  cubic-bezier(.16,.7,.34,1);
   }
 
@@ -70,7 +70,6 @@
     position: relative;
     z-index: 1;
     transform-origin: 50% 50%;
-    will-change: transform;
   }
 
   .page {
@@ -88,6 +87,114 @@
     opacity: 1;
     visibility: visible;
     transition: opacity 420ms var(--ease), visibility 0s;
+  }
+
+
+  /* ================================================================
+     Preview gate — a doormat, not a lock. See the README.
+     ================================================================ */
+
+  #gate {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background:
+      radial-gradient(70% 50% at 50% 40%, rgba(176,141,87,0.06), transparent 70%),
+      var(--ink);
+    opacity: 1;
+    transition: opacity 600ms var(--ease);
+  }
+  #gate.is-open { opacity: 0; pointer-events: none; }
+  html.is-unlocked #gate { display: none; }
+  html:not(.is-unlocked) body { overflow: hidden; }
+
+  .gate-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.15rem;
+    width: min(360px, 100%);
+  }
+  #gate.is-wrong .gate-card { animation: gate-shake 420ms var(--ease); }
+
+  @keyframes gate-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-7px); }
+    45% { transform: translateX(6px); }
+    70% { transform: translateX(-3px); }
+  }
+
+  .gate-mark { display: flex; align-items: center; gap: .7rem; }
+  .gate-mark svg { width: 34px; height: 34px; color: var(--brass-lit); flex: none; }
+  .gate-mark b {
+    font-family: Archivo, system-ui, sans-serif; font-weight: 800;
+    font-size: 1.15rem; letter-spacing: -0.015em;
+    display: block; line-height: 1; text-align: left; color: var(--paper);
+  }
+  .gate-mark i {
+    font-family: Archivo, system-ui, sans-serif; font-style: normal;
+    font-size: .6rem; font-weight: 600; letter-spacing: .34em;
+    color: var(--muted); display: block; margin-top: .26rem; text-align: left;
+  }
+
+  .gate-plate {
+    margin-top: .4rem;
+    padding: .4rem .8rem;
+    background: linear-gradient(168deg, var(--brass-hi), var(--brass) 45%, #8A6E42);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
+    color: #2A2116;
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .58rem; font-weight: 700; letter-spacing: .22em;
+    line-height: 1; text-transform: uppercase;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+  }
+
+  .gate-line {
+    margin: 0;
+    font-size: .95rem; font-weight: 300; line-height: 1.5;
+    color: var(--muted); max-width: 34ch;
+  }
+
+  .gate-field { display: flex; flex-direction: column; gap: .45rem; width: 100%; margin-top: .3rem; }
+  .gate-label {
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--brass);
+  }
+  #gate-input {
+    width: 100%;
+    padding: .75rem .9rem;
+    background: rgba(241,239,236,0.04);
+    border: 1px solid var(--hairline);
+    color: var(--paper);
+    font-family: Spectral, Georgia, serif;
+    font-size: 1rem;
+    letter-spacing: .08em;
+  }
+  #gate-input:focus { outline: none; border-color: var(--brass); background: rgba(241,239,236,0.06); }
+
+  .gate-go {
+    width: 100%;
+    padding: .72rem 1rem;
+    background: rgba(176,141,87,0.1);
+    border: 1px solid var(--brass-dim);
+    color: var(--brass-lit);
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 220ms, border-color 220ms;
+  }
+  .gate-go:hover, .gate-go:focus-visible { background: rgba(176,141,87,0.18); border-color: var(--brass); }
+
+  .gate-error {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: .85rem; font-style: italic;
+    color: var(--brass-lit);
   }
 
   /* ================================================================
@@ -144,7 +251,7 @@
     color: var(--dim);
   }
   .statement .wd { display: inline-block; white-space: nowrap; }
-  .statement .ch { display: inline-block; will-change: transform; }
+  .statement .ch { display: inline-block; }
 
   /* ================================================================
      The threshold — a wall with two doors in it
@@ -153,8 +260,6 @@
   .threshold {
     position: relative;
     padding: clamp(1rem, 3vh, 2rem) 0 0;
-    perspective: 1150px;
-    perspective-origin: 50% 46%;
   }
 
   .eyebrow {
@@ -197,7 +302,6 @@
     align-items: flex-end;
     gap: clamp(2.5rem, 24vw, 24rem);
     padding-bottom: clamp(2rem, 5vh, 3.2rem);
-    transform-style: preserve-3d;
   }
 
   /* ---- one door ------------------------------------------------- */
@@ -209,17 +313,21 @@
     gap: clamp(1rem, 2.4vh, 1.5rem);
     background: none; border: 0; padding: 0; margin: 0;
     font: inherit; color: inherit; cursor: pointer;
-    transform-style: preserve-3d;
   }
 
   .door {
+    --leaf-h: clamp(210px, 38vh, 400px);
     position: relative;
     display: block;
-    height: clamp(210px, 38vh, 400px);
-    width: auto;
-    aspect-ratio: 0.44;
-    transform-style: preserve-3d;
+    height: var(--leaf-h);
+    width: calc(var(--leaf-h) * 0.44);
   }
+  .door {
+    --tease: 16deg;
+    perspective: 620px;
+    perspective-origin: 16% 46%;
+  }
+  .door[data-side="games"] { perspective-origin: 84% 46%; }
 
   /* the door meets something: contact shadow plus the warm spill
      from the light under it */
@@ -285,11 +393,10 @@
   /* light escaping under a shut door */
   .sill {
     position: absolute;
-    left: 7%; right: 7%;
-    bottom: -2px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, rgba(217,178,124,0.5) 25%, rgba(217,178,124,0.6) 50%, rgba(217,178,124,0.5) 75%, transparent);
-    filter: blur(1.5px);
+    left: 5%; right: 5%;
+    bottom: -3px;
+    height: 7px;
+    background: radial-gradient(62% 100% at 50% 50%, rgba(217,178,124,0.6), rgba(217,178,124,0.18) 55%, transparent 80%);
     z-index: 4;
     opacity: .75;
     transition: opacity 420ms var(--ease);
@@ -305,29 +412,69 @@
     position: absolute;
     inset: 0;
     z-index: 2;
-    transform-style: preserve-3d;
     transform-origin: left center;
     transition: transform 720ms var(--swing);
   }
+  .door.is-live .leaf-wrap {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+  /* used to snap the leaf shut while it is out of shot, rather than asking a
+     compositor animation to survive the camera layer being torn down */
+  .door.no-swing .leaf-wrap { transition: none; }
+  .door:not(.is-live) .leaf-wrap { transition-duration: 400ms; }
+  /* the far side and the thickness only exist once the box is 3D —
+     at rest they would paint out of order in a flat context */
+  .leaf-back, .leaf-edge { visibility: hidden; }
+  .door.is-live .leaf-back,
+  .door.is-live .leaf-edge { visibility: visible; }
   .door[data-side="games"] .leaf-wrap { transform-origin: right center; }
 
-  /* a hair of a crack on hover — it reads as openable */
+  /* The tease. This is a real rotation on the hinge, but the leaf stays a
+     FLAT element under .door's perspective — no 3D rendering context, so
+     nothing here depends on an engine painting a static preserve-3d subtree.
+     preserve-3d is switched on only for the full swing, and switched off
+     again the moment the door is shut. */
   .portal-btn:hover .leaf-wrap,
-  .portal-btn:focus-visible .leaf-wrap { transform: rotateY(-3.5deg); }
-  .door[data-side="games"] .leaf-wrap { }
+  .portal-btn:focus-visible .leaf-wrap { transform: rotateY(calc(-1 * var(--tease))); }
+  .door[data-side="games"] .leaf-wrap { transform-origin: right center; }
   .portal-btn:hover .door[data-side="games"] .leaf-wrap,
-  .portal-btn:focus-visible .door[data-side="games"] .leaf-wrap { transform: rotateY(3.5deg); }
+  .portal-btn:focus-visible .door[data-side="games"] .leaf-wrap { transform: rotateY(var(--tease)); }
+
+  /* light escaping down the leading edge as it comes off the latch */
+  .leaf-front::after {
+    content: "";
+    position: absolute;
+    top: 4%; bottom: 4%; right: 0;
+    width: 4px;
+    background: linear-gradient(180deg, transparent, rgba(217,178,124,0.75) 18%, rgba(217,178,124,0.75) 82%, transparent);
+    opacity: 0;
+    transition: opacity 300ms var(--ease);
+  }
+  .door[data-side="games"] .leaf-front::after { right: auto; left: 0; }
+  .portal-btn:hover .leaf-front::after,
+  .portal-btn:focus-visible .leaf-front::after { opacity: 1; }
 
   .door.is-open .leaf-wrap,
-  .portal-btn:hover .door.is-open .leaf-wrap { transform: rotateY(-66deg); }
+  .portal-btn:hover .door.is-open .leaf-wrap { transform: rotateY(-108deg); }
   .door[data-side="games"].is-open .leaf-wrap,
-  .portal-btn:hover .door[data-side="games"].is-open .leaf-wrap { transform: rotateY(66deg); }
+  .portal-btn:hover .door[data-side="games"].is-open .leaf-wrap { transform: rotateY(108deg); }
 
+  .leaf-front, .leaf-back, .leaf-edge {
+    transition: opacity 380ms var(--ease);
+  }
+  .leaf-back {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
   .leaf-front, .leaf-back {
     position: absolute;
     inset: 0;
-    backface-visibility: hidden;
   }
+  /* once the camera is through the doorway, the door is behind you */
+  .door.is-through .leaf-front,
+  .door.is-through .leaf-back,
+  .door.is-through .leaf-edge { opacity: 0; }
 
   .leaf-front {
     background:
@@ -366,14 +513,14 @@
     top: 0; left: 100%;
     width: 13px; height: 100%;
     transform-origin: left center;
-    transform: rotateY(90deg);
+    transform: rotateY(89.6deg);
     background: linear-gradient(180deg, #38322B, #201D19);
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06);
   }
   .door[data-side="games"] .leaf-edge {
     left: auto; right: 100%;
     transform-origin: right center;
-    transform: rotateY(-90deg);
+    transform: rotateY(-89.6deg);
   }
 
   /* light falls off as the leaf turns away */
@@ -413,9 +560,9 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
     color: #2A2116;
     font-family: Archivo, system-ui, sans-serif;
-    font-size: .56rem;
+    font-size: .52rem;
     font-weight: 700;
-    letter-spacing: .24em;
+    letter-spacing: .2em;
     line-height: 1;
     text-transform: uppercase;
     text-shadow: 0 1px 0 rgba(255,255,255,0.25);
@@ -501,6 +648,15 @@
     font-family: Archivo, sans-serif; font-weight: 700; font-size: 1.15rem;
     letter-spacing: -0.01em; margin: 0 0 .2rem; color: var(--paper);
   }
+  .case h3 .host {
+    font-family: Archivo, sans-serif;
+    font-weight: 600;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    color: var(--brass);
+    margin-left: .55rem;
+  }
+
   .case .status {
     font-family: Archivo, sans-serif; font-size: .6rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem;
@@ -518,7 +674,7 @@
     font-family: Archivo, sans-serif; font-weight: 600; font-size: .62rem;
     letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-top: .25rem;
   }
-  .steps .want { color: var(--muted); font-style: italic; }
+  .steps .want, .prose .want { color: var(--muted); font-style: italic; }
   .steps li.key b { color: var(--brass); }
   .steps li.key { color: var(--paper); }
 
