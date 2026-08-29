@@ -387,91 +387,91 @@ try {
 
     <div class="body">
 
-      <p class="lede">Two rounds of playtest notes came back and both were about the same underlying thing: the game was telling the player what to think. Fixing that took sixty-nine lines of prose, a menu that had to go, and a new rule in the static checker. A new layer went into the story, and the art pipeline learned to read a second expression sheet.</p>
+      <p class="lede">Two rounds of playtest notes came back, and both were politely circling the same problem: the game kept explaining itself. Sixty-nine lines of prose, one menu and a fair amount of my dignity later, it explains considerably less. There is also a new layer of plot, and the art pipeline has learned to cope with a sheet that lied to it.</p>
 
       <h2>What the studio playtest found</h2>
-      <p class="kicker">Round one · outside eyes, first time</p>
+      <p class="kicker">Round one &middot; outside eyes, first time</p>
 
-      <p>The headline note was that the prose read as machine-written, and the tester was precise about why: <em class="q">"the character thinks on text, and then it unnecessarily explains the thought in the same sentence."</em></p>
+      <p>The headline note was that the prose read as machine-written. Ouch. Also: fair. What stopped it being a vague sting was how precise the tester was about why — <em class="q">"the character thinks on text, and then it unnecessarily explains the thought in the same sentence."</em></p>
 
-      <p>They were right, and the fault turned out to be mechanical rather than stylistic — <strong>one clause too many</strong>, over and over. A sentence lands an image, and then another clause explains what the image meant.</p>
+      <p>Which is the good kind of bad news, because it is mechanical rather than stylistic: <strong>one clause too many</strong>, over and over. A sentence lands an image, and then a second clause trots along behind it explaining what the image was for, like a tour guide who will not let you look at anything on your own.</p>
 
       <div class="swap">
         <div class="before"><span class="tag">was</span><s>It is not neutrality, and every person on this deck understands that it is not.</s> A company of thirty-one notices the one who would not choose.</div>
         <div class="after"><span class="tag">now</span>A company of thirty-one notices the one who would not choose.</div>
       </div>
 
-      <p>Sixty-nine lines were rewritten against a single test: <strong>a trailing clause survives only if it gives the player a fact they cannot have.</strong> <em class="q">"Coat still buttoned from yesterday, which means he has not been to his hammock"</em> stays — that is information. <em class="q">"He has not offered you any, which is its own kind of message"</em> goes. The rule is written into the project's writing register so it survives into chapters two to six.</p>
+      <p>Sixty-nine lines went through a single test: <strong>a trailing clause survives only if it hands the player a fact they cannot get anywhere else.</strong> <em class="q">"Coat still buttoned from yesterday, which means he has not been to his hammock"</em> stays, because that is information. <em class="q">"He has not offered you any, which is its own kind of message"</em> goes, because that is me nudging you. The rule is written into the project's register now, so chapters two to six cannot quietly relapse.</p>
 
-      <p>The captain's age was stated four times across two chapters and had become a running joke in the notes. It is now stated <strong>zero</strong> times; he is old, and it is carried by behaviour — the knees with opinions about the weather, the papers held close to the candle.</p>
+      <p>I also told you the captain was old four times across two chapters. The notes had started keeping count, which is its own kind of review. He is now told to you <strong>zero</strong> times and is simply old instead: knees with opinions about the weather, papers held close to the candle.</p>
 
       <h3>Two bugs and a feature</h3>
-      <p><strong>Rollback is off.</strong> The tester reported the scroll wheel letting them re-read. It was worse than that: rollback also let a player undo a seam close and get their thread back, which hollows out the game's only economy. Re-reading survives through the pause menu, which cannot undo anything.</p>
-      <p><strong>The keyring on the chest lid</strong> gave the lock's refusal, because the code branched on lock and lid together. Fixed at the branch, not the line.</p>
-      <p><strong>A journal</strong> was their suggestion and is now in — current objective, everything seen, who has been met, thread and days remaining. It is built out of flags that already existed, so future chapters populate it for free. Two rules govern it: it never knows more than the player, and it never draws the conclusion.</p>
+      <p><strong>Rollback is off.</strong> The tester noticed the scroll wheel let them re-read, which was the polite version of the problem. Rollback also let you undo a seam close and get your thread back, quietly dismantling the only economy the game has. Re-reading survives through the pause menu, which cannot undo anything and knows it.</p>
+      <p><strong>The keyring on the chest lid</strong> gave you the lock's refusal, because the code was checking the lock and the lid as though they were one thing. Fixed at the branch rather than the line, which is the difference between a fix and a plaster.</p>
+      <p><strong>A journal</strong> was their idea and is now in: current objective, everything seen, who you have met, thread and days remaining. It is built out of flags that already existed, so every future chapter fills it in for free. Two rules keep it honest — it never knows more than you do, and it never draws the conclusion for you.</p>
 
       <h2>What the second playthrough found</h2>
-      <p class="kicker">Round two · the director, playing it cold</p>
+      <p class="kicker">Round two &middot; the director, playing it cold</p>
 
-      <p>The most valuable note was the smallest: a line that said the same four words twice in one sentence. A rewrite had gone around the middle of it without anyone reading the end. That is a class of error a person should not be finding by playing, so <strong>the static checker now catches echoes</strong> — a four-word run repeated inside one line, or a five-word run shared by two lines close together, with an allow-list for the handful of repetitions that are doing a job. It was verified by reintroducing the exact bug and watching it get caught.</p>
+      <p>The most valuable note was the smallest: a line that said the same four words twice in one sentence. A rewrite had gone round the middle of it and never read the end. Nobody should be finding that by playing the game, so <strong>the checker now catches echoes</strong> — a four-word run repeated inside one line, or a five-word run shared by two lines sitting close together, with an allow-list for the handful that repeat on purpose. I proved it by putting the exact bug back in and watching it get caught, which was more satisfying than it had any right to be.</p>
 
       <h3>The menu that was giving the game away</h3>
-      <p>In an early scene, the player chose which of a short list of people to eavesdrop on. That menu quietly told them the answer was one of exactly that list, before they had any reason to think so, and it spent the scene's tension on picking from it.</p>
-      <p>Now <strong>one person comes, argues, and leaves, and the player cannot say who.</strong> The choice is no longer <em class="q">who</em> — it is how close they dare stand to the door. Ear to the wood gets the whole argument and costs you something; standing back gets you only one side of it, which turned out to be the eerier of the two. He answers less and less of something you cannot hear.</p>
-      <p>The general form is worth keeping: <strong>a choice should be about what the player is willing to risk, not about which answer they would like to be handed.</strong></p>
-      <p>The reason the player cannot place the voice is the premise itself: nine days aboard is long enough to know a crew by their tread and not by their voices through two inches of oak.</p>
+      <p>In an early scene you chose which of a short list of people to eavesdrop on. Very helpful of me: it told you the answer was one of exactly those people, before you had any reason to think so, and then spent the scene's tension on picking from a shortlist.</p>
+      <p>Now <strong>one person comes, argues, and leaves, and you cannot say who.</strong> The choice is no longer <em class="q">who</em> — it is how close you dare stand to the door. Ear to the wood gets you the whole argument and costs you something. Standing back gets you one side of it, which turned out to be much the eerier of the two: he answers less and less of something you cannot hear.</p>
+      <p>The general shape is worth keeping. <strong>A choice should be about what you are willing to risk, not about which answer you would like handed to you.</strong></p>
+      <p>And the reason you cannot place the voice is the premise doing its job. Nine days aboard is long enough to know a crew by their tread. It is not long enough to know them through two inches of oak.</p>
 
       <h3>Where the player sleeps</h3>
-      <p>The note was <em class="q">"why am I sleeping on the deck? That should be explained."</em> One line does it — nine days aboard does not buy a place in the forecastle — and it pays for itself immediately, because it puts the player <strong>ten feet from the mainmast when the captain died on it, hearing nothing.</strong> That is now the single largest reason to suspect them, and the first mate's question was rewritten to use it.</p>
+      <p>The note was blunt: <em class="q">"why am I sleeping on the deck? That should be explained."</em> One line does it — nine days aboard does not buy you a place in the forecastle — and it pays for itself on the spot, because it puts you <strong>ten feet from the mainmast when the captain died on it, hearing nothing at all.</strong> That is now the single best reason to suspect you, and the first mate's question has been rewritten to lean on it. Turning a plot hole into a murder charge is the best trade I have made all week.</p>
 
       <h3>Two notes that were one note</h3>
-      <p>Two unrelated-looking comments about a supporting character had the same answer underneath them, and finding it produced a better version of a mechanic than the one that had been asked for.</p>
-      <p>The game's central decision is how carefully you close something you were not supposed to open. Doing it properly costs you more of a resource you cannot replace; doing it fast is cheap and leaves evidence. The note asked for the two outcomes to differ more. <strong>The fix was to make the careful option cost something that is not a number</strong> — take the time and somebody sees you do it. The consequence is not a stat going up. It is that a person now knows, and you have no idea yet what that will mean.</p>
-      <p>That is a better shape for a game with an economy in it. The safest choice for the evidence is the most dangerous choice for you, and it never says so.</p>
+      <p>Two unrelated-looking comments about a supporting character had the same answer sitting underneath them, and digging for it produced a better version of the mechanic than the one I had been asked for. I am choosing to describe that as process.</p>
+      <p>The game's central decision is how carefully you close something you were not supposed to open. Careful costs more of a resource you cannot replace. Quick is cheap and leaves evidence. The note asked for the two outcomes to differ more, and <strong>the fix was to make the careful option cost something that is not a number</strong> — take the time, and somebody sees you take it. The consequence is not a stat going up. It is that a person now knows, and you have no idea yet what that is going to mean.</p>
+      <p>That is a better shape for a game with an economy in it. The safest choice for the evidence is the most dangerous choice for you, and the game never says so out loud.</p>
 
       <h3>And the vote</h3>
-      <p>The report was that voting for a candidate did not make him captain. The arithmetic was correct — he does win — but the count was read out as two bare numbers, <em class="q">"16 to 15"</em>, with nothing to say whose was whose. It now names them.</p>
-      <p>Underneath that was a real design problem: an earlier choice can swing the company far enough that the player's own vote cannot reach it. That is intended, and it was invisible, so it read as a broken count. The game now acknowledges it once, in character, at the moment it happens. <strong>A consequence the player cannot see is indistinguishable from a bug</strong>, and this is the second time that has come up today.</p>
+      <p>The report was that voting for a candidate did not make him captain. The arithmetic was fine — he does win — but the count came out as two bare numbers, <em class="q">"16 to 15"</em>, with nothing to say whose was whose. It names them now.</p>
+      <p>Underneath that was a real design problem hiding behind a fake one. An earlier choice can swing the company far enough that your own vote cannot reach it. That is intended. It was also invisible, so it read as a broken count. The game now acknowledges it once, in character, at the moment it happens. <strong>A consequence the player cannot see is indistinguishable from a bug</strong> — second time that has come up today, and I am beginning to suspect it is a law rather than a coincidence.</p>
 
       <h2>Faces</h2>
-      <p class="kicker">Art pipeline · four sheets in, one outstanding</p>
+      <p class="kicker">Art pipeline &middot; four sheets in, one outstanding</p>
 
-      <p>The note was that expressions felt random. They were, and the cause was measurable: <strong>of roughly 120 character lines, only 12 carried an expression.</strong> Everything else inherited whatever was last shown, so a single pose could hold for eleven lines. Every line now names its own state — 123 of them.</p>
+      <p>The note was that expressions felt random. They were. The cause was embarrassingly measurable: <strong>of roughly 120 character lines, 12 carried an expression.</strong> Everything else inherited whatever was last on screen, so a single pose could hold for eleven lines while its owner said increasingly varied things with exactly the same face. Every line now names its own state. All 123 of them.</p>
 
-      <p>The exceptions are deliberate. The voice behind the cabin door has no sprite, and giving those lines an expression would pop one on screen. You are listening through wood.</p>
+      <p>The exceptions are deliberate. The voice behind the cabin door has no sprite, and giving those lines an expression would pop one onto the screen. You are listening through wood. You get nothing.</p>
 
-      <p>Four states became nine: <code>neutral</code>, <code>listening</code>, <code>dry</code>, <code>guarded</code>, <code>sharp</code>, <code>hard</code>, <code>weary</code>, <code>breaking</code>, and <code>amused</code> — the last added by the director on the grounds that <code>dry</code> is the flat joke you are not sure landed and <code>amused</code> is the one that did. The crew needed both.</p>
+      <p>Four states became nine: <code>neutral</code>, <code>listening</code>, <code>dry</code>, <code>guarded</code>, <code>sharp</code>, <code>hard</code>, <code>weary</code>, <code>breaking</code> and <code>amused</code> — the last one added by the director on the grounds that <code>dry</code> is the flat joke you are not sure landed and <code>amused</code> is the one that did. That is a real distinction, and this crew needed both.</p>
 
-      <p>One pose was doing active harm: the quartermaster's <code>hard</code> was her holding the ship's articles out flat toward the camera, and it was landing on every authority line she has. It is now <code>book</code>, used exactly four times, all of them moments where she physically presents the articles — and in those four it is the best the pose has ever looked.</p>
+      <p>One pose was doing active harm. The quartermaster's <code>hard</code> was her holding the ship's articles out flat toward the camera, and it was landing on every authority line she has, so she spent the chapter as a woman permanently presenting a document. It is now <code>book</code>, used exactly four times, all of them moments where she physically presents the articles — and in those four it is the best that pose has ever looked.</p>
 
       <h3>A sheet with no transparency</h3>
-      <p>One sheet came back fully opaque with the transparency checkerboard <strong>painted into the picture</strong>. It previews identically and it is not the same thing at all: the cutter finds figures by looking for empty columns, so with no empty space it sliced six near-identical crops. The rebuilder now detects an opaque sheet and keys the grid out by connectivity from the border, which leaves the white shirts intact.</p>
+      <p>One sheet came back fully opaque with the transparency checkerboard <strong>painted into the picture</strong>. It previews identically. It is not remotely the same thing. The cutter finds figures by looking for empty columns, and with no empty space anywhere to be found it obligingly sliced six near-identical crops. The rebuilder now spots an opaque sheet and keys the grid out by connectivity from the border, which has the pleasant side effect of leaving the white shirts alone.</p>
 
       <h2>A twist has to pay for itself</h2>
-      <p class="kicker">Story · a layer added, and an old hole closed</p>
+      <p class="kicker">Story &middot; a layer added, and an old hole closed</p>
 
-      <p>A new layer of plot was proposed today and adopted. What it is stays in the story bible, but the reasoning is worth writing down, because it is the test every proposed twist should have to pass and most do not.</p>
+      <p>A new layer of plot was proposed today and adopted. What it is stays in the story bible, but the reasoning is worth writing down, because it is the test every proposed twist should have to pass and most cheerfully do not.</p>
 
-      <p><strong>A twist earns its place by explaining something the story was previously getting away with</strong> — not by adding a surprise. Surprise is cheap and it is available at any point in any story. What is expensive, and what makes a mystery hold together on a second reading, is a revelation that turns out to have been load-bearing all along.</p>
+      <p><strong>A twist earns its place by explaining something the story was previously getting away with</strong> — not by being a surprise. Surprise is cheap and available at any point in any story. What is expensive, and what makes a mystery hold together on a second reading, is a revelation that turns out to have been load-bearing all along.</p>
 
-      <p>This one closed a hole the bible has been carrying since its second revision. A crucial discovery — the one that sets everything after it in motion — was happening offstage, by coincidence, because nobody had ever asked <em class="q">how did that character find that out?</em> The document simply said they did. The new layer is the answer, and once it was on the table it was obviously the <em class="q">only</em> answer, which is usually the sign that it was the shape of the thing all along.</p>
+      <p>This one closed a hole the bible has been carrying since its second revision. A crucial discovery — the one that sets everything after it in motion — was happening offstage by coincidence, because nobody had ever asked <em class="q">how did that character find that out?</em> The document simply said they did, in a confident tone, and we all nodded along. The new layer is the answer, and once it was on the table it was obviously the <em class="q">only</em> answer, which is usually the sign that it was the shape of the thing all along.</p>
 
-      <p>It cost nothing already written. <strong>Four details that had been pure characterisation became plot without a word changing</strong> — habits and small kindnesses that were there to make somebody feel like a person turn out to have been the mechanism. That is the ideal case: no retrofitting, no scene rewritten, and a first-time player has already seen all of it.</p>
+      <p>It cost nothing already written. <strong>Four details that had been pure characterisation became plot without a word changing</strong> — habits and small kindnesses that were only there to make somebody feel like a person turn out to have been the mechanism. That is the ideal case: nothing retrofitted, no scene rewritten, and a first-time player has already seen all of it.</p>
 
       <h3>The ambiguity is the point</h3>
-      <p>The layer creates a question about two characters that the game will <strong>never answer</strong>, deliberately. Both readings are fully supported by everything on screen and neither is confirmed, which puts it in the same family as an existing rule of the project: <em class="q">no character portrait may read as lying</em>, because a portrait that does hands the player the answer and ends the game.</p>
-      <p>It is now written down as a hard rule. A scene that forces a verdict on it is a wrong scene, however good the scene is.</p>
+      <p>The layer creates a question about two characters that the game will <strong>never answer</strong>, deliberately. Both readings are fully supported by everything on screen and neither is confirmed, which puts it in the same family as an existing rule of the project: <em class="q">no character portrait may read as lying</em>, because a portrait that does hands the player the answer and ends the game some hours early.</p>
+      <p>That is now written down as a hard rule. A scene that forces a verdict on it is a wrong scene, however good the scene is. Especially if it is good.</p>
 
       <h3>What it cost chapter one: one line</h3>
-      <p>Chapter one is written, played and being tested, so the bar for touching it is high. It needed a single sentence — a small physical detail, in a crowded scene, attached to no comment at all.</p>
-      <p>The standard for that kind of plant is strict and worth stating: <strong>it must mean nothing on a first read.</strong> A twist the player could not possibly have seen coming is a cheat. A twist they walked straight past is a re-read, and a re-read is the thing people tell their friends about. The project already has one of these — an object sitting in plain sight in an early scene that becomes appalling several chapters later — and the rule is the same both times: never hide it, just don't point at it.</p>
+      <p>Chapter one is written, played and being tested, so the bar for touching it is high. It needed a single sentence: a small physical detail, in a crowded scene, with no comment attached to it whatsoever.</p>
+      <p>The standard for that kind of plant is strict and worth saying out loud. <strong>It has to mean nothing on a first read.</strong> A twist you could not possibly have seen coming is a cheat. A twist you walked straight past is a re-read, and a re-read is the thing people tell their friends about. There is already one of these in the project — an object sitting in plain sight in an early scene that becomes appalling several chapters later — and the rule is the same both times: never hide it, just do not point at it.</p>
 
       <h2>Tools</h2>
-      <p class="kicker">Written today · both round-trip verified</p>
+      <p class="kicker">Written today &middot; both round-trip verified</p>
 
-      <p><strong>The whole script is now editable outside the code.</strong> An exporter writes every line in the game to one markdown file in story order; an importer reads edits back in. Matching is by content hash rather than position, so the source can keep moving while the file is being edited, and anything that changed on both sides is reported and skipped rather than silently overwritten. It refuses a change that would break the game — an unescaped quote, a lost interpolation, an unbalanced tag, a deleted choice.</p>
+      <p><strong>The whole script is now editable outside the code.</strong> An exporter writes every line in the game into one markdown file in story order; an importer reads the edits back in. Matching is by content hash rather than position, so the source can keep moving while the file is being edited, and anything that changed on both sides is reported and skipped rather than silently overwritten. It also refuses a change that would break the game — an unescaped quote, a lost interpolation, an unbalanced tag, a deleted choice.</p>
 
-      <p>The static checker gained the echo rule above, and now separates <em class="q">missing</em> from <em class="q">wired up but not drawn yet</em>, so art that has been coded ahead of being made stops reading as a failure.</p>
+      <p>The static checker gained the echo rule above, and now tells <em class="q">missing</em> apart from <em class="q">wired up but not drawn yet</em>, so art that has been coded ahead of being made stops shouting at me every time I run it.</p>
 
       <div class="readout">
         <div class="head">State of the build</div>
@@ -493,7 +493,7 @@ try {
       <div class="open">
         <div class="row">
           <div class="who art">art</div>
-          <div class="what"><b>Roche's expression sheet</b> — seven figures, including a proper three-quarter-length <code>away</code>. His current one is a chest-up bust from an early round, so it ends in a hard cut while every other figure runs off the screen edge. Feathered as a stopgap.</div>
+          <div class="what"><b>Roche's expression sheet</b> — seven figures, including a proper three-quarter-length <code>away</code>. His current one is a chest-up bust from an early round, so he ends in a hard cut while everybody else runs off the screen edge. Feathered as a stopgap, which fools nobody.</div>
         </div>
         <div class="row">
           <div class="who art">art</div>
@@ -505,15 +505,15 @@ try {
         </div>
         <div class="row">
           <div class="who">writing</div>
-          <div class="what"><b>The script pass</b> — the exported file is with the director for edits.</div>
+          <div class="what"><b>The script pass</b> — the exported file is with the director. Fingers crossed.</div>
         </div>
         <div class="row">
           <div class="who">story</div>
-          <div class="what"><b>Fold the new layer into the chapter map</b> before chapter two is written, and settle one character's motive properly — the current answer is true but incomplete, and they are owed a scene for it.</div>
+          <div class="what"><b>Fold the new layer into the chapter map</b> before chapter two is written, and settle one character's motive properly. The current answer is true but incomplete, and they are owed a scene for it.</div>
         </div>
         <div class="row">
           <div class="who">build</div>
-          <div class="what"><b>Playtest chapter one end to end</b> on this build — the journal, all three chest closes, and whether the expressions now read as deliberate.</div>
+          <div class="what"><b>Playtest chapter one end to end</b> on this build: the journal, all three chest closes, and whether the expressions now read as deliberate rather than as weather.</div>
         </div>
       </div>
 
@@ -521,7 +521,7 @@ try {
   </article>
 
   <footer>
-    Entry one. Written to be read without spoiling anything — where a change turned on a plot point, the log describes the problem and the principle and leaves the reveal where it belongs.
+    Entry one. Written so it can be read without spoiling anything — where a change turned on a plot point, I have described the problem and the principle and left the reveal where it belongs. Back in a month, assuming there is something worth telling you.
     <br>
     <a class="back" href="../index.html#games">
       <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
