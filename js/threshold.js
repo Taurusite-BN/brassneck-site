@@ -43,7 +43,12 @@
 
     let already = false;
     try { already = sessionStorage.getItem("bn-preview") === "open"; } catch (e) {}
-    if (already) { gate.remove(); document.documentElement.classList.add("is-unlocked"); return; }
+    if (already) {
+      gate.remove();
+      document.documentElement.classList.add("is-unlocked");
+      restoreRoute();
+      return;
+    }
 
     setTimeout(() => input.focus(), 60);
 
@@ -68,6 +73,7 @@
       setTimeout(() => gate.remove(), 620);
       measureHero();
       measureGlyphs();
+      restoreRoute();
     });
   }
 
@@ -371,6 +377,33 @@
     };
   }
 
+  const TITLES = {
+    home:     "Brassneck Threshold",
+    websites: "Websites — Brassneck Studio",
+    games:    "Games — Brassneck Studio"
+  };
+
+  // Arriving straight at #games — from the devlog's back link, or a shared
+  // link — should land on the page, not replay the dive. The dive is the
+  // reward for choosing a door, not a toll on every visit.
+  function showInstant(side) {
+    const page = pages[side];
+    if (!page) return;
+    page.classList.add("is-active");
+    page.scrollTop = 0;
+    route = side;
+    wordTarget = 0;
+    wordAlpha = 0;
+    setInert(true);
+    document.documentElement.classList.add("is-locked");
+    document.title = TITLES[side];
+  }
+
+  function restoreRoute() {
+    const side = (location.hash || "").replace("#", "");
+    if (pages[side]) showInstant(side);
+  }
+
   function setInert(on) {
     if (on) {
       camera.setAttribute("inert", "");
@@ -419,7 +452,8 @@
         page.classList.add("is-active");
         route = side;
         setInert(true);
-        document.title = side === "websites" ? "Websites — Brassneck Studio" : "Games — Brassneck Studio";
+        document.title = TITLES[side];
+        try { history.replaceState(null, "", "#" + side); } catch (e) {}
 
         after(FADE + 40, () => {
           // hidden behind an opaque page: stand the camera back down
@@ -468,7 +502,8 @@
     setInert(false);
     page.classList.remove("is-active");
     route = "home";
-    document.title = "Brassneck Threshold";
+    document.title = TITLES.home;
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
 
     after(FADE, () => {
       camera.style.transition = "transform " + ms(FLY + 80) + "ms var(--pull)";

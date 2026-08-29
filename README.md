@@ -51,9 +51,43 @@ drop the fallback if you only ever serve over HTTPS or localhost.
 ```
 index.html            all three views — home, websites, games
 css/styles.css        design tokens at the top, then components in page order
-js/threshold.js       particles, magnetic text, and the door/dive sequence
+js/threshold.js       particles, magnetic text, the door/dive sequence, the gate
 assets/               the mark, used as the favicon
+devlog/               one file per entry, each a standalone page
 ```
+
+
+## The devlog
+
+Entries live in `devlog/`, one standalone HTML file each, named `YYYY-MM-DD-*.html`. They
+are **not** part of the single-page app — each is a real page with a real URL, because a
+devlog entry is the one thing on this site somebody might link to directly.
+
+Each entry keeps *The Articles*' own palette (bone, sea slate, bilge dark, wet oak, lamp
+brass) rather than the studio's. That is deliberate: stepping into an entry should feel
+like stepping into the game's world, not reading a studio blog post about it.
+
+**To add an entry:** drop the new file in `devlog/`, add the two lines it needs at the top
+(the session-gate script and the `.back` link — copy them from the existing entry), then
+add one `<li>` to `.logs` in the Games section of `index.html`. Newest first.
+
+Two things every entry needs:
+
+- **The gate script in `<head>`.** It checks `sessionStorage` for the preview unlock and
+  redirects to `index.html` if it is missing. Without it, an entry URL is an open door
+  straight past the password.
+- **The `.back` link** pointing at `../index.html#games` — see routing below.
+
+## Routing
+
+The homepage is a single page that swaps views, but `#websites` and `#games` are real
+addresses. Landing on one — from a devlog's back link, or a shared link — calls
+`showInstant()`, which puts you on the page with no dive. **The dive is the reward for
+choosing a door, not a toll on every visit.** Diving sets the hash via `history.replaceState`;
+coming home clears it.
+
+Route restoration runs *after* the gate, in both the already-unlocked and just-unlocked
+paths, so a deep link still asks for the password first.
 
 ## Where to change things
 

@@ -722,6 +722,68 @@
     display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
   }
 
+
+  /* ---- devlog list ---------------------------------------------- */
+
+  .logs { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: .6rem; }
+
+  .log {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: .35rem 1.4rem;
+    padding: 1.15rem 1.3rem;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(241,239,236,0.026);
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--brass-dim);
+    transition: background 220ms var(--ease), border-color 220ms var(--ease);
+  }
+  .log:hover, .log:focus-visible {
+    background: rgba(176,141,87,0.07);
+    border-left-color: var(--brass-lit);
+  }
+
+  .log-date {
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .68rem; font-weight: 600; letter-spacing: .1em;
+    color: var(--brass);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .log-main { display: block; }
+
+  .log-title {
+    display: block;
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: .3rem;
+  }
+  .log-title::after {
+    content: " \2192";
+    color: var(--brass-dim);
+    transition: color 220ms var(--ease);
+  }
+  .log:hover .log-title::after,
+  .log:focus-visible .log-title::after { color: var(--brass-lit); }
+
+  .log-sum { display: block; font-size: var(--step-0); color: var(--muted); max-width: 62ch; }
+
+  .log-meta {
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .6rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .log { grid-template-columns: 1fr; gap: .5rem; }
+    .log-meta { order: 3; }
+  }
+
   /* ================================================================
      Tuner
      ================================================================ */

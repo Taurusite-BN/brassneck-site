@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Articles Devlog</title>
+<meta name="description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<meta name="theme-color" content="#12171b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Articles Devlog">
+<meta property="og:description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312171b'/><path d='M16 6 L20 16 L16 26 L12 16 Z' fill='%23c9a227'/></svg>">
+<script>
+try {
+  if (sessionStorage.getItem("bn-preview") !== "open") {
+    location.replace("../index.html");
+  }
+} catch (e) {}
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* ------------------------------------------------------------------
+     The palette is the game's own, verbatim from claude/style-bible.md:
+     bone #D9D2C3 · sea slate #4A5A63 · bilge dark #1B2328 ·
+     wet oak #6E5236 · lamp brass #C9A227. Brass is the only saturated
+     colour and it appears only where light physically is.
+
+     This page commits to one visual world rather than shipping a light
+     theme, because the game does. Every colour is painted explicitly.
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:   #12171b;
+    --panel:    #1b2328;
+    --panel-2:  #202a30;
+    --rule:     #2b363d;
+    --bone:     #d9d2c3;
+    --body:     #c6c0b2;
+    --muted:    #8a97a0;
+    --faint:    #5d6b76;
+    --brass:    #c9a227;
+    --brass-lt: #e6c860;
+    --oak:      #6e5236;
+    --measure:  66ch;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--body);
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ---------------- masthead ---------------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 34px 0 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ship {
+    font-family: "IM Fell English", Georgia, serif;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1;
+    color: var(--bone);
+    text-wrap: balance;
+  }
+  .ship em {
+    font-style: italic;
+    color: var(--brass);
+  }
+  .standfirst {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 62ch;
+    line-height: 1.7;
+  }
+
+  /* ---------------- entry ---------------- */
+
+  .entry {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    gap: 0 40px;
+    padding-top: 52px;
+  }
+
+  .rail { position: relative; }
+  .rail-inner {
+    position: sticky;
+    top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+  }
+  .rail .date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+  }
+  .rail .meta {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.8;
+  }
+  .diamond {
+    width: 9px; height: 9px;
+    background: var(--brass);
+    transform: rotate(45deg);
+    margin: 10px 0 4px 1px;
+  }
+
+  .body { max-width: var(--measure); }
+
+  .lede {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--bone);
+    margin: 0 0 8px;
+    text-wrap: pretty;
+  }
+
+  h2 {
+    font-family: "IM Fell English", Georgia, serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--bone);
+    margin: 52px 0 0;
+    text-wrap: balance;
+  }
+  h2 + .kicker { margin-top: 6px; }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 14px;
+  }
+
+  h3 {
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--bone);
+    margin: 30px 0 0;
+  }
+
+  p { margin: 14px 0 0; }
+  p:first-child { margin-top: 0; }
+
+  strong { color: var(--bone); font-weight: 700; }
+  em.q {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.86em;
+    color: var(--brass-lt);
+    background: #ffffff08;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  ul { margin: 14px 0 0; padding-left: 0; list-style: none; }
+  li {
+    position: relative;
+    padding-left: 22px;
+    margin-top: 9px;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 0.66em;
+    width: 5px; height: 5px;
+    background: var(--oak);
+    transform: rotate(45deg);
+  }
+
+  /* ---------------- before / after ---------------- */
+
+  .swap {
+    margin: 20px 0 0;
+    border-left: 2px solid var(--rule);
+    padding: 2px 0 2px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .swap .before,
+  .swap .after { font-size: 16px; line-height: 1.5; }
+  .swap .before { color: var(--faint); }
+  .swap .before s { text-decoration-color: var(--oak); }
+  .swap .after { color: var(--bone); }
+  .swap .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------------- readout panel ---------------- */
+
+  .readout {
+    margin: 26px 0 0;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: 20px 22px;
+    overflow-x: auto;
+  }
+  .readout .head {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 14px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 18px 24px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .n {
+    display: block;
+    font-size: 26px;
+    color: var(--brass);
+    line-height: 1.1;
+  }
+  .stat .l {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  /* ---------------- open items ---------------- */
+
+  .open {
+    margin: 22px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .open .row {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 4px 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .open .who {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-top: 2px;
+  }
+  .open .who.art  { color: var(--brass); }
+  .open .what { color: var(--body); }
+  .open .what b { color: var(--bone); }
+
+  /* ---------------- footer ---------------- */
+
+  footer {
+    margin-top: 72px;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.9;
+    max-width: 70ch;
+  }
+
+
+  /* ---------------- back to the studio ---------------- */
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    padding: 7px 12px 7px 10px;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .back:hover, .back:focus-visible {
+    color: var(--brass-lt);
+    border-color: var(--oak);
+    background: #ffffff06;
+  }
+  .back svg { width: 13px; height: 13px; flex: none; color: var(--brass); }
+
+  footer .back { margin-top: 22px; }
+
+  @media (max-width: 800px) {
+    .entry { grid-template-columns: 1fr; gap: 0; }
+    .rail-inner {
+      position: static;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 22px;
+    }
+    .diamond { display: none; }
+    .rail .meta { line-height: 1.5; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry { animation: rise .5s ease-out both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a class="back" href="../index.html#games">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g transform="translate(3,7)">
+        <path d="M52 29A23 23 0 1 0 59 64" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+        <path d="M50 21C63 21 71 16 82 7 78.5 20 78.5 39 82 52 71 43 62 36 50 36Z" fill="currentColor"/>
+      </g>
+    </svg>
+    Brassneck Studio
+  </a>
+
+  <header class="masthead">
+    <div class="ship">The Articles <em>— devlog</em></div>
+    <div class="standfirst">
+      A point-and-click murder mystery aboard the brig Merciful · Ren'Py 8.5.3 · macOS
+    </div>
+  </header>
+
+  <article class="entry">
+
+    <div class="rail">
+      <div class="rail-inner">
+        <div class="date">28 Aug 2026</div>
+        <div class="diamond"></div>
+        <div class="meta">
+          build 0.3-playtest<br>
+          chapter one<br>
+          two playtest rounds
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <p class="lede">Two rounds of playtest notes came back and both were about the same underlying thing: the game was telling the player what to think. Fixing that took sixty-nine lines of prose, a menu that had to go, and a new rule in the static checker. A new layer went into the story, and the art pipeline learned to read a second expression sheet.</p>
+
+      <h2>What the studio playtest found</h2>
+      <p class="kicker">Round one · outside eyes, first time</p>
+
+      <p>The headline note was that the prose read as machine-written, and the tester was precise about why: <em class="q">"the character thinks on text, and then it unnecessarily explains the thought in the same sentence."</em></p>
+
+      <p>They were right, and the fault turned out to be mechanical rather than stylistic — <strong>one clause too many</strong>, over and over. A sentence lands an image, and then another clause explains what the image meant.</p>
+
+      <div class="swap">
+        <div class="before"><span class="tag">was</span><s>It is not neutrality, and every person on this deck understands that it is not.</s> A company of thirty-one notices the one who would not choose.</div>
+        <div class="after"><span class="tag">now</span>A company of thirty-one notices the one who would not choose.</div>
+      </div>
+
+      <p>Sixty-nine lines were rewritten against a single test: <strong>a trailing clause survives only if it gives the player a fact they cannot have.</strong> <em class="q">"Coat still buttoned from yesterday, which means he has not been to his hammock"</em> stays — that is information. <em class="q">"He has not offered you any, which is its own kind of message"</em> goes. The rule is written into the project's writing register so it survives into chapters two to six.</p>
+
+      <p>The captain's age was stated four times across two chapters and had become a running joke in the notes. It is now stated <strong>zero</strong> times; he is old, and it is carried by behaviour — the knees with opinions about the weather, the papers held close to the candle.</p>
+
+      <h3>Two bugs and a feature</h3>
+      <p><strong>Rollback is off.</strong> The tester reported the scroll wheel letting them re-read. It was worse than that: rollback also let a player undo a seam close and get their thread back, which hollows out the game's only economy. Re-reading survives through the pause menu, which cannot undo anything.</p>
+      <p><strong>The keyring on the chest lid</strong> gave the lock's refusal, because the code branched on lock and lid together. Fixed at the branch, not the line.</p>
+      <p><strong>A journal</strong> was their suggestion and is now in — current objective, everything seen, who has been met, thread and days remaining. It is built out of flags that already existed, so future chapters populate it for free. Two rules govern it: it never knows more than the player, and it never draws the conclusion.</p>
+
+      <h2>What the second playthrough found</h2>
+      <p class="kicker">Round two · the director, playing it cold</p>
+
+      <p>The most valuable note was the smallest: a line that said the same four words twice in one sentence. A rewrite had gone around the middle of it without anyone reading the end. That is a class of error a person should not be finding by playing, so <strong>the static checker now catches echoes</strong> — a four-word run repeated inside one line, or a five-word run shared by two lines close together, with an allow-list for the handful of repetitions that are doing a job. It was verified by reintroducing the exact bug and watching it get caught.</p>
+
+      <h3>The menu that was giving the game away</h3>
+      <p>In an early scene, the player chose which of a short list of people to eavesdrop on. That menu quietly told them the answer was one of exactly that list, before they had any reason to think so, and it spent the scene's tension on picking from it.</p>
+      <p>Now <strong>one person comes, argues, and leaves, and the player cannot say who.</strong> The choice is no longer <em class="q">who</em> — it is how close they dare stand to the door. Ear to the wood gets the whole argument and costs you something; standing back gets you only one side of it, which turned out to be the eerier of the two. He answers less and less of something you cannot hear.</p>
+      <p>The general form is worth keeping: <strong>a choice should be about what the player is willing to risk, not about which answer they would like to be handed.</strong></p>
+      <p>The reason the player cannot place the voice is the premise itself: nine days aboard is long enough to know a crew by their tread and not by their voices through two inches of oak.</p>
+
+      <h3>Where the player sleeps</h3>
+      <p>The note was <em class="q">"why am I sleeping on the deck? That should be explained."</em> One line does it — nine days aboard does not buy a place in the forecastle — and it pays for itself immediately, because it puts the player <strong>ten feet from the mainmast when the captain died on it, hearing nothing.</strong> That is now the single largest reason to suspect them, and the first mate's question was rewritten to use it.</p>
+
+      <h3>Two notes that were one note</h3>
+      <p>Two unrelated-looking comments about a supporting character had the same answer underneath them, and finding it produced a better version of a mechanic than the one that had been asked for.</p>
+      <p>The game's central decision is how carefully you close something you were not supposed to open. Doing it properly costs you more of a resource you cannot replace; doing it fast is cheap and leaves evidence. The note asked for the two outcomes to differ more. <strong>The fix was to make the careful option cost something that is not a number</strong> — take the time and somebody sees you do it. The consequence is not a stat going up. It is that a person now knows, and you have no idea yet what that will mean.</p>
+      <p>That is a better shape for a game with an economy in it. The safest choice for the evidence is the most dangerous choice for you, and it never says so.</p>
+
+      <h3>And the vote</h3>
+      <p>The report was that voting for a candidate did not make him captain. The arithmetic was correct — he does win — but the count was read out as two bare numbers, <em class="q">"16 to 15"</em>, with nothing to say whose was whose. It now names them.</p>
+      <p>Underneath that was a real design problem: an earlier choice can swing the company far enough that the player's own vote cannot reach it. That is intended, and it was invisible, so it read as a broken count. The game now acknowledges it once, in character, at the moment it happens. <strong>A consequence the player cannot see is indistinguishable from a bug</strong>, and this is the second time that has come up today.</p>
+
+      <h2>Faces</h2>
+      <p class="kicker">Art pipeline · four sheets in, one outstanding</p>
+
+      <p>The note was that expressions felt random. They were, and the cause was measurable: <strong>of roughly 120 character lines, only 12 carried an expression.</strong> Everything else inherited whatever was last shown, so a single pose could hold for eleven lines. Every line now names its own state — 123 of them.</p>
+
+      <p>The exceptions are deliberate. The voice behind the cabin door has no sprite, and giving those lines an expression would pop one on screen. You are listening through wood.</p>
+
+      <p>Four states became nine: <code>neutral</code>, <code>listening</code>, <code>dry</code>, <code>guarded</code>, <code>sharp</code>, <code>hard</code>, <code>weary</code>, <code>breaking</code>, and <code>amused</code> — the last added by the director on the grounds that <code>dry</code> is the flat joke you are not sure landed and <code>amused</code> is the one that did. The crew needed both.</p>
+
+      <p>One pose was doing active harm: the quartermaster's <code>hard</code> was her holding the ship's articles out flat toward the camera, and it was landing on every authority line she has. It is now <code>book</code>, used exactly four times, all of them moments where she physically presents the articles — and in those four it is the best the pose has ever looked.</p>
+
+      <h3>A sheet with no transparency</h3>
+      <p>One sheet came back fully opaque with the transparency checkerboard <strong>painted into the picture</strong>. It previews identically and it is not the same thing at all: the cutter finds figures by looking for empty columns, so with no empty space it sliced six near-identical crops. The rebuilder now detects an opaque sheet and keys the grid out by connectivity from the border, which leaves the white shirts intact.</p>
+
+      <h2>A twist has to pay for itself</h2>
+      <p class="kicker">Story · a layer added, and an old hole closed</p>
+
+      <p>A new layer of plot was proposed today and adopted. What it is stays in the story bible, but the reasoning is worth writing down, because it is the test every proposed twist should have to pass and most do not.</p>
+
+      <p><strong>A twist earns its place by explaining something the story was previously getting away with</strong> — not by adding a surprise. Surprise is cheap and it is available at any point in any story. What is expensive, and what makes a mystery hold together on a second reading, is a revelation that turns out to have been load-bearing all along.</p>
+
+      <p>This one closed a hole the bible has been carrying since its second revision. A crucial discovery — the one that sets everything after it in motion — was happening offstage, by coincidence, because nobody had ever asked <em class="q">how did that character find that out?</em> The document simply said they did. The new layer is the answer, and once it was on the table it was obviously the <em class="q">only</em> answer, which is usually the sign that it was the shape of the thing all along.</p>
+
+      <p>It cost nothing already written. <strong>Four details that had been pure characterisation became plot without a word changing</strong> — habits and small kindnesses that were there to make somebody feel like a person turn out to have been the mechanism. That is the ideal case: no retrofitting, no scene rewritten, and a first-time player has already seen all of it.</p>
+
+      <h3>The ambiguity is the point</h3>
+      <p>The layer creates a question about two characters that the game will <strong>never answer</strong>, deliberately. Both readings are fully supported by everything on screen and neither is confirmed, which puts it in the same family as an existing rule of the project: <em class="q">no character portrait may read as lying</em>, because a portrait that does hands the player the answer and ends the game.</p>
+      <p>It is now written down as a hard rule. A scene that forces a verdict on it is a wrong scene, however good the scene is.</p>
+
+      <h3>What it cost chapter one: one line</h3>
+      <p>Chapter one is written, played and being tested, so the bar for touching it is high. It needed a single sentence — a small physical detail, in a crowded scene, attached to no comment at all.</p>
+      <p>The standard for that kind of plant is strict and worth stating: <strong>it must mean nothing on a first read.</strong> A twist the player could not possibly have seen coming is a cheat. A twist they walked straight past is a re-read, and a re-read is the thing people tell their friends about. The project already has one of these — an object sitting in plain sight in an early scene that becomes appalling several chapters later — and the rule is the same both times: never hide it, just don't point at it.</p>
+
+      <h2>Tools</h2>
+      <p class="kicker">Written today · both round-trip verified</p>
+
+      <p><strong>The whole script is now editable outside the code.</strong> An exporter writes every line in the game to one markdown file in story order; an importer reads edits back in. Matching is by content hash rather than position, so the source can keep moving while the file is being edited, and anything that changed on both sides is reported and skipped rather than silently overwritten. It refuses a change that would break the game — an unescaped quote, a lost interpolation, an unbalanced tag, a deleted choice.</p>
+
+      <p>The static checker gained the echo rule above, and now separates <em class="q">missing</em> from <em class="q">wired up but not drawn yet</em>, so art that has been coded ahead of being made stops reading as a failure.</p>
+
+      <div class="readout">
+        <div class="head">State of the build</div>
+        <div class="stats">
+          <div class="stat"><span class="n">20</span><span class="l">script files</span></div>
+          <div class="stat"><span class="n">48</span><span class="l">labels</span></div>
+          <div class="stat"><span class="n">67</span><span class="l">images</span></div>
+          <div class="stat"><span class="n">543</span><span class="l">lines of writing</span></div>
+          <div class="stat"><span class="n">123</span><span class="l">expressions set</span></div>
+          <div class="stat"><span class="n">9</span><span class="l">states per character</span></div>
+          <div class="stat"><span class="n">14</span><span class="l">lengths of thread</span></div>
+          <div class="stat"><span class="n">0</span><span class="l">checker issues</span></div>
+        </div>
+      </div>
+
+      <h2>Open</h2>
+      <p class="kicker">Next up</p>
+
+      <div class="open">
+        <div class="row">
+          <div class="who art">art</div>
+          <div class="what"><b>Roche's expression sheet</b> — seven figures, including a proper three-quarter-length <code>away</code>. His current one is a chest-up bust from an early round, so it ends in a hard cut while every other figure runs off the screen edge. Feathered as a stopgap.</div>
+        </div>
+        <div class="row">
+          <div class="who art">art</div>
+          <div class="what"><b>The quartermaster's corrected <code>hard</code></b> — one figure. Falls back to her folded-arms pose meanwhile, which carries seventeen lines without embarrassing itself.</div>
+        </div>
+        <div class="row">
+          <div class="who art">art</div>
+          <div class="what"><b>A journal icon</b> to replace the text button. Wired and guarded; drops in with no code change.</div>
+        </div>
+        <div class="row">
+          <div class="who">writing</div>
+          <div class="what"><b>The script pass</b> — the exported file is with the director for edits.</div>
+        </div>
+        <div class="row">
+          <div class="who">story</div>
+          <div class="what"><b>Fold the new layer into the chapter map</b> before chapter two is written, and settle one character's motive properly — the current answer is true but incomplete, and they are owed a scene for it.</div>
+        </div>
+        <div class="row">
+          <div class="who">build</div>
+          <div class="what"><b>Playtest chapter one end to end</b> on this build — the journal, all three chest closes, and whether the expressions now read as deliberate.</div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <footer>
+    Entry one. Written to be read without spoiling anything — where a change turned on a plot point, the log describes the problem and the principle and leaves the reveal where it belongs.
+    <br>
+    <a class="back" href="../index.html#games">
+      <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g transform="translate(3,7)">
+        <path d="M52 29A23 23 0 1 0 59 64" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+        <path d="M50 21C63 21 71 16 82 7 78.5 20 78.5 39 82 52 71 43 62 36 50 36Z" fill="currentColor"/>
+      </g>
+    </svg>
+      Back to the studio
+    </a>
+  </footer>
+
+</div>
+</body>
+</html>
