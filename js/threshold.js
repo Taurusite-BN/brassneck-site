@@ -377,6 +377,27 @@
     };
   }
 
+  // Umami counts one pageview per document load. This site swaps views in
+  // place, so without this the only thing it could ever tell you is that
+  // somebody arrived — never which door they chose, which is the one number
+  // worth having. The website id is read off the script tag so there is only
+  // ever one copy of it in the repo.
+  const UMAMI_ID = (document.querySelector("script[data-website-id]") || {}).dataset
+    ? document.querySelector("script[data-website-id]").dataset.websiteId
+    : null;
+
+  function trackView(path, title, retry) {
+    if (!UMAMI_ID) return;
+    try {
+      if (window.umami) {
+        window.umami.track({ website: UMAMI_ID, url: path, title: title });
+      } else if (!retry) {
+        // deep links can route before the deferred tracker has run
+        setTimeout(() => trackView(path, title, true), 800);
+      }
+    } catch (e) { /* analytics must never break the site */ }
+  }
+
   const TITLES = {
     home:     "Brassneck Threshold",
     websites: "Websites — Brassneck Studio",
@@ -397,6 +418,7 @@
     setInert(true);
     document.documentElement.classList.add("is-locked");
     document.title = TITLES[side];
+    trackView("/" + side, TITLES[side]);
   }
 
   function restoreRoute() {
@@ -454,6 +476,7 @@
         setInert(true);
         document.title = TITLES[side];
         try { history.replaceState(null, "", "#" + side); } catch (e) {}
+        trackView("/" + side, TITLES[side]);
 
         after(FADE + 40, () => {
           // hidden behind an opaque page: stand the camera back down
@@ -504,6 +527,7 @@
     route = "home";
     document.title = TITLES.home;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    trackView("/", TITLES.home);
 
     after(FADE, () => {
       camera.style.transition = "transform " + ms(FLY + 80) + "ms var(--pull)";

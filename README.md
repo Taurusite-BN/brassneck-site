@@ -78,6 +78,25 @@ Two things every entry needs:
   straight past the password.
 - **The `.back` link** pointing at `../index.html#games` — see routing below.
 
+## Analytics
+
+Umami, self-hosted at `cloud.umami.is`, script tag in the `<head>` of `index.html` and of
+every devlog entry. Website id `765c87cc-…` lives in that tag and nowhere else — the JS
+reads it back off the tag rather than keeping a second copy.
+
+**Why there is code as well as a script tag.** Umami counts one pageview per *document*
+load, and this site swaps views in place. Left alone it could only ever tell you that
+somebody arrived, never which door they chose — which is the one number worth having on a
+site whose whole idea is two doors. `trackView()` in `threshold.js` sends a pageview for
+`/websites`, `/games` and `/` as you move between them, so the dashboard shows the split.
+
+The call is wrapped so analytics can never break the page, and it retries once after 800ms
+because a deep link can route before the deferred tracker has run.
+
+Note that the preview gate fires a pageview too — a visit that never gets past the
+password still counts as a visit. That is arguably what you want while the site is under
+construction, but it does mean early numbers are not all real readers.
+
 ## Routing
 
 The homepage is a single page that swaps views, but `#websites` and `#games` are real
