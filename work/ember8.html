@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ember8: Brassneck Studio</title>
+  <meta name="description" content="Case study: a bilingual static site for Ember8, trauma release therapy and breathwork coaching in the Netherlands.">
+  <script>
+  try {
+    if (sessionStorage.getItem("bn-preview") !== "open") {
+      location.replace("../index.html");
+    } else {
+      // styles.css keeps <body> unscrollable until the gate is passed, and this
+      // page never runs the gate script, without this it cannot scroll at all
+      document.documentElement.classList.add("is-unlocked");
+    }
+  } catch (e) {
+    document.documentElement.classList.add("is-unlocked");
+  }
+  </script>
+
+  <link rel="icon" href="../assets/brassneck-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Spectral:ital,wght@0,300;0,400;0,600;1,300&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Umami: privacy-friendly analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
+</head>
+<body class="doc">
+
+<div class="shell">
+
+  <a class="doc-back" href="../index.html#websites">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g transform="translate(3,7)">
+        <path d="M52 29A23 23 0 1 0 59 64" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+        <path d="M50 21C63 21 71 16 82 7 78.5 20 78.5 39 82 52 71 43 62 36 50 36Z" fill="currentColor"/>
+      </g>
+    </svg>
+    Brassneck Studio
+  </a>
+
+  <div class="page-head">
+    <p class="eyebrow">Case study</p>
+    <h1>Ember8</h1>
+    <p class="lede">Trauma release therapy and breathwork coaching, in the Netherlands. A site that had to work in two languages, get people as far as booking, and carry a health practice's legal pages without frightening anybody.</p>
+    <p class="doc-meta">
+      <a href="https://ember8.nl" rel="noopener">ember8.nl</a>
+      <span>&middot;</span>
+      <span>Live</span>
+      <span>&middot;</span>
+      <span>Design, build, analytics</span>
+    </p>
+  </div>
+
+  <section class="band">
+    <h2 class="band-title">Who they are</h2>
+    <p class="prose">Ember8 works with people stuck in a pattern they cannot think their way out of, and with teams inside organisations. The pitch, in their words, is <em>Break The Loop</em>: you do not need to become someone different, you need to understand what your body is already telling you.</p>
+    <p class="prose" style="margin-top:.9rem">That is a delicate thing to sell on a web page. Push too hard and it reads as a clinic; push too little and nobody books.</p>
+  </section>
+
+  <section class="band">
+    <h2 class="band-title">What it had to do</h2>
+    <ul class="doc-list">
+      <li><b>Work in two languages, properly.</b> Not a translate widget. A full Dutch site and a full English one, each written rather than converted.</li>
+      <li><b>Get people to a first session.</b> One route, obvious from every page, with nothing in the way of it.</li>
+      <li><b>Carry the legal pages without dread.</b> Terms, medical disclaimer, privacy. A health practice has to have them; they do not have to read like a warning.</li>
+      <li><b>Need no maintenance from them.</b> No CMS to be trained on, no plugin to update, nothing to break while they are with a client.</li>
+    </ul>
+  </section>
+
+  <section class="band">
+    <h2 class="band-title">What we built</h2>
+    <p class="prose">A hand-written static site. Dutch at the root, a complete English mirror underneath it, and a booking route running through both. Minimal and dark, generous with space, the logo in white. The design gets out of the way of what is being asked of the reader.</p>
+    <p class="prose" style="margin-top:.9rem">No framework and no CMS. Plain HTML, one stylesheet, one small script. That is not minimalism for its own sake: it is a site that will still load quickly in five years and cannot be broken by an update nobody asked for.</p>
+    <p class="prose" style="margin-top:.9rem">Analytics went in on day one, which is the part most freelance builds skip. You cannot report on what you did not measure, and the moment to start measuring is before launch, not after somebody asks how it is going.</p>
+
+    <dl class="meta">
+      <div><dt>Languages</dt><dd>Dutch and English, in full</dd></div>
+      <div><dt>Pages</dt><dd>Home, booking, about, contact, plus the legal set</dd></div>
+      <div><dt>Built with</dt><dd>Plain HTML, CSS and JavaScript</dd></div>
+      <div><dt>Analytics</dt><dd>Umami, from launch</dd></div>
+    </dl>
+  </section>
+
+  <section class="band">
+    <h2 class="band-title">What happened</h2>
+    <p class="prose want">Bookings and enquiries over the first six months. Umami has been recording since launch, so the number exists. It just needs pulling and checking with Ember8 before it goes on a public page.</p>
+  </section>
+
+  <section class="band">
+    <div class="closer">
+      <h2>Want something like this?</h2>
+      <p>Tell us what it has to do and we will tell you honestly what it would take.</p>
+      <a class="cta cta-lg" href="../index.html#contact">Get in touch</a>
+      <span class="cta-note">Replies usually within a day</span>
+    </div>
+  </section>
+
+  <div class="footnote">
+    <span>Case study: Brassneck Studio</span>
+    <a class="backlink" href="../index.html#websites">← Back to Websites</a>
+  </div>
+</div>
+
+</body>
+</html>

@@ -10,7 +10,7 @@
    * This keeps the unfinished site off the open web while it is being
    * reviewed. It is a doormat, not a lock: the markup is still in the
    * file for anyone who opens dev tools. Real access control belongs
-   * on the host — see the README.
+   * on the host, see the README.
    * ================================================================ */
 
   const GATE_SHA = "b14ac78a46e90b7137f90518d51ce3677cf078db540d60d17097b6c40e25abf2";
@@ -180,7 +180,7 @@
 
     fx.clearRect(0, 0, vw, vh);
 
-    // during the dive the canvas is the only thing not on the compositor —
+    // during the dive the canvas is the only thing not on the compositor -
     // stand it down so every frame belongs to the camera
     if (diving) { requestAnimationFrame(tick); return; }
 
@@ -326,7 +326,8 @@
   const camera = document.getElementById("camera");
   const pages = {
     websites: document.getElementById("page-websites"),
-    games:    document.getElementById("page-games")
+    games:    document.getElementById("page-games"),
+    contact:  document.getElementById("page-contact")
   };
   const doors = {
     websites: document.getElementById("door-websites"),
@@ -379,7 +380,7 @@
 
   // Umami counts one pageview per document load. This site swaps views in
   // place, so without this the only thing it could ever tell you is that
-  // somebody arrived — never which door they chose, which is the one number
+  // somebody arrived, never which door they chose, which is the one number
   // worth having. The website id is read off the script tag so there is only
   // ever one copy of it in the repo.
   const UMAMI_ID = (document.querySelector("script[data-website-id]") || {}).dataset
@@ -400,12 +401,13 @@
 
   const TITLES = {
     home:     "Brassneck Threshold",
-    websites: "Websites — Brassneck Studio",
-    games:    "Games — Brassneck Studio"
+    websites: "Websites: Brassneck Studio",
+    games:    "Games: Brassneck Studio",
+    contact:  "Contact: Brassneck Studio"
   };
 
-  // Arriving straight at #games — from the devlog's back link, or a shared
-  // link — should land on the page, not replay the dive. The dive is the
+  // Arriving straight at #games, from the devlog's back link, or a shared
+  // link, should land on the page, not replay the dive. The dive is the
   // reward for choosing a door, not a toll on every visit.
   function showInstant(side) {
     const page = pages[side];
@@ -420,10 +422,15 @@
     document.title = TITLES[side];
     trackView("/" + side, TITLES[side]);
   }
+    markRoute();
 
   function restoreRoute() {
     const side = (location.hash || "").replace("#", "");
     if (pages[side]) showInstant(side);
+  }
+
+  function markRoute() {
+    document.documentElement.dataset.route = route;
   }
 
   function setInert(on) {
@@ -465,18 +472,19 @@
       door.querySelector(".room-glow").style.transform = "scale(0.82)";
       door.querySelector(".room-floor").style.transform = "scaleY(1.35)";
       requestAnimationFrame(() => { camera.style.transform = t.transform; });
-      // you are past the leaf now — take it out of shot rather than
+      // you are past the leaf now, take it out of shot rather than
       // letting it hang at the frame edge until the page swap
       after(180, () => door.classList.add("is-through"));
 
       onSettled(camera, "transform", ms(FLY), () => {
-        // the screen is now the inside of the doorway — fade the page onto it
+        // the screen is now the inside of the doorway, fade the page onto it
         page.classList.add("is-active");
         route = side;
         setInert(true);
         document.title = TITLES[side];
         try { history.replaceState(null, "", "#" + side); } catch (e) {}
         trackView("/" + side, TITLES[side]);
+        markRoute();
 
         after(FADE + 40, () => {
           // hidden behind an opaque page: stand the camera back down
@@ -528,6 +536,7 @@
     document.title = TITLES.home;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
     trackView("/", TITLES.home);
+    markRoute();
 
     after(FADE, () => {
       camera.style.transition = "transform " + ms(FLY + 80) + "ms var(--pull)";
@@ -560,20 +569,76 @@
     });
   }
 
+  // Contact has no door, there are two doors on the threshold and that is the
+  // whole idea, so a third one would dilute it. It fades in over whatever you
+  // were reading instead.
+  function fadeTo(side) {
+    phase = "busy";
+    const prev = pages[route];
+    if (prev) prev.classList.remove("is-active");
+    const next = pages[side];
+    next.classList.add("is-active");
+    next.scrollTop = 0;
+    route = side;
+    wordTarget = 0;
+    setInert(true);
+    document.documentElement.classList.add("is-locked");
+    document.title = TITLES[side];
+    try { history.replaceState(null, "", "#" + side); } catch (e) {}
+    trackView("/" + side, TITLES[side]);
+    markRoute();
+    after(FADE + 60, () => {
+      phase = "idle";
+      const back = next.querySelector(".backlink");
+      if (back) back.focus({ preventScroll: true });
+    });
+  }
+
+  function fadeHome(then) {
+    phase = "busy";
+    const prev = pages[route];
+    if (prev) prev.classList.remove("is-active");
+    route = "home";
+    wordTarget = 1;
+    setInert(false);
+    document.documentElement.classList.remove("is-locked");
+    document.title = TITLES.home;
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    trackView("/", TITLES.home);
+    after(FADE + 60, () => {
+      measureHero();
+      measureGlyphs();
+      phase = "idle";
+      if (then) then();
+    });
+  }
+
+  const HAS_DOOR = side => side === "websites" || side === "games";
+
   function go(dest) {
     if (dest === route || phase !== "idle") return;
-    if (dest === "home") { backOut(); return; }
+
+    if (dest === "home") {
+      if (route === "contact") { fadeHome(); return; }
+      backOut();
+      return;
+    }
+    // Only the two doors on the threshold open. Arriving at or leaving the
+    // contact page is a fade, firing the door animation from a form page
+    // reads as decoration rather than as going somewhere.
+    if (dest === "contact") { fadeTo("contact"); return; }
+    if (route === "contact") { fadeTo(dest); return; }
     if (route === "home") { diveTo(dest); return; }
     backOut(() => after(120, () => diveTo(dest)));
   }
 
-  // The leaf is a flat element at rest and while teasing open — only the full
+  // The leaf is a flat element at rest and while teasing open, only the full
   // swing needs a real 3D box, and it is torn down again the moment the door
   // is shut. Nothing ever sits still in a preserve-3d state.
   function wake(door) { if (door) door.classList.add("is-live"); }
 
   // Shut the leaf with no transition at all and drop it back to a flat 2D
-  // element. Called only while the leaf is out of shot, so the snap is unseen —
+  // element. Called only while the leaf is out of shot, so the snap is unseen -
   // and it avoids leaving a compositor animation running across the moment the
   // camera layer is torn down, which strands the leaf mid-swing.
   function shutFlat(door) {
@@ -595,8 +660,359 @@
     el.addEventListener("click", () => go(el.dataset.go));
   });
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && route !== "home") go("home");
+    if (e.key !== "Escape") return;
+    // a native <dialog> handles its own Escape, without this guard, closing an
+    // example also walked the visitor back out to the threshold
+    if (document.querySelector("dialog[open]")) return;
+    if (route !== "home") go("home");
   });
+
+  /* ================================================================ *
+   * 3b. The service reel
+   *
+   * The Websites page had one job it was not doing: saying what we sell.
+   * A list would have done it. A list that changes while you read it does
+   * it and holds you there a second longer, which is the whole point of
+   * the page.
+   * ================================================================ */
+
+  const REEL = [
+    "SEO",
+    "web design",
+    "hosting and support",
+    "traffic reports",
+    "branding",
+    "graphic design",
+    "a lot more than will fit here!"
+  ];
+
+  function startReel() {
+    const word = document.getElementById("reel-word");
+    const rule = document.getElementById("reel-rule");
+    if (!word || !rule) return;
+
+    let i = 0;
+    const measure = () => { rule.style.width = word.offsetWidth + "px"; };
+
+    const settle = () => {
+      word.textContent = REEL[i];
+      measure();
+    };
+
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    settle();
+
+    const step = () => {
+      // nothing to animate if nobody is looking at it
+      if (route !== "websites" || document.hidden) return;
+      word.classList.remove("is-in");
+      word.classList.add("is-out");
+      setTimeout(() => {
+        i = (i + 1) % REEL.length;
+        word.textContent = REEL[i];
+        word.classList.remove("is-out");
+        word.classList.add("is-in");
+        measure();
+      }, reduce ? 0 : 240);
+    };
+
+    setInterval(step, 2200);
+    window.addEventListener("resize", measure);
+  }
+
+  /* ================================================================ *
+   * 3c. The enquiry form
+   *
+   * Paste the Formspree endpoint below and it starts working. Until then
+   * the form falls back to an email rather than pretending to send.
+   * ================================================================ */
+
+  const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+  const FALLBACK_EMAIL = "oliver@brassneck.studio";
+
+  function initEnquiry() {
+    const form = document.getElementById("enquiry");
+    if (!form) return;
+    const status = document.getElementById("enquiry-status");
+    const wired = FORM_ENDPOINT.indexOf("YOUR_FORM_ID") === -1;
+
+    const say = (msg, kind) => {
+      status.textContent = msg;
+      status.className = "f-status" + (kind ? " is-" + kind : "");
+    };
+
+    const markBad = el => {
+      const field = el.closest(".field");
+      if (field) field.classList.add("is-bad");
+    };
+
+    form.addEventListener("input", e => {
+      const field = e.target.closest(".field");
+      if (field) field.classList.remove("is-bad");
+    });
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      form.querySelectorAll(".is-bad").forEach(f => f.classList.remove("is-bad"));
+
+      const data = new FormData(form);
+      if (data.get("_gotcha")) return;           // a bot filled the hidden field
+
+      const required = ["name", "email", "message"];
+      let firstBad = null;
+      for (const key of required) {
+        const el = form.elements[key];
+        const val = (data.get(key) || "").toString().trim();
+        const ok = key === "email" ? /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val) : val.length > 1;
+        if (!ok) { markBad(el); if (!firstBad) firstBad = el; }
+      }
+      if (firstBad) {
+        say("Something above needs another look.", "bad");
+        firstBad.focus();
+        return;
+      }
+
+      if (!wired) {
+        const body = [
+          "Name: " + data.get("name"),
+          "Email: " + data.get("email"),
+          "About: " + data.get("subject"),
+          "Timescale: " + (data.get("timescale") || "not given"),
+          "",
+          data.get("message")
+        ].join("\n");
+        say("The form is not wired up yet. Opening your email instead.", "bad");
+        window.location.href = "mailto:" + FALLBACK_EMAIL +
+          "?subject=" + encodeURIComponent("Enquiry: " + data.get("subject")) +
+          "&body=" + encodeURIComponent(body);
+        return;
+      }
+
+      form.classList.add("is-sending");
+      say("Sending…");
+
+      try {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          body: data,
+          headers: { Accept: "application/json" }
+        });
+        if (res.ok) {
+          const done = document.createElement("div");
+          done.className = "sent";
+          done.innerHTML = "<h2>That is with me.</h2>" +
+            "<p>I will read it properly and come back to you, usually within a day and always within three, " +
+            "even if the answer is that I am not the right person for it.</p>";
+          form.replaceWith(done);
+          trackView("/contact/sent", "Enquiry sent: Brassneck Studio");
+          return;
+        }
+        const payload = await res.json().catch(() => null);
+        const msg = payload && payload.errors
+          ? payload.errors.map(x => x.message).join(", ")
+          : "That did not go through. Email " + FALLBACK_EMAIL + " and I will pick it up.";
+        say(msg, "bad");
+      } catch (err) {
+        say("That did not go through. No connection. Email " + FALLBACK_EMAIL + " instead.", "bad");
+      } finally {
+        form.classList.remove("is-sending");
+      }
+    });
+  }
+
+  /* ================================================================ *
+   * 3d. The roster, the trailer, and the examples
+   * ================================================================ */
+
+  function initRoster() {
+    const articles = document.getElementById("articles");
+    const locked = document.getElementById("locked-msg");
+    const quip = document.getElementById("locked-quip");
+    if (!articles || !locked) return;
+
+    const slots = [...document.querySelectorAll(".roster .slot")];
+
+    const show = (showArticles, btn) => {
+      articles.hidden = !showArticles;
+      locked.hidden = showArticles;
+      const shown = showArticles ? articles : locked;
+      shown.classList.remove("is-swapping");
+      void shown.offsetWidth;
+      shown.classList.add("is-swapping");
+      slots.forEach(s => {
+        const on = s === btn;
+        s.classList.toggle("is-current", on);
+        if (s.dataset.slot === "articles") s.setAttribute("aria-pressed", String(on));
+      });
+      if (pages.games) pages.games.scrollTop = 0;
+    };
+
+    slots.forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.slot === "articles") {
+          show(true, btn);
+        } else {
+          quip.textContent = btn.dataset.quip || "";
+          show(false, btn);
+        }
+      });
+    });
+
+    document.querySelectorAll(".locked-back").forEach(btn => {
+      btn.addEventListener("click", () => show(true, slots[0]));
+    });
+  }
+
+  // The trailer slot swells as it comes up to the middle of the screen and
+  // falls back as it leaves. Range is deliberately wide (0.84 to 1.0) so it
+  // reads as the page breathing rather than as a rendering wobble.
+  function initTrailerScroll() {
+    const slot = document.querySelector("#trailer-stage .reel");
+    const page = pages.games;
+    if (!slot || !page || reduce) return;
+
+    const MIN = 0.84;
+    const MAX = 1.0;
+    let queued = false;
+
+    const apply = () => {
+      queued = false;
+      const r = slot.getBoundingClientRect();
+      if (!r.height) return;
+      const vh = window.innerHeight;
+      const centre = r.top + r.height / 2;
+      // 1 when the slot sits dead centre, falling to 0 well before it leaves
+      const nearness = Math.max(0, 1 - Math.abs(centre - vh / 2) / (vh * 0.62));
+      const eased = nearness * nearness * (3 - 2 * nearness);
+      slot.style.transform = "scale(" + (MIN + (MAX - MIN) * eased).toFixed(4) + ")";
+      slot.style.opacity = (0.66 + 0.34 * eased).toFixed(3);
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    };
+
+    page.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    apply();
+  }
+
+  const EXAMPLES = {
+    "web-design": {
+      title: "Web design",
+      shot: "assets/example-web-design.png",
+      ph: "Ember8 home, Dutch",
+      body: "<p>Ember8 sells something delicate: therapy for people stuck in a pattern. Push the design too hard and it reads as a clinic; push too little and nobody books.</p>" +
+            "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>"
+    },
+    "seo": {
+      title: "SEO",
+      shot: "assets/example-seo.png",
+      ph: "Two language trees, one site",
+      body: "<p>Ember8 needed to be found in Dutch <em>and</em> English, by people searching for a feeling rather than a service name.</p>" +
+            "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>"
+    },
+    "hosting": {
+      title: "Hosting &amp; support",
+      shot: "assets/example-hosting.png",
+      ph: "Static build, no moving parts",
+      body: "<p>A therapist should not be updating plugins between clients.</p>" +
+            "<p>Ember8 is plain HTML, one stylesheet, one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for. It will still load quickly in five years.</p>"
+    },
+    "reports": {
+      title: "Traffic reports",
+      shot: "assets/example-reports.png",
+      ph: "One page, once a month",
+      body: "<p>Analytics went on Ember8 the day it launched, which is the part most freelance builds skip. You cannot report on what you did not measure, and the moment to start is before launch, not when somebody asks how it is going.</p>" +
+            "<p>What you get back is a page, not a PDF: who came, what they did, and the one thing we would change next.</p>"
+    },
+    "branding": {
+      title: "Branding",
+      shot: "assets/example-branding.png",
+      ph: "The Brassneck mark at 16px",
+      body: "<p>Our own mark is the shortest example we have. A coiled brass tube opening into a bell, the literal reading of the name, so the joke carries the meaning and nothing needs explaining.</p>" +
+            "<p>Seven other shapes were drawn and thrown away because they failed the only test that matters: rendered at sixteen pixels in one colour, could you still tell what it was?</p>"
+    },
+    "graphic": {
+      title: "Graphic design",
+      shot: "assets/example-graphic.png",
+      ph: "Devlog, in the game's own palette",
+      body: "<p>The Articles devlog is set in the game's palette rather than the studio's (bone, sea slate, bilge dark, wet oak, lamp brass) so that opening an entry feels like stepping into the game rather than reading a blog post about it.</p>" +
+            "<p>That is what this is for: everything around the main thing speaking in the same voice as the main thing.</p>"
+    }
+  };
+
+  function initExamples() {
+    const modal = document.getElementById("svc-modal");
+    if (!modal || typeof modal.showModal !== "function") return;
+    const title = document.getElementById("svc-modal-title");
+    const body = document.getElementById("svc-modal-body");
+    const img = document.getElementById("svc-modal-img");
+    const ph = document.getElementById("svc-modal-ph");
+
+    let origin = null;
+    let closing = false;
+
+    // The dialog grows out of the card you clicked and shrinks back into it.
+    // Cheap to do, and it answers the question "where did this come from".
+    const framesFrom = card => {
+      const d = modal.getBoundingClientRect();
+      if (!card || !d.width) return null;
+      const scale = Math.max(0.2, card.width / d.width);
+      const dx = (card.left + card.width / 2) - (d.left + d.width / 2);
+      const dy = (card.top + card.height / 2) - (d.top + d.height / 2);
+      return [
+        { transform: "translate(" + dx + "px," + dy + "px) scale(" + scale.toFixed(4) + ")", opacity: 0 },
+        { transform: "none", opacity: 1 }
+      ];
+    };
+
+    const EASE_OUT = { duration: reduce ? 1 : 400, easing: "cubic-bezier(.16,.84,.3,1)" };
+    const EASE_IN  = { duration: reduce ? 1 : 260, easing: "cubic-bezier(.5,0,.85,.4)" };
+
+    document.querySelectorAll("[data-svc]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ex = EXAMPLES[btn.dataset.svc];
+        if (!ex) return;
+        title.innerHTML = ex.title;
+        body.innerHTML = ex.body;
+        ph.textContent = ex.ph;
+        img.hidden = false;
+        img.onerror = () => { img.hidden = true; };
+        img.src = ex.shot;
+
+        origin = btn.getBoundingClientRect();
+        modal.showModal();
+        const frames = framesFrom(origin);
+        if (frames) modal.animate(frames, EASE_OUT);
+        trackView("/websites/example/" + btn.dataset.svc, "Example: " + ex.title);
+      });
+    });
+
+    // shrink back into the card rather than blinking out
+    modal.addEventListener("cancel", e => {
+      if (closing) return;
+      e.preventDefault();
+      dismiss();
+    });
+    modal.querySelectorAll("button[value=close]").forEach(b => {
+      b.addEventListener("click", e => { e.preventDefault(); dismiss(); });
+    });
+    modal.addEventListener("click", e => { if (e.target === modal) dismiss(); });
+
+    function dismiss() {
+      if (closing) return;
+      closing = true;
+      const frames = framesFrom(origin);
+      const done = () => { modal.close(); closing = false; };
+      if (!frames) { done(); return; }
+      const anim = modal.animate([frames[1], frames[0]], EASE_IN);
+      anim.onfinish = done;
+      anim.oncancel = done;
+    }
+  }
 
   /* ================================================================ *
    * 4. Wiring
@@ -642,7 +1058,7 @@
   bind("c-dust", "dust");
 
   // Some engines skip the first paint of a backface-hidden child inside an
-  // untransformed preserve-3d parent — the door then only appears once a hover
+  // untransformed preserve-3d parent, the door then only appears once a hover
   // dirties it. Nudge each leaf by a hair and put it straight back.
   function kickLeaves() {
     document.querySelectorAll(".leaf-front").forEach(el => { void el.offsetWidth; });
@@ -654,7 +1070,13 @@
     booted = true;
     sizeField(); measureHero(); sampleWord(); makeDust(); splitMagnetic();
     kickLeaves();
+    markRoute();
     initGate();
+    startReel();
+    initEnquiry();
+    initRoster();
+    initTrailerScroll();
+    initExamples();
     requestAnimationFrame(tick);
     requestAnimationFrame(glyphTick);
   }

@@ -54,6 +54,7 @@ css/styles.css        design tokens at the top, then components in page order
 js/threshold.js       particles, magnetic text, the door/dive sequence, the gate
 assets/               the mark, used as the favicon
 devlog/               one file per entry, each a standalone page
+work/                 one file per case study, each a standalone page
 ```
 
 
@@ -78,35 +79,147 @@ Two things every entry needs:
   straight past the password.
 - **The `.back` link** pointing at `../index.html#games` — see routing below.
 
-## Analytics
+## Service examples
 
-Umami, self-hosted at `cloud.umami.is`, script tag in the `<head>` of `index.html` and of
-every devlog entry. Website id `765c87cc-…` lives in that tag and nowhere else — the JS
-reads it back off the tag rather than keeping a second copy.
+Each card in "What we do" is a `<button data-svc="...">` that opens a native `<dialog>`.
+The card lifts and scales on hover, and the dialog **grows out of the card you clicked and
+shrinks back into it** on close, via the Web Animations API against the card's measured
+rect. Both are disabled under `prefers-reduced-motion`.
+Copy lives in the `EXAMPLES` object in `threshold.js` — title, image path, placeholder
+caption, and HTML body. Every example is drawn from real work (mostly Ember8), not invented.
 
-**Why there is code as well as a script tag.** Umami counts one pageview per *document*
-load, and this site swaps views in place. Left alone it could only ever tell you that
-somebody arrived, never which door they chose — which is the one number worth having on a
-site whose whole idea is two doors. `trackView()` in `threshold.js` sends a pageview for
-`/websites`, `/games` and `/` as you move between them, so the dashboard shows the split.
+Screenshots are optional: each looks for `assets/example-<name>.png` and falls back to a
+captioned placeholder panel if the file is not there. Drop the images in and they appear.
 
-The call is wrapped so analytics can never break the page, and it retries once after 800ms
-because a deep link can route before the deferred tracker has run.
+Opening one sends `/websites/example/<name>` to Umami, so you can see which service people
+are actually curious about — useful for deciding what to write next.
 
-Note that the preview gate fires a pageview too — a visit that never gets past the
-password still counts as a visit. That is arguably what you want while the site is under
-construction, but it does mean early numbers are not all real readers.
+Because the close is animated, the dialog's own `cancel` event and its close buttons are
+intercepted (`preventDefault`) and `modal.close()` is called on `animation.onfinish`.
+
+**One trap worth knowing:** the global Escape handler that walks a visitor back to the
+threshold has to bail when `dialog[open]` matches. Without that guard, closing an example
+with Escape also closed the whole page.
+
+## Case studies
+
+`work/*.html`, one standalone page each, same pattern as the devlog: real URL, gate script
+in the `<head>`, `.doc-back` link home. **The gate script must also add `is-unlocked` to
+`<html>`** — `styles.css` keeps `<body>` unscrollable until that class is present, and these
+pages never run the main JS. Miss it and the page renders perfectly and refuses to scroll. They use the **studio** stylesheet (`../css/styles.css`)
+via `body.doc`, unlike devlog entries, which carry the game's palette.
+
+The Websites page shows a **preview card** (`.study`) linking to the full page — deliberately
+one client, not a list. Not every client wants their site written about, and a grid of logos
+is a promise you cannot always keep. New case study = new file in `work/`, new `.study` card.
+
+## House style
+
+**No em dashes.** They were swept out of every user-facing file and each one rewritten for
+its own sentence rather than swapped blind, so nothing turned into a comma splice. Use a
+colon, a full stop, brackets or a comma instead. Worth a grep before any commit:
+
+```
+grep -rn "—" index.html work/ js/
+```
+
+## Voice
+
+Marketing pages (Websites, Contact, case studies) speak as **we**. The devlog speaks as
+**I** — it is one person's log and self-deprecation needs a self. Keep that split; it is
+deliberate rather than an oversight.
+
+## The contact form
+
+`#page-contact`. The form is **not wired up yet** — one line does it:
+
+```js
+const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";   // js/threshold.js
+```
+
+Create the form at formspree.io, paste the endpoint over `YOUR_FORM_ID`, done. Until then
+the form still validates and still works: submitting opens a pre-filled email to
+`FALLBACK_EMAIL` instead of pretending to send. It never silently swallows an enquiry.
+
+Submission is `fetch` with `Accept: application/json`, per Formspree's own AJAX pattern —
+success is `response.ok`, and a failure reads `errors[].message` out of the JSON body. On
+success the whole form is replaced with a confirmation panel and `/contact/sent` is sent
+to Umami, so the conversion rate is visible without any extra setup.
+
+There is a `_gotcha` honeypot field, hidden off-screen. Formspree discards submissions
+that fill it; the JS bails on it too, so it works either way.
+
+## The service reel
+
+The rolling list on the Websites page (`REEL` in `threshold.js`). The rotating word is set
+larger than the "We do" lead-in (`.reel-lead` is `.58em` of the line size) so the service is
+the thing that reads, not the verb. Words are plain strings
+— add, remove or reorder freely; the brass rule underneath measures each word and animates
+to its width, so nothing needs adjusting when the list changes. It re-measures on resize
+and after webfonts load.
+
+It stops when the tab is hidden or when you are not on the Websites page, so it is not
+burning a timer in the background. Words are set in sentence case in the JS and uppercased
+in CSS (`text-transform`), so the source stays readable and the accessible label on
+`.reel-line` reads as a normal sentence to a screen reader.
+
+## The character select
+
+Top right of the Games page head, on the same line as the h1. Deliberately small: the
+**trailer** is what should be on screen when the page loads, and the roster is a signpost
+pointing at it, not the event. If you enlarge the slots, check the trailer still opens above
+the fold at 900px tall before you commit.
+
+Slots are `<button>`s. Clicking a locked one swaps the trailer for its `data-quip` line;
+clicking The Articles (or "Back to The Articles") swaps it back. That is why the quips are
+no longer printed on the cards — they are the reward for poking a locked slot.
+
+Page order on Games: header and roster, then the **trailer slot** (the video), then the
+trailer copy underneath it, then the blurb, devlog and release.
+
+The slot breaks out of the 1140px shell and takes `min(94vw, 1720px, 74vh x 16/9)` — about
+1210 x 680 on a 1440 x 950 screen. It uses 94vw rather than 100vw on purpose: the page is
+its own scroll container, so a true 100vw block gives it a horizontal scrollbar.
+
+`initTrailerScroll()` scales the **slot itself** (not the whole stage) between 0.84 and 1.0
+with a smoothstep curve, driven by how near its centre is to the middle of the viewport.
+Opacity rides along from 0.66 to 1. It sits at about 0.97 on load, peaks a scroll-notch
+later, then falls away, which is what makes the movement readable rather than a wobble.
+Disabled entirely under `prefers-reduced-motion`.
+
+**To add the cover art:** drop a portrait image at `assets/articles-cover.png`. Nothing
+else to change — the `<img>` is already there with `onerror="this.remove()"`, so until the
+file exists it deletes itself and the placeholder shows through. That does mean a 404 in
+the console until you add it, which is deliberate: it is the cheapest possible reminder.
+
+Unlocking a slot later = swap `is-locked` for `is-unlocked`, replace the padlock SVG with
+an `<img>`, fill in the name. The greyed-out look is `filter: grayscale(1)` plus opacity,
+so a locked slot with real art in it would still read as locked.
 
 ## Routing
 
-The homepage is a single page that swaps views, but `#websites` and `#games` are real
-addresses. Landing on one — from a devlog's back link, or a shared link — calls
+The homepage is a single page that swaps views, but `#websites`, `#games` and
+`#contact` are real addresses. Landing on one — from a devlog's back link, or a shared link — calls
 `showInstant()`, which puts you on the page with no dive. **The dive is the reward for
 choosing a door, not a toll on every visit.** Diving sets the hash via `history.replaceState`;
 coming home clears it.
 
 Route restoration runs *after* the gate, in both the already-unlocked and just-unlocked
 paths, so a deep link still asks for the password first.
+
+**Contact has no door, and never fires one.** There are two doors on the threshold and that
+is the whole idea — a third would dilute it. `contact` routes through `fadeTo()` /
+`fadeHome()` rather than `diveTo()` / `backOut()`, in **both** directions: arriving at the
+contact page and leaving it are fades. Firing the door animation off a form page reads as
+decoration rather than as going somewhere.
+
+The door is reserved for: threshold → Websites/Games, and Websites ↔ Games.
+
+## The tuning panel
+
+Only on the threshold. `markRoute()` stamps `data-route` on `<html>` and CSS hides `.tuner`
+anywhere else, because the sliders only control the particle wordmark, which only exists on
+the home page. Delete the panel before this goes live.
 
 ## Where to change things
 
@@ -146,6 +259,10 @@ thing filling the screen at the end of the flight *is* the aperture you clicked,
 about its own centre — so there is nothing to keep in register and nothing that can
 drift. The swap waits on `transitionend`, not a timer, with a timeout only as a guard
 against a dropped event.
+
+`section.roster-band` and `section.trailer-band` are written with the element prefix on
+purpose: plain `.roster-band` (0,1,0) loses to `section.band` (0,1,1) and the border-top
+override silently does nothing. Watch for that pattern anywhere in this stylesheet.
 
 Two things to leave alone unless you know why they're there: the scroll lock plus
 `scrollbar-gutter: stable` on `html` (without the gutter, hiding the scrollbar mid-flight
