@@ -131,7 +131,7 @@
   }
 
   .gate-mark { display: flex; align-items: center; gap: .7rem; }
-  .gate-mark svg { width: 34px; height: 34px; color: var(--brass-lit); flex: none; }
+  .gate-mark .mark { width: auto; height: 76px; flex: none; display: block; }
   .gate-mark b {
     font-family: Archivo, system-ui, sans-serif; font-weight: 800;
     font-size: 1.15rem; letter-spacing: -0.015em;
@@ -212,7 +212,13 @@
     display: flex; align-items: center; gap: .7rem;
     background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: inherit;
   }
-  .wordmark svg { width: 30px; height: 30px; color: var(--brass-lit); flex: none; }
+  .wordmark .mark {
+    width: auto;
+    height: 48px;
+    flex: none;
+    display: block;
+    margin-right: .1rem;
+  }
   .wordmark b {
     font-family: Archivo, system-ui, sans-serif; font-weight: 800;
     font-size: 1.02rem; letter-spacing: -0.015em;
@@ -1043,7 +1049,7 @@
     border-color: var(--brass-dim);
     background: rgba(176,141,87,0.06);
   }
-  .doc-back svg { width: 20px; height: 20px; color: var(--brass-lit); flex: none; }
+  .doc-back .mark { width: auto; height: 26px; flex: none; display: block; }
 
   .doc-meta {
     display: flex; flex-wrap: wrap; gap: .4rem .7rem;

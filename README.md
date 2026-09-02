@@ -52,7 +52,7 @@ drop the fallback if you only ever serve over HTTPS or localhost.
 index.html            all three views — home, websites, games
 css/styles.css        design tokens at the top, then components in page order
 js/threshold.js       particles, magnetic text, the door/dive sequence, the gate
-assets/               the mark, used as the favicon
+assets/               the mark (PNG, transparent), favicon and touch icon
 devlog/               one file per entry, each a standalone page
 work/                 one file per case study, each a standalone page
 ```
@@ -112,6 +112,27 @@ via `body.doc`, unlike devlog entries, which carry the game's palette.
 The Websites page shows a **preview card** (`.study`) linking to the full page — deliberately
 one client, not a list. Not every client wants their site written about, and a grid of logos
 is a promise you cannot always keep. New case study = new file in `work/`, new `.study` card.
+
+## The mark
+
+`assets/brassneck-mark.png` is a transparent PNG, keyed out of Oliver's dark-ground
+artwork. The counters (eyebrows, eye, mouth, the gap under the ring) were drawn in the
+same ink as the background, so keying the dark out leaves those knocked through: on any
+dark surface the mark reads exactly as drawn, and it is not stuck to one background colour.
+
+`brassneck-mark-light.png` is the white-ground variant, kept for print and for anything on
+a pale surface. `favicon.png` and `apple-touch-icon.png` are the mark composited back onto
+the ink square, since a browser tab needs a solid shape rather than a transparent one.
+
+Referenced as an `<img class="mark">` in five places on `index.html`, plus the case study
+and the devlog back links, sized by CSS height (48px masthead, 76px on the gate, 22-26px on
+the back links).
+
+**Known limitation, worth deciding on before launch:** this mark carries facial detail and
+does not survive 16px. At favicon size it reads as a brass blob. The previous abstract mark
+was chosen partly because it held its silhouette that small (see `brand-identity.md`). If
+the tab icon matters, the answer is a separate simplified glyph for 16-32px, not a smaller
+render of this one.
 
 ## House style
 
