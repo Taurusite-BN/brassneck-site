@@ -327,7 +327,8 @@
   const pages = {
     websites: document.getElementById("page-websites"),
     games:    document.getElementById("page-games"),
-    contact:  document.getElementById("page-contact")
+    contact:  document.getElementById("page-contact"),
+    studio:   document.getElementById("page-studio")
   };
   const doors = {
     websites: document.getElementById("door-websites"),
@@ -403,7 +404,8 @@
     home:     "Brassneck Threshold",
     websites: "Websites: Brassneck Studio",
     games:    "Games: Brassneck Studio",
-    contact:  "Contact: Brassneck Studio"
+    contact:  "Contact: Brassneck Studio",
+    studio:   "Studio: Brassneck Studio"
   };
 
   // Arriving straight at #games, from the devlog's back link, or a shared
@@ -619,15 +621,16 @@
     if (dest === route || phase !== "idle") return;
 
     if (dest === "home") {
-      if (route === "contact") { fadeHome(); return; }
+      if (route === "contact" || route === "studio") { fadeHome(); return; }
       backOut();
       return;
     }
     // Only the two doors on the threshold open. Arriving at or leaving the
     // contact page is a fade, firing the door animation from a form page
     // reads as decoration rather than as going somewhere.
-    if (dest === "contact") { fadeTo("contact"); return; }
-    if (route === "contact") { fadeTo(dest); return; }
+    const DOORLESS = dest === "contact" || dest === "studio";
+    if (DOORLESS) { fadeTo(dest); return; }
+    if (route === "contact" || route === "studio") { fadeTo(dest); return; }
     if (route === "home") { diveTo(dest); return; }
     backOut(() => after(120, () => diveTo(dest)));
   }

@@ -150,6 +150,39 @@ Marketing pages (Websites, Contact, case studies) speak as **we**. The devlog sp
 **I** — it is one person's log and self-deprecation needs a self. Keep that split; it is
 deliberate rather than an oversight.
 
+## The Studio page
+
+`#page-studio`. It exists to answer one objection out loud: *a studio that does websites
+and games probably does neither properly*. Naming the doubt is more persuasive than
+avoiding it, so the h1 is "Concerns? Meet the team."
+
+Three moves, in order:
+
+1. **The team.** Four people, four roles. Each one-liner is written to show the *transfer*,
+   not the biography, because the transfer is the argument.
+2. **Same skill, two rooms.** A six-row table with the website version on the left, the
+   discipline in the middle, the game version on the right. This is the actual proof.
+   Add rows by copying a `.xfer`.
+3. **The punchline.** "We have the skills to do both. So we had the audacity to do both,"
+   followed by the dictionary gloss of *brassneck*, which is what lands the name.
+
+Portraits are optional and follow the same pattern as everywhere else: each looks for
+`assets/team-<name>.png` and falls back to a brass initial if the file is not there.
+
+Like Contact, Studio routes by fade rather than by door.
+
+**Reaching it from the threshold:** `.why-both`, a small brass plaque reading "Why both?"
+hung on the wall between the two doors, with hairlines running off toward each. It is a
+sibling of `.stage` rather than a flex child of it, absolutely positioned, so adding it does
+not push the doors apart. Below 900px the doors are too close together to hang anything
+between them, so it drops underneath and centres. It stays `position: relative` there
+rather than `static`, because `.floor` is absolutely positioned over that part of the
+section and would otherwise paint on top of it.
+
+**The four one-liners are drafts.** They describe how each role carries across rather than
+making claims about anyone's history, but they are words put in real people's mouths on a
+public page. Get them read before launch.
+
 ## The contact form
 
 `#page-contact`. The form is **not wired up yet** — one line does it:
@@ -228,8 +261,8 @@ coming home clears it.
 Route restoration runs *after* the gate, in both the already-unlocked and just-unlocked
 paths, so a deep link still asks for the password first.
 
-**Contact has no door, and never fires one.** There are two doors on the threshold and that
-is the whole idea — a third would dilute it. `contact` routes through `fadeTo()` /
+**Contact and Studio have no door, and never fire one.** There are two doors on the threshold and that
+is the whole idea — a third would dilute it. both route through `fadeTo()` /
 `fadeHome()` rather than `diveTo()` / `backOut()`, in **both** directions: arriving at the
 contact page and leaving it are fades. Firing the door animation off a form page reads as
 decoration rather than as going somewhere.

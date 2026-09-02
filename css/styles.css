@@ -1079,6 +1079,61 @@
   /* ================================================================
      Character select, compact, centred, so the trailer leads
      ================================================================ */
+
+  /* ---- the plaque on the wall between the doors ------------------ */
+
+  .why-both {
+    position: absolute;
+    left: 50%;
+    bottom: calc(clamp(2rem, 5vh, 3.2rem) + 1.1rem);
+    transform: translateX(-50%);
+    z-index: 3;
+
+    padding: .6rem 1.15rem;
+    background: var(--wall);
+    border: 1px solid var(--brass-dim);
+    color: var(--brass-lit);
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 240ms var(--ease), border-color 240ms var(--ease), color 240ms var(--ease);
+  }
+  .why-both:hover, .why-both:focus-visible {
+    background: rgba(176,141,87,0.14);
+    border-color: var(--brass);
+    color: var(--brass-hi);
+  }
+
+  /* hairlines running off toward each door, so it reads as fixed to the wall */
+  .why-both::before,
+  .why-both::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: clamp(1.2rem, 6vw, 5rem);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--brass-dim));
+    pointer-events: none;
+  }
+  .why-both::before { right: 100%; margin-right: .85rem; }
+  .why-both::after  { left: 100%; margin-left: .85rem; transform: scaleX(-1); }
+
+  /* below this the doors are too close together to hang anything between */
+  @media (max-width: 900px) {
+    .why-both {
+      /* relative rather than static so the z-index still beats the floor,
+         which is absolutely positioned over this part of the section */
+      position: relative;
+      left: auto;
+      bottom: auto;
+      transform: none;
+      display: block;
+      margin: 0 auto clamp(2rem, 5vh, 3.2rem);
+    }
+    .why-both::before, .why-both::after { display: none; }
+  }
+
   /* ================================================================
      Games, character select
      ================================================================ */
@@ -1461,6 +1516,146 @@
 
   @media (max-width: 720px) {
     .reel-word { white-space: normal; }
+  }
+
+
+  /* ================================================================
+     Studio: the team, and the case for doing both
+     ================================================================ */
+
+  .crew {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .crew-member {
+    background: var(--ink);
+    padding: 1.6rem 1.4rem 1.8rem;
+    display: grid;
+    align-content: start;
+    gap: .4rem;
+    transition: background 280ms var(--ease);
+  }
+  .crew-member:hover { background: rgba(176,141,87,0.05); }
+
+  .crew-face {
+    position: relative;
+    width: 74px; height: 74px;
+    display: grid; place-items: center;
+    margin-bottom: .8rem;
+    overflow: hidden;
+    border: 1px solid var(--brass-dim);
+    background:
+      radial-gradient(80% 80% at 40% 25%, rgba(176,141,87,0.16), transparent 70%),
+      #0B0C11;
+  }
+  .crew-face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .crew-initial {
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em;
+    color: var(--brass);
+  }
+
+  .crew-name {
+    margin: 0;
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 800; font-size: 1.16rem; letter-spacing: -0.02em;
+    color: var(--paper);
+  }
+  .crew-role {
+    margin: 0 0 .5rem;
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--brass);
+  }
+  .crew-line { margin: 0; color: var(--muted); font-size: var(--step-0); }
+
+  /* ---- the transfer table --------------------------------------- */
+
+  .xfers { margin-top: 1.6rem; border-top: 1px solid var(--rule); }
+
+  .xfer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem 1.6rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .xfer-web { text-align: right; color: var(--dim); font-size: var(--step-0); }
+  .xfer-game { text-align: left; color: var(--dim); font-size: var(--step-0); }
+  .xfer-mid {
+    justify-self: center;
+    padding: .32rem .7rem;
+    border: 1px solid var(--brass-dim);
+    background: rgba(176,141,87,0.07);
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .58rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--brass-lit);
+    white-space: nowrap;
+  }
+
+  .xfer-head {
+    border-bottom-color: var(--hairline);
+    padding-bottom: .7rem;
+  }
+  .xfer-head .xfer-web,
+  .xfer-head .xfer-game {
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .xfer-head .xfer-mid { border-color: transparent; background: none; color: var(--muted); }
+
+  /* ---- the punchline --------------------------------------------- */
+
+  .audacity {
+    display: grid;
+    justify-items: start;
+    gap: .2rem;
+    padding: clamp(2rem, 5vw, 3.2rem);
+    border: 1px solid var(--hairline);
+    background:
+      radial-gradient(90% 140% at 0% 0%, rgba(176,141,87,0.11), transparent 62%),
+      rgba(176,141,87,0.035);
+  }
+  .aud-line {
+    margin: 0;
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    letter-spacing: -0.032em;
+    line-height: 1.08;
+    color: var(--dim);
+    text-wrap: balance;
+  }
+  .aud-punch { color: var(--brass-lit); }
+  .aud-note {
+    margin: 1.5rem 0 0;
+    max-width: 56ch;
+    color: var(--muted);
+    font-size: var(--step-0);
+  }
+  .aud-note strong {
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 700;
+    color: var(--paper);
+  }
+  .aud-note span { font-style: italic; color: var(--brass-dim); margin-left: .2rem; }
+
+  @media (max-width: 980px) {
+    .crew { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .xfer { grid-template-columns: 1fr; gap: .35rem; padding: 1.1rem 0; }
+    .xfer-web, .xfer-game { text-align: left; }
+    .xfer-mid { justify-self: start; margin: .2rem 0; }
+    .xfer-head { display: none; }
+  }
+  @media (max-width: 520px) {
+    .crew { grid-template-columns: 1fr; }
   }
 
   /* ================================================================
