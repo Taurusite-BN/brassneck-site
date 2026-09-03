@@ -1,7 +1,8 @@
-# Brassneck Studio — threshold prototype
+# Brassneck Studio — the site
 
-Homepage prototype: a particle wordmark and magnetic body text that answer to the cursor,
-and two doors that open and dive through to the Work and Games pages.
+A particle wordmark and magnetic body text that answer to the cursor, two doors that open
+and dive through to Websites and Games, and behind them the real pages: services, prices,
+a case study, the studio, the devlog, and a working enquiry form.
 
 ## Run it
 
@@ -17,41 +18,28 @@ violation and the wordmark comes out blank. Serving over `http://` fixes it.
 If you don't have it: VS Code → Extensions → search "Live Server" (Ritwick Dey).
 
 
-## The preview gate
+## The preview gate (removed, 3 Sep 2026)
 
-The site opens on a password screen. Password: **Articles**. Unlocking is remembered for
-the browser tab (`sessionStorage`), so a refresh does not ask again; closing the tab does.
+The site used to open on a password screen (`Articles`, hashed, held in `sessionStorage`).
+It came down when the shop opened: prices are published, the enquiry form is live, and a
+padlock in front of a working shopfront costs more in lost enquiries than it saves in
+polish. See `claude/website-service-marketing-plan.md`, Phase 0.
 
-**Be clear about what this is.** It is a doormat, not a lock. The whole site is still in
-`index.html`, so anyone who opens dev tools, disables JavaScript, or reads view-source can
-walk straight past it. The password itself is stored as a SHA-256 hash rather than in
-plain text, which stops a casual glance at the source revealing it — but a word like
-"Articles" would not survive a dictionary attack, and that is not the point. The point is
-that a stranger who lands on the URL sees "in construction" and stops.
+What went with it: `#gate` and its inline script in `index.html`, the whole gate block in
+`styles.css` (including `html:not(.is-unlocked) body { overflow: hidden }`), section 0 of
+`threshold.js`, and the redirect scripts at the top of `work/*.html` and `devlog/*.html`.
+`restoreRoute()` is now called directly from `boot()`.
 
-**Before this goes on a real domain, put real access control on the host, not in the
-page.** On Cloudflare Pages that means Cloudflare Access in front of the deployment —
-Cloudflare's own docs point to it for exactly this case. It authenticates before any HTML
-is served, so the unfinished site never reaches an unauthorised browser at all. The gate
-in this repo can stay as a belt-and-braces layer or be deleted at that point.
-
-To change the password, hash the new one and replace both constants at the top of the
-gate section in `js/threshold.js`:
-
-```
-echo -n "NewPassword" | shasum -a 256
-```
-
-`GATE_FNV` is a non-cryptographic fallback used only when `crypto.subtle` is unavailable
-(a page served over plain HTTP from a LAN IP rather than localhost). Regenerate it too, or
-drop the fallback if you only ever serve over HTTPS or localhost.
+If a future unfinished section needs hiding, do it on the host (Cloudflare Access in front
+of the deployment) rather than in the page. A doormat in JavaScript never stopped anybody
+who opened dev tools.
 
 ## Files
 
 ```
 index.html            all three views — home, websites, games
 css/styles.css        design tokens at the top, then components in page order
-js/threshold.js       particles, magnetic text, the door/dive sequence, the gate
+js/threshold.js       particles, magnetic text, the door/dive sequence, routing
 assets/               the mark (PNG, transparent), favicon and touch icon
 devlog/               one file per entry, each a standalone page
 work/                 one file per case study, each a standalone page
@@ -68,16 +56,10 @@ Each entry keeps *The Articles*' own palette (bone, sea slate, bilge dark, wet o
 brass) rather than the studio's. That is deliberate: stepping into an entry should feel
 like stepping into the game's world, not reading a studio blog post about it.
 
-**To add an entry:** drop the new file in `devlog/`, add the two lines it needs at the top
-(the session-gate script and the `.back` link — copy them from the existing entry), then
-add one `<li>` to `.logs` in the Games section of `index.html`. Newest first.
+**To add an entry:** drop the new file in `devlog/`, copy the `.back` link from the existing
+entry, then add one `<li>` to `.logs` in the Games section of `index.html`. Newest first.
 
-Two things every entry needs:
-
-- **The gate script in `<head>`.** It checks `sessionStorage` for the preview unlock and
-  redirects to `index.html` if it is missing. Without it, an entry URL is an open door
-  straight past the password.
-- **The `.back` link** pointing at `../index.html#games` — see routing below.
+Every entry needs **the `.back` link** pointing at `../index.html#games`, see routing below.
 
 ## Service examples
 
@@ -101,12 +83,32 @@ intercepted (`preventDefault`) and `modal.close()` is called on `animation.onfin
 threshold has to bail when `dialog[open]` matches. Without that guard, closing an example
 with Escape also closed the whole page.
 
+## Pricing
+
+Published on the Websites page ("What it costs"), straight out of
+`claude/website-service-marketing-plan.md` §3. Build tiers `£800 / £1,500 / Ask`, care
+plans `£20 / £60 / £100` a month, and **hosting included for the first twelve months on
+every build** (which is the free year of Lights On, and the mechanism that gets every
+client onto a plan).
+
+Two things to hold to when editing these numbers:
+
+- **£1,500 is deliberately below the UK band** (£2,000-£5,000 for a brochure site) because
+  there are two case studies and no testimonial yet, so price is doing the work proof
+  cannot. **Review after the third paid build. £1,950 is the next stop.**
+- **Care and Partner are sold from day one**, not from month thirteen. The included year
+  covers the Lights On layer only. If the free year quietly grows to include content edits
+  there is no upgrade left to sell.
+
+Markup is `.tiers` / `.tier` (the middle one carries `.is-pick` and the brass flag) and
+`.plans` / `.plan`, both in `#page-websites`. Both collapse to one column under 900px.
+
 ## Case studies
 
-`work/*.html`, one standalone page each, same pattern as the devlog: real URL, gate script
-in the `<head>`, `.doc-back` link home. **The gate script must also add `is-unlocked` to
-`<html>`** — `styles.css` keeps `<body>` unscrollable until that class is present, and these
-pages never run the main JS. Miss it and the page renders perfectly and refuses to scroll. They use the **studio** stylesheet (`../css/styles.css`)
+`work/*.html`, one standalone page each, same pattern as the devlog: real URL, `.doc-back`
+link home. (These pages used to need an `is-unlocked` class on `<html>` to scroll at all,
+because the gate stylesheet held `<body>` still until the password was passed. That rule
+went with the gate.) They use the **studio** stylesheet (`../css/styles.css`)
 via `body.doc`, unlike devlog entries, which carry the game's palette.
 
 The Websites page shows a **preview card** (`.study`) linking to the full page — deliberately
@@ -125,8 +127,7 @@ a pale surface. `favicon.png` and `apple-touch-icon.png` are the mark composited
 the ink square, since a browser tab needs a solid shape rather than a transparent one.
 
 Referenced as an `<img class="mark">` in five places on `index.html`, plus the case study
-and the devlog back links, sized by CSS height (48px masthead, 76px on the gate, 22-26px on
-the back links).
+and the devlog back links, sized by CSS height (48px masthead, 22-26px on the back links).
 
 **Known limitation, worth deciding on before launch:** this mark carries facial detail and
 does not survive 16px. At favicon size it reads as a brass blob. The previous abstract mark
@@ -185,15 +186,15 @@ public page. Get them read before launch.
 
 ## The contact form
 
-`#page-contact`. The form is **not wired up yet** — one line does it:
+`#page-contact`. Live since 3 Sep 2026:
 
 ```js
-const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";   // js/threshold.js
+const FORM_ENDPOINT = "https://formspree.io/f/maeybwaz";   // js/threshold.js
 ```
 
-Create the form at formspree.io, paste the endpoint over `YOUR_FORM_ID`, done. Until then
-the form still validates and still works: submitting opens a pre-filled email to
-`FALLBACK_EMAIL` instead of pretending to send. It never silently swallows an enquiry.
+If that endpoint is ever cleared back to a `YOUR_FORM_ID` placeholder the form still
+validates and still works: submitting opens a pre-filled email to `FALLBACK_EMAIL` instead
+of pretending to send. It never silently swallows an enquiry.
 
 Submission is `fetch` with `Accept: application/json`, per Formspree's own AJAX pattern —
 success is `response.ok`, and a failure reads `errors[].message` out of the JSON body. On
@@ -258,8 +259,8 @@ The homepage is a single page that swaps views, but `#websites`, `#games` and
 choosing a door, not a toll on every visit.** Diving sets the hash via `history.replaceState`;
 coming home clears it.
 
-Route restoration runs *after* the gate, in both the already-unlocked and just-unlocked
-paths, so a deep link still asks for the password first.
+`restoreRoute()` runs from `boot()`, once the fonts have settled, so a deep link lands
+directly on its page with the title and the Umami view already set.
 
 **Contact and Studio have no door, and never fire one.** There are two doors on the threshold and that
 is the whole idea — a third would dilute it. both route through `fadeTo()` /

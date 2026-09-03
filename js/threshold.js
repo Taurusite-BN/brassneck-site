@@ -5,79 +5,6 @@
 
 
   /* ================================================================ *
-   * 0. Preview gate
-   *
-   * This keeps the unfinished site off the open web while it is being
-   * reviewed. It is a doormat, not a lock: the markup is still in the
-   * file for anyone who opens dev tools. Real access control belongs
-   * on the host, see the README.
-   * ================================================================ */
-
-  const GATE_SHA = "b14ac78a46e90b7137f90518d51ce3677cf078db540d60d17097b6c40e25abf2";
-  const GATE_FNV = "5190b83e";
-
-  function fnv1a(str) {
-    let h = 0x811c9dc5;
-    const bytes = new TextEncoder().encode(str);
-    for (const b of bytes) {
-      h ^= b;
-      h = Math.imul(h, 0x01000193) >>> 0;
-    }
-    return h.toString(16).padStart(8, "0");
-  }
-
-  async function digest(str) {
-    if (window.crypto && crypto.subtle && window.isSecureContext) {
-      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
-    }
-    return null;
-  }
-
-  function initGate() {
-    const gate = document.getElementById("gate");
-    if (!gate) return;
-    const form  = document.getElementById("gate-form");
-    const input = document.getElementById("gate-input");
-    const err   = document.getElementById("gate-error");
-
-    let already = false;
-    try { already = sessionStorage.getItem("bn-preview") === "open"; } catch (e) {}
-    if (already) {
-      gate.remove();
-      document.documentElement.classList.add("is-unlocked");
-      restoreRoute();
-      return;
-    }
-
-    setTimeout(() => input.focus(), 60);
-
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-      const value = input.value.trim();
-      const sha = await digest(value);
-      const ok = sha ? sha === GATE_SHA : fnv1a(value) === GATE_FNV;
-
-      if (!ok) {
-        err.textContent = "That is not it.";
-        gate.classList.add("is-wrong");
-        setTimeout(() => gate.classList.remove("is-wrong"), 500);
-        input.select();
-        return;
-      }
-
-      try { sessionStorage.setItem("bn-preview", "open"); } catch (e) {}
-      err.textContent = "";
-      document.documentElement.classList.add("is-unlocked");
-      gate.classList.add("is-open");
-      setTimeout(() => gate.remove(), 620);
-      measureHero();
-      measureGlyphs();
-      restoreRoute();
-    });
-  }
-
-  /* ================================================================ *
    * 1. The particle field
    * ================================================================ */
 
@@ -401,7 +328,7 @@
   }
 
   const TITLES = {
-    home:     "Brassneck Threshold",
+    home:     "Brassneck Studio",
     websites: "Websites: Brassneck Studio",
     games:    "Games: Brassneck Studio",
     contact:  "Contact: Brassneck Studio",
@@ -423,8 +350,8 @@
     document.documentElement.classList.add("is-locked");
     document.title = TITLES[side];
     trackView("/" + side, TITLES[side]);
-  }
     markRoute();
+  }
 
   function restoreRoute() {
     const side = (location.hash || "").replace("#", "");
@@ -730,7 +657,7 @@
    * the form falls back to an email rather than pretending to send.
    * ================================================================ */
 
-  const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+  const FORM_ENDPOINT = "https://formspree.io/f/maeybwaz";
   const FALLBACK_EMAIL = "oliver@brassneck.studio";
 
   function initEnquiry() {
@@ -906,42 +833,42 @@
     "web-design": {
       title: "Web design",
       shot: "assets/example-web-design.png",
-      ph: "Ember8 home, Dutch",
+      ph: "Ember8 home, Dutch &middot; screenshot pending",
       body: "<p>Ember8 sells something delicate: therapy for people stuck in a pattern. Push the design too hard and it reads as a clinic; push too little and nobody books.</p>" +
             "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>"
     },
     "seo": {
       title: "SEO",
       shot: "assets/example-seo.png",
-      ph: "Two language trees, one site",
+      ph: "Two language trees, one site &middot; screenshot pending",
       body: "<p>Ember8 needed to be found in Dutch <em>and</em> English, by people searching for a feeling rather than a service name.</p>" +
             "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>"
     },
     "hosting": {
       title: "Hosting &amp; support",
       shot: "assets/example-hosting.png",
-      ph: "Static build, no moving parts",
+      ph: "Static build, nothing to photograph",
       body: "<p>A therapist should not be updating plugins between clients.</p>" +
             "<p>Ember8 is plain HTML, one stylesheet, one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for. It will still load quickly in five years.</p>"
     },
     "reports": {
       title: "Traffic reports",
       shot: "assets/example-reports.png",
-      ph: "One page, once a month",
+      ph: "One page a month &middot; numbers withheld, they are the client&rsquo;s",
       body: "<p>Analytics went on Ember8 the day it launched, which is the part most freelance builds skip. You cannot report on what you did not measure, and the moment to start is before launch, not when somebody asks how it is going.</p>" +
             "<p>What you get back is a page, not a PDF: who came, what they did, and the one thing we would change next.</p>"
     },
     "branding": {
       title: "Branding",
       shot: "assets/example-branding.png",
-      ph: "The Brassneck mark at 16px",
+      ph: "The Brassneck mark at 16px, smaller than this caption",
       body: "<p>Our own mark is the shortest example we have. A coiled brass tube opening into a bell, the literal reading of the name, so the joke carries the meaning and nothing needs explaining.</p>" +
             "<p>Seven other shapes were drawn and thrown away because they failed the only test that matters: rendered at sixteen pixels in one colour, could you still tell what it was?</p>"
     },
     "graphic": {
       title: "Graphic design",
       shot: "assets/example-graphic.png",
-      ph: "Devlog, in the game's own palette",
+      ph: "Devlog, in the game&rsquo;s own palette &middot; one click away",
       body: "<p>The Articles devlog is set in the game's palette rather than the studio's (bone, sea slate, bilge dark, wet oak, lamp brass) so that opening an entry feels like stepping into the game rather than reading a blog post about it.</p>" +
             "<p>That is what this is for: everything around the main thing speaking in the same voice as the main thing.</p>"
     }
@@ -981,7 +908,7 @@
         if (!ex) return;
         title.innerHTML = ex.title;
         body.innerHTML = ex.body;
-        ph.textContent = ex.ph;
+        ph.innerHTML = ex.ph;
         img.hidden = false;
         img.onerror = () => { img.hidden = true; };
         img.src = ex.shot;
@@ -1074,7 +1001,7 @@
     sizeField(); measureHero(); sampleWord(); makeDust(); splitMagnetic();
     kickLeaves();
     markRoute();
-    initGate();
+    restoreRoute();
     startReel();
     initEnquiry();
     initRoster();

@@ -20,24 +20,6 @@
 </head>
 <body>
 
-  <div id="gate">
-  <form class="gate-card" id="gate-form" novalidate>
-    <span class="gate-mark">
-          <img class="mark" src="assets/brassneck-mark.png" alt="" width="772" height="834">
-      <span><b>Brassneck</b><i>STUDIO</i></span>
-    </span>
-    <span class="gate-plate">In construction</span>
-    <p class="gate-line">This preview is for the studio and the people reviewing it. It is unfinished, and it is not public yet.</p>
-    <label class="gate-field">
-      <span class="gate-label">Password</span>
-      <input type="password" id="gate-input" name="preview" autocomplete="current-password" autocapitalize="off" spellcheck="false">
-    </label>
-    <button class="gate-go" type="submit">Enter</button>
-    <p class="gate-error" id="gate-error" role="status" aria-live="polite"></p>
-  </form>
-</div>
-<script>try{if(sessionStorage.getItem("bn-preview")==="open"){document.documentElement.classList.add("is-unlocked");}}catch(e){}</script>
-
 <canvas id="field" aria-hidden="true"></canvas>
 
   <!-- ======================= HOME (inside the camera) ======================= -->
@@ -132,7 +114,7 @@
 
     <div class="shell">
       <div class="footnote">
-        <span>Prototype: homepage threshold, Brassneck Studio</span>
+        <span>Brassneck Studio &middot; websites and games, from the same four people</span>
         <span>oliver@brassneck.studio</span>
       </div>
     </div>
@@ -210,11 +192,81 @@
       </section>
 
       <section class="band">
+        <h2 class="band-title">What it costs</h2>
+        <p class="prose price-intro">Prices are on the page because you were going to ask anyway, and because the half hour it takes to write a quote is a half hour neither of us gets back. <b>Hosting, domain, SSL, backups and monitoring are included for the first twelve months on every build.</b></p>
+
+        <div class="tiers">
+          <div class="tier">
+            <span class="tier-name">Basic</span>
+            <span class="tier-price">&pound;800</span>
+            <span class="tier-line">One page, done properly. The whole story on one screen, which is harder than four pages and reads better.</span>
+            <ul class="tier-list">
+              <li>Built mobile first</li>
+              <li>Enquiry form that arrives in your inbox</li>
+              <li>Analytics from day one</li>
+              <li>First year&rsquo;s hosting included</li>
+            </ul>
+            <span class="tier-turn">About two weeks</span>
+          </div>
+
+          <div class="tier is-pick">
+            <span class="tier-flag">Most people want this one</span>
+            <span class="tier-name">Standard</span>
+            <span class="tier-price">&pound;1,500</span>
+            <span class="tier-line">Five to seven pages, with the words shaped alongside you rather than left as a homework assignment.</span>
+            <ul class="tier-list">
+              <li>Copy written with you, not handed to you</li>
+              <li>Search basics done in the structure, not bolted on</li>
+              <li>Form routing, analytics, the lot</li>
+              <li>First year&rsquo;s hosting included</li>
+            </ul>
+            <span class="tier-turn">Four to six weeks</span>
+          </div>
+
+          <div class="tier">
+            <span class="tier-name">Larger</span>
+            <span class="tier-price">Ask</span>
+            <span class="tier-line">Two languages, booking flows, something that moves in a way nothing else does. The Ember8 shape.</span>
+            <ul class="tier-list">
+              <li>Quoted per project, in writing, before anything starts</li>
+              <li>No hourly surprises at the end</li>
+              <li>If it is not worth building we will say so</li>
+              <li>First year&rsquo;s hosting included</li>
+            </ul>
+            <span class="tier-turn">Eight weeks and up</span>
+          </div>
+        </div>
+
+        <h3 class="sub-title">Keeping it alive</h3>
+        <p class="prose price-intro">Our sites are hand written and static. There is no WordPress, so there are no plugins, no security treadmill, and nothing that falls over at 3am because something updated itself while you slept. These plans keep the site current, not upright.</p>
+
+        <div class="plans">
+          <div class="plan">
+            <span class="plan-name">Lights On</span>
+            <span class="plan-price">&pound;20<i>/mo</i></span>
+            <span class="plan-line">Hosting, domain renewal, SSL, uptime monitoring, off-site backups, and a yearly check that every link and form still does what it says. Free for your first twelve months.</span>
+          </div>
+          <div class="plan">
+            <span class="plan-name">Care</span>
+            <span class="plan-price">&pound;60<i>/mo</i></span>
+            <span class="plan-line">Everything above, plus 45 minutes of content changes a month (unused time rolls over once), a monthly note on your traffic, and a reply inside two working days.</span>
+          </div>
+          <div class="plan">
+            <span class="plan-name">Partner</span>
+            <span class="plan-price">&pound;100<i>/mo</i></span>
+            <span class="plan-line">Everything above, plus an hour and a half of changes a month, a review call every quarter, and first claim on the diary when you want something new.</span>
+          </div>
+        </div>
+
+        <p class="prose price-foot">What is not in the price: photography, licensed fonts, paid software, and anything with the word &ldquo;portal&rdquo; in it. Those get named and costed before they happen, never afterwards.</p>
+      </section>
+
+      <section class="band">
         <h2 class="band-title">A recent one, in full</h2>
         <a class="study" href="work/ember8.html">
           <span class="study-shot">
             <img src="assets/ember8-preview.png" alt="" onerror="this.remove()">
-            <span class="study-shot-ph">ember8.nl</span>
+            <span class="study-shot-ph">ember8.nl &middot; screenshot pending</span>
           </span>
           <span class="study-body">
             <span class="study-eyebrow">Live &middot; Design, build, analytics</span>
@@ -234,14 +286,14 @@
         <h2 class="band-title">Testimonials</h2>
         <div class="quotes">
           <figure class="quote is-pending">
-            <blockquote><span class="want">Ember8's words go here. One or two sentences, in their voice, about what changed, not about the design.</span></blockquote>
+            <blockquote><span class="want">Ember8 have been asked for a sentence. They run a therapy practice and we build websites, so between us somebody is always mid-session. Their words will be here, unedited, the moment they land.</span></blockquote>
             <figcaption>
               <span class="who">Ember8</span>
               <span class="what">Trauma release therapy &amp; breathwork &middot; Netherlands</span>
             </figcaption>
           </figure>
         </div>
-        <p class="prose want" style="margin-top:1.1rem">One good quote beats three vague ones. This grows as the work does.</p>
+        <p class="prose" style="margin-top:1.1rem">One real quote beats three invented ones, and we would rather have a short page than a fictional one. This grows as the work does.</p>
       </section>
 
       <section class="band">
@@ -290,7 +342,7 @@
               <button class="slot is-unlocked is-current" type="button" data-slot="articles" aria-pressed="true">
                 <span class="slot-art">
                   <img src="assets/articles-cover.png" alt="" onerror="this.remove()">
-                  <span class="slot-ph">art</span>
+                  <span class="slot-ph">cover art, in the post</span>
                 </span>
                 <span class="slot-foot"><span class="slot-name">The Articles</span></span>
               </button>
@@ -323,8 +375,8 @@
         <div class="trailer-stage" id="trailer-stage">
           <div class="reel">
             <div>
-              <span>Trailer</span>
-              <em>Twenty seconds, autoplaying, muted, looping.</em>
+              <span>Trailer pending</span>
+              <em>Twenty seconds of it, eventually. There is footage. There is also a man who has recut the first four frames eleven times and would like everyone to stop asking.</em>
             </div>
           </div>
 
@@ -366,7 +418,7 @@
           </li>
         </ul>
 
-        <p class="prose want" style="margin-top:1.3rem">Weekly is the goal.</p>
+        <p class="prose" style="margin-top:1.3rem">Weekly is the goal. Weekly is also what everybody says in entry one, so treat it as an ambition rather than a timetable.</p>
       </section>
 
       <section class="band">
