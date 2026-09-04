@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Articles Devlog</title>
+<meta name="description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<meta name="theme-color" content="#12171b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Articles Devlog — entry two">
+<meta property="og:description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* ------------------------------------------------------------------
+     The palette is the game's own, verbatim from claude/style-bible.md:
+     bone #D9D2C3 · sea slate #4A5A63 · bilge dark #1B2328 ·
+     wet oak #6E5236 · lamp brass #C9A227. Brass is the only saturated
+     colour and it appears only where light physically is.
+
+     This page commits to one visual world rather than shipping a light
+     theme, because the game does. Every colour is painted explicitly.
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:   #12171b;
+    --panel:    #1b2328;
+    --panel-2:  #202a30;
+    --rule:     #2b363d;
+    --bone:     #d9d2c3;
+    --body:     #c6c0b2;
+    --muted:    #8a97a0;
+    --faint:    #5d6b76;
+    --brass:    #c9a227;
+    --brass-lt: #e6c860;
+    --oak:      #6e5236;
+    --measure:  66ch;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--body);
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ---------------- masthead ---------------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 34px 0 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ship {
+    font-family: "IM Fell English", Georgia, serif;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1;
+    color: var(--bone);
+    text-wrap: balance;
+  }
+  .ship em {
+    font-style: italic;
+    color: var(--brass);
+  }
+  .standfirst {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 62ch;
+    line-height: 1.7;
+  }
+
+  /* ---------------- entry ---------------- */
+
+  .entry {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    gap: 0 40px;
+    padding-top: 52px;
+  }
+
+  .rail { position: relative; }
+  .rail-inner {
+    position: sticky;
+    top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+  }
+  .rail .date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+  }
+  .rail .meta {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.8;
+  }
+  .diamond {
+    width: 9px; height: 9px;
+    background: var(--brass);
+    transform: rotate(45deg);
+    margin: 10px 0 4px 1px;
+  }
+
+  .body { max-width: var(--measure); }
+
+  .lede {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--bone);
+    margin: 0 0 8px;
+    text-wrap: pretty;
+  }
+
+  h2 {
+    font-family: "IM Fell English", Georgia, serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--bone);
+    margin: 52px 0 0;
+    text-wrap: balance;
+  }
+  h2 + .kicker { margin-top: 6px; }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 14px;
+  }
+
+  h3 {
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--bone);
+    margin: 30px 0 0;
+  }
+
+  p { margin: 14px 0 0; }
+  p:first-child { margin-top: 0; }
+
+  strong { color: var(--bone); font-weight: 700; }
+  em.q {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.86em;
+    color: var(--brass-lt);
+    background: #ffffff08;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  ul { margin: 14px 0 0; padding-left: 0; list-style: none; }
+  li {
+    position: relative;
+    padding-left: 22px;
+    margin-top: 9px;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 0.66em;
+    width: 5px; height: 5px;
+    background: var(--oak);
+    transform: rotate(45deg);
+  }
+
+  /* ---------------- pictures ----------------
+     The entry column is 66ch and these want to be wider than that, so
+     figures break out to the right into the grid gutter on wide screens
+     and behave themselves on narrow ones. */
+
+  figure {
+    margin: 30px 0 0;
+    width: 100%;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+  }
+  figcaption {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.75;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    margin-top: 9px;
+    max-width: 78ch;
+  }
+  figcaption b {
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  figcaption .ba {
+    color: var(--brass);
+    font-weight: 500;
+  }
+
+  @media (min-width: 1040px) {
+    figure.wide { width: calc(100% + 190px); }
+  }
+
+  /* ---------------- before / after ---------------- */
+
+  .swap {
+    margin: 20px 0 0;
+    border-left: 2px solid var(--rule);
+    padding: 2px 0 2px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .swap .before,
+  .swap .after { font-size: 16px; line-height: 1.5; }
+  .swap .before { color: var(--faint); }
+  .swap .before s { text-decoration-color: var(--oak); }
+  .swap .after { color: var(--bone); }
+  .swap .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------------- readout panel ---------------- */
+
+  .readout {
+    margin: 26px 0 0;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: 20px 22px;
+    overflow-x: auto;
+  }
+  .readout .head {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 14px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 18px 24px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .n {
+    display: block;
+    font-size: 26px;
+    color: var(--brass);
+    line-height: 1.1;
+  }
+  .stat .l {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  /* ---------------- open items ---------------- */
+
+  .open {
+    margin: 22px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .open .row {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 4px 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .open .who {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-top: 2px;
+  }
+  .open .who.art  { color: var(--brass); }
+  .open .what { color: var(--body); }
+  .open .what b { color: var(--bone); }
+
+  /* ---------------- footer ---------------- */
+
+  footer {
+    margin-top: 72px;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.9;
+    max-width: 70ch;
+  }
+
+
+  /* ---------------- back to the studio ---------------- */
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    padding: 7px 12px 7px 10px;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .back:hover, .back:focus-visible {
+    color: var(--brass-lt);
+    border-color: var(--oak);
+    background: #ffffff06;
+  }
+  .back .mark { width: auto; height: 20px; flex: none; display: block; }
+
+  footer .back { margin-top: 22px; }
+
+  @media (max-width: 800px) {
+    .entry { grid-template-columns: 1fr; gap: 0; }
+    .rail-inner {
+      position: static;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 22px;
+    }
+    .diamond { display: none; }
+    .rail .meta { line-height: 1.5; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry { animation: rise .5s ease-out both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+</style>
+<!-- Umami — privacy-friendly analytics -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
+
+</head>
+<body>
+<div class="page">
+
+  <a class="back" href="../index.html#games">
+    <img class="mark" src="../assets/brassneck-mark.png" alt="" width="772" height="834">
+    Brassneck Studio
+  </a>
+
+  <header class="masthead">
+    <div class="ship">The Articles <em>— devlog</em></div>
+    <div class="standfirst">
+      A point-and-click murder mystery aboard the brig Merciful · Ren'Py 8.5.3 · macOS
+    </div>
+  </header>
+
+  <article class="entry">
+
+    <div class="rail">
+      <div class="rail-inner">
+        <div class="date">4 Sep 2026</div>
+        <div class="diamond"></div>
+        <div class="meta">
+          build 0.4<br>
+          entry two<br>
+          ~70 notes actioned
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <p class="lede">A big week. The dialogue box has been redesigned six times, the text now types itself, half the cast has had a haircut, the ship has acquired a map of itself, and a playtester sent seventy notes that were all, annoyingly, correct. I also discovered that the resource economy I have been carefully rationing for a month is not in any meaningful sense rationed. Pictures this time, because there is finally something to look at.</p>
+
+      <h2>The dialogue box: an apology in six acts</h2>
+      <p class="kicker">UI &middot; the longest thread of the week</p>
+
+      <p>The game used to put its words in a black gradient panel across the bottom of the screen, which is what every visual novel does and which looked exactly like what it was: a thing switched on rather than a thing made. The note was that it should be paper, in ink, and left-aligned like something written rather than something printed.</p>
+
+      <p>So it became parchment. Then it was too big. Then the parchment had a ragged torn edge along the top which the director did not like, so the edge went straight and got a line of thread along it instead — which, given the player is a sailmaker, is roughly a thousand times better and I should have thought of it. Then the parchment became sailcloth. Then the sailcloth was translucent and feathered, and then it stopped being either, because <strong>a semi-transparent panel reads as a filter laid over the painting rather than a thing lying on top of it</strong>, and it was costing contrast for nothing. Then it lost forty pixels of height.</p>
+
+      <p>Six versions. Every one of them was an improvement and I am not sure I have ever enjoyed anything less.</p>
+
+      <h3>The bit that was not cosmetic</h3>
+      <p>Going from a near-black panel to pale cloth broke <strong>every speaker name colour in the game.</strong> They had all been chosen against a dark background, and against cloth the worst of them was sitting at a contrast ratio of <strong>2.23 to 1</strong>, which is not a colour, it is a rumour. All six were re-solved keeping their hue and pushed back above five to one, and there is now a small script that will tell me the ratio of any colour against the actual composited background rather than against what I think the background looks like.</p>
+
+      <p>The font changed too — the text is handwritten now, and the brief was <em class="q">"looks like handwriting but remains legible"</em>, which are two requirements that spend most of their time arguing. Getting the files was its own adventure: the obvious download route returned a wall of 403s, so the fonts came down as npm packages and got converted out of web format into something Ren'Py would accept. Nothing about that sentence was in the plan for that afternoon.</p>
+
+      <h3>Where the player's face goes, an argument in four rounds</h3>
+      <p>The player character now has a portrait, and it has been in four places. On top of the box, where it clipped through the parchment. Greyed out and permanently present, which was wrong. Greyed out only in conversations the player is in, which was also wrong, and was me overriding a perfectly clear instruction and being caught doing it. Then to the left of the box, out of what the director accurately called <em class="q">"prime real estate."</em> Then, finally, the box moved to the middle of the screen and the portrait came back inside it.</p>
+
+      <p>What settled it was measurement rather than opinion. Before moving anything, I wrapped <strong>every single line in the game through the real font at the real column width</strong> and counted. Result: the portrait costs <em>zero</em> extra lines of text, and the player only speaks on about <strong>7% of lines</strong> anyway — so the face appears rarely enough to mean something when it does. That same measurement is what let the box shrink twice, and it is the reason I now believe none of the arguing was necessary. Measure the thing. It is always cheaper than being right.</p>
+
+      <h2>The text types itself now</h2>
+      <p class="kicker">A one-line fix that took an hour to find</p>
+
+      <p>Text used to appear instantly, in full, like a slide. The note was that it should arrive a letter at a time, which is better for retention and also just feels like reading rather than being handed a card.</p>
+
+      <p>This is a single built-in setting, so it should have been a thirty-second job. Except I had already set it, and it did not work. <strong>A default in one file was being silently overridden by a preference in another</strong> — and preferences win, because they are supposed to. So the typewriter had been switched on and immediately switched off again by a line I wrote weeks ago and had forgotten about.</p>
+
+      <p>It also needed a one-time nudge for anyone with an existing save, because their preference had already been written to disk at the wrong value. Nobody but me has a save. I wrote it anyway, on the grounds that "nobody has one yet" is how every migration bug in history has begun.</p>
+
+      <h2>Seventy notes</h2>
+      <p class="kicker">Playtest &middot; the big round</p>
+
+      <p>The playtester came back with about seventy items, and the depressing thing about a good tester is how few of them you get to argue with. Roughly: a third were prose, a third were contradictions, and a third were bugs and ideas. A tour of the more instructive ones.</p>
+
+      <h3>Things that did not add up</h3>
+      <ul>
+        <li><strong>A man's boots are soaked to the knee, and the only standing water aboard is in the hold — a hold the player later walks through without getting wet.</strong> Two scenes written a fortnight apart, each internally sensible, jointly nonsense. Fixed by deciding exactly how deep the water is and then respecting that number everywhere.</li>
+        <li><strong>Six men stand in a ring around something.</strong> The tester could not tell what was being described. Neither, on rereading, could I. It is a small crowd standing round a body and it now says so.</li>
+        <li><strong>You cannot see how he died.</strong> A murder mystery in which nobody can see the injury is a very confident piece of design. The player now gets a cause of death — imprecisely, at a glance, from a distance, which is exactly as much as somebody who is not a surgeon would get.</li>
+        <li><strong>"Nine days aboard" appears rather a lot.</strong> It is the premise's best single fact and I had been leaning on it like a crutch. Thinned out.</li>
+        <li><strong>Two hotspots on a chest were labelled the wrong way round</strong>, so clicking the lid gave you the description of how the thing was built. Not a writing problem, a coordinates problem, and the sort of thing a fresh pair of eyes finds in four seconds.</li>
+      </ul>
+
+      <h3>Bugs, with one genuinely humbling one</h3>
+      <p><strong>The pause menu was eating clicks.</strong> Ask to quit and the confirmation appeared, and you could not press yes or no until you first pressed resume — because the menu underneath was still capturing the mouse. Every action now closes the thing it came from.</p>
+      <p><strong>The menus were illegible.</strong> Pale text on near-white template artwork left over from Ren'Py's default skin. I confidently attributed this to the recent change to ink-coloured text. The director pointed out that <em class="q">"that menu legibility has been in the game since the first iteration, not since the ink change"</em> — which was correct, and which I had in fact discovered ten minutes earlier and then explained wrongly out of sheer momentum. <strong>The menus have been unreadable since the day the project started</strong> and nobody looked at them, because everybody was looking at the game.</p>
+      <p><strong>Picking up a second coin announced it as "Silver (2)"</strong>, which is an inventory count and not a thing that happens to you. The pickup now just says what you were handed and the counting happens quietly in the bag.</p>
+
+      <h3>Ideas that were better than the notes they arrived in</h3>
+      <p><strong>Three scenes in one place, one picture.</strong> The player spends three separate moments on deck across a day and the deck looked identical every time, so no time appeared to pass. There are now morning, noon and late versions — all of them <em>recolours</em> of the same painting, generated in code, costing nothing, and it is startling how much day passes for free.</p>
+      <p><strong>Somebody asks whether you read a document, and the game let them ask it without knowing you can read.</strong> Whether the player character is literate is a real and deliberate uncertainty, so a character casually assuming it torpedoes the whole thing. That question is now gated on somebody actually having found out.</p>
+      <p><strong>The best one:</strong> the player tells the crew that a page is missing from a book. The crew check. There is no page. And in the old version everybody just… accepted that, which is not what thirty armed people would do. Now you get called a liar, and somebody else in the room — not you — points out the physical evidence that proves you were telling the truth. It turns a flat beat into an accusation, a rescue, and a very good question about why <em>that particular person</em> spoke up.</p>
+
+      <h2>The crew all looked like each other</h2>
+      <p class="kicker">Playtest &middot; the note that cost the most</p>
+
+      <p>The tester's verdict on the cast was that they were <em class="q">"too similar and not memorable."</em> Which is a generous way of putting it. What I had actually done was draw one person five times and give them different jobs.</p>
+
+      <p>It was worse than that, though, and it took laying all five heads out in a row to see how. <strong>Four of the five had grey or silvering hair.</strong> In a setting where the life expectancy of the average pirate was — and I want to be delicate about this — not brilliant. I had built a crew of thirty desperate criminals and given them the hair of a bowls club.</p>
+
+      <p>The director's instruction was blunt and correct: not everybody should be going grey, and the two women in dark coats need to stop looking like sisters.</p>
+
+      <h3>The bit that surprised me</h3>
+      <p>Here is the thing that made this worth writing down. <strong>The prompts had already said three completely different things.</strong> One was <em class="q">"short grey hair swept back"</em>, one was <em class="q">"dark curly hair tied back"</em>, one was <em class="q">"dark hair going white at the temples"</em>. Three descriptions, three distinct people, in writing, from the start.</p>
+
+      <p>The generator read all three and handed back triplets.</p>
+
+      <p>So the fix was never going to be better adjectives, because that is exactly what I already had. <strong>Adjectives get averaged. Shapes do not.</strong> Every character now leads with a silhouette you could pick out from a black cut-out at the size they actually appear on screen, and the colour is the last decision rather than the first.</p>
+
+      <p>The cast is now eight outlines and no two are alike: a covered head, a bald head, a braid forward over one shoulder, a club bound behind, loose and long, loose and short, cropped ragged, cropped close. If you cannot tell two of them apart in profile in a dark room, that is a bug now.</p>
+
+      <figure class="wide">
+        <img src="img/carrow-before-after.jpg" alt="The quartermaster, before and after: silver-grey tousled hair and an open coat with a white collar, beside blonde hair bound flat and a coat buttoned to the throat." width="1134" height="746" loading="lazy">
+        <figcaption><b>Quartermaster</b> &nbsp;<span class="ba">before</span> silver, loose, open coat, white collar &nbsp;·&nbsp; <span class="ba">after</span> blonde, bound flat to the skull, coat buttoned to the throat with no white on her anywhere. She now reads as a pale head on one closed dark column, which is a better shape than anything she had before.</figcaption>
+      </figure>
+
+      <figure class="wide">
+        <img src="img/ferreira-before-after.jpg" alt="The navigator, before and after: dark hair swept back with a silver streak, beside ginger hair in a thick braid worn forward over one shoulder." width="1134" height="746" loading="lazy">
+        <figcaption><b>Navigator</b> &nbsp;<span class="ba">before</span> dark, swept back, with a silver streak nobody asked for &nbsp;·&nbsp; <span class="ba">after</span> ginger, in a braid worn forward down the chest. Mass at the front instead of behind, and the only red head in the game.</figcaption>
+      </figure>
+
+      <figure class="wide">
+        <img src="img/vane-before-after.jpg" alt="The first mate, before and after: greying swept-back hair, beside jet black loose hair with a white neckcloth at the throat." width="1134" height="746" loading="lazy">
+        <figcaption><b>First mate</b> &nbsp;<span class="ba">before</span> going white at forty &nbsp;·&nbsp; <span class="ba">after</span> jet black, loose to the shoulders — and a white neckcloth that is not a fashion choice. See below.</figcaption>
+      </figure>
+
+      <h3>The neckcloth is load-bearing</h3>
+      <p>Black hair. Dark navy coat. One light source, from the side, because the whole game has one light source. Congratulations: you have painted a floating head with no neck.</p>
+      <p>I only spotted it because I was writing the brief rather than looking at a picture, which is the one advantage of doing this in longhand first. So the first mate now wears a loosely knotted white neckcloth, the hair takes a lit edge along the top and nowhere else, and his head is attached to his body. <strong>Two of the more romantic details in the game exist because of contrast ratios</strong> and I would ask you not to think about that too hard.</p>
+
+      <p>The navigator's rolled chart also went away and came back as a case on a strap. Same reasoning as the quartermaster's book last month: <strong>a prop held up becomes the pose, and then the pose lands on every line the character has.</strong> On a strap it is permanently part of her outline and can never take over. There is exactly one picture where the chart comes out, and it is the one where she reads the thing.</p>
+
+      <p>The damage: six sheets regenerated, thirty-one figures drawn, twenty-eight perfectly good ones binned. Worth it. Two suspects who look like sisters is not a preference in a murder mystery, it is a defect.</p>
+
+      <h2>Three new faces, and the states they don't get</h2>
+      <p class="kicker">Art &middot; the crew who are not suspects</p>
+
+      <p>A mechanic I have been building needs the ship to notice you, and <em class="q">"thirty people"</em> cannot notice anything. Only <em class="q">somebody</em> can. So there are now three named hands who are never accused of anything: an old sailor with forty years at sea and no interest whatsoever in rank, a bosun who hands out the work, and a cook who sees every man aboard twice a day and repeats all of it.</p>
+
+      <figure class="wide">
+        <img src="img/new-crew.jpg" alt="Three new character portraits: an old woman with cropped grey hair, a bearded bosun in a headscarf with bare arms, and a bald cook in a stained apron." width="1344" height="586" loading="lazy">
+        <figcaption><b>New hands</b> &nbsp;Forty years at sea · the bosun · the cook. Between them they take the cropped-close, the covered head and the bald head, which is three silhouettes nobody else was using.</figcaption>
+      </figure>
+
+      <p>Here is the decision I like most this week, and it is a decision to do <em>less</em>. The four suspects each have nine expressions. <strong>The bosun and the cook have six, and the missing three are missing on purpose.</strong></p>
+
+      <p><code>guarded</code> and <code>breaking</code> exist so that the player can be wrong about somebody. Nobody is ever going to suspect the cook. Give him a guarded, withholding, secretive face and I guarantee you it ends up on a line about soup — which is precisely how the quartermaster spent last month brandishing a book at everyone she spoke to. <strong>A state a character has no use for is a state that gets spent on the wrong line.</strong></p>
+
+      <p>The code fills the gaps invisibly: ask for any of the nine and you get the nearest thing that exists. Nobody will ever know except you, and now everyone who reads this.</p>
+
+      <p>Their name colours took an afternoon too. The four suspects each hold a distinct hue; these three are a family of three quiet inks that sit together and apart from the people who matter to the plot. All of them solved against the actual cloth of the dialogue box at between five and six to one, because a devlog is exactly where that sort of thing belongs.</p>
+
+      <h2>The ship has a map of itself</h2>
+      <p class="kicker">Systems &middot; and a small miracle of guesswork</p>
+
+      <p>There is now a ship's plan. It is a drawn schematic rather than a painted scene, which is cheaper, more period-correct, and — this matters — shows no horizon, so it does not break the rule that you see nothing but empty grey water until the game decides otherwise.</p>
+
+      <figure class="wide">
+        <img src="img/ships-plan.jpg" alt="A shipwright's draught of a two-masted brig in ink on old paper, cut lengthwise so every deck is visible: masts and crow's nest above, weather deck, four compartments below it, and one long hold beneath." width="1300" height="732" loading="lazy">
+        <figcaption><b>The ship's plan</b> &nbsp;Bow to the right. Seven places you can be. In chapter one all seven are greyed out and each one refuses you in its own words, which is the cheapest characterisation in the game.</figcaption>
+      </figure>
+
+      <p><strong>The map is not navigation. It is the exposure system.</strong> Every move is a small act of being seen somewhere you had a reason to be, or didn't. You get a handful of hours in a day, and you spend them either finding things out or doing your actual job — and doing your actual job is what buys back your invisibility. Investigate loudly and the ship starts looking at you. Nobody is ever shown a number.</p>
+
+      <p>In chapter one the plan is on screen and every node is locked, because in chapter one you are <em>taken</em> places. Nobody asks the sailmaker's opinion. Each refusal is written separately and my favourite is the forecastle: <em class="q">"Thirty men sleep forward. You are not one of them."</em> That is one sentence doing the work of a paragraph of exposition, and it also happens to be the reason nobody can alibi you on the night of the murder.</p>
+
+      <h3>The bit I am unreasonably pleased about</h3>
+      <p>I wrote all seven clickable regions <em>before the drawing existed</em>, guessing where a shipwright would put a brig's compartments and writing the coordinates into a table so that when the art arrived only the numbers would need to change.</p>
+      <p>Then the plan came back and I laid the boxes over it expecting to spend a happy hour nudging rectangles. <strong>Four of the seven were within a few pixels.</strong> The galley box had a stove in it. Three needed moving — the crow's nest onto the actual mast platform, the deck down onto the actual deck, the hold out to the full run of the ship — and nothing else in the file was touched.</p>
+      <p>I have chosen to interpret this as expertise rather than luck and I would ask you to do the same.</p>
+
+      <h2>Somebody finally asked what the port is</h2>
+      <p class="kicker">Story &middot; a hole that had been there since the pitch</p>
+
+      <p>There is a clock in the corner of the screen counting down to landfall. It has been there since the first build. This week the director asked the obvious question — <em class="q">what actually is that place?</em> — and the honest answer was that nobody had ever decided. It was a name on a timer.</p>
+
+      <p>It is now <strong>a pirate haven</strong>: forty taverns, fresh water, no law and no magistrate. And the load-bearing half of the decision is this — <strong>it is not where they are going. It is where they stop for water on the way.</strong></p>
+
+      <p>That one sentence fixes something that had quietly bothered me for weeks: why is a crew who signed on for treasure counting down to a <em>port</em>? Because that is exactly what a sailor counts. The next landfall, not the goal. You water at the Key and then the captain shows you where the prize is. Nobody has to explain it, because it is the most normal thing in the world.</p>
+
+      <p>And it turns a later moment from an abstraction into an emergency, because <strong>you do not sail past your water.</strong> A number on a screen becomes a thing thirty people would riot about. Same clock, same number, entirely different meaning — and not one line of code changed.</p>
+
+      <h3>Fourteen puzzles, written down at last</h3>
+      <p>The other thing that did not exist was a list of the puzzles. Not the design of them — the <em>list</em>. The director's note was that without one <em class="q">"we are moving in the dark,"</em> which was polite, because we were.</p>
+      <p>There are now fourteen, mapped across all six chapters, with three rules over the top of them: <strong>every puzzle is solved by the player's trade or by a person, never by a hidden object; nothing on the critical path is ever locked behind one; and anything that would need a hint system is cut on sight.</strong> Four of the fourteen are things you can fail to notice. The other ten are decisions, which is a different and better kind of difficulty.</p>
+      <p>Writing them down immediately paid for itself. Half of them turned out to already exist in the game as unused capability — the player has been carrying something since chapter one that opens things, and in a month of design nobody had thought to have it open anything.</p>
+
+      <h3>And money became useful</h3>
+      <p>The player picks up the occasional silver coin, and until this week those coins were receipts. They now buy the only thing worth buying in a game about not being noticed: <strong>a coin means somebody did not see you.</strong> You can pay for something instead of stealing it. You can pay for a favour instead of asking for one loudly. Between two and six coins in the entire game, so every one of them is a decision.</p>
+      <p>Nothing in the game will ever say this out loud. The player works out that money is quiet.</p>
+
+      <h2>The economy that turned out not to be one</h2>
+      <p class="kicker">Design &middot; caught by arithmetic, not by playing</p>
+
+      <p>The game has one consumable resource. You get a fixed amount for the entire game and you cannot get more. Everything you do costs some, and the whole tension of the thing is supposed to be that you cannot afford to do everything properly.</p>
+
+      <p>This week I wrote a small script to walk every possible route through chapter one and tell me what the player arrives at chapter two holding. Then I subtracted what chapter two's three big purchases cost.</p>
+
+      <p><strong>The answer is that you can buy all three and still have eight left out of fourteen.</strong> They do not compete. There is no choice. I have spent a month running an economy of scarcity in which nobody is ever short of anything.</p>
+
+      <p>The instinct is to cut the number, and the instinct is wrong. <strong>Fourteen is fine — the problem is that chapters three to six have no prices on them yet.</strong> The tax exists. I simply have not sent anybody a bill. So the number stays and the later chapters get costed, and I will find out at the next playtest whether anybody feels it.</p>
+
+      <p>The wider lesson, which I am writing on a wall somewhere: <strong>scarcity is created by things worth buying, not by taking supply away.</strong> A player who is never tempted is not being rationed, they are being ignored.</p>
+
+      <h2>Writing chapter four before chapter two</h2>
+      <p class="kicker">Story &middot; deliberately out of order</p>
+
+      <p>Chapter two is almost entirely planting. Nearly everything in it is a small object, a stray remark or a flag being quietly set, and every single one of those is a promissory note against a scene much later in the game.</p>
+
+      <p>The trouble with writing a chapter of promises is that it is extremely easy to write a lovely one that promises things nobody can pay. So chapter four got outlined first — not written, outlined — and the useful part of the document is a table with two columns: <strong>every plant chapter two is allowed to make, and the exact beat of chapter four that pays for it.</strong> If a plant has no row, chapter two does not get to plant it.</p>
+
+      <p>Writing it in that order immediately caught something. There was a moment in chapter four that needed the player to have found something out in chapter two, and <strong>nothing in the game produced it.</strong> Not hard to fix — but I would have written the whole of chapter two, felt very pleased with myself, and hit the wall four weeks later.</p>
+
+      <p>It also settled the running order of the chapter's three big moments, which I had the wrong way round. I will not say what they are, but the principle survives being vague: <strong>if the point of a story is that solving the mystery does not save you, then the mystery has to be solved first and the floor has to give way second.</strong> Do it in the other order and you have not written an inversion, you have written two things that happen.</p>
+
+      <h2>A box that was telling you the answer</h2>
+      <p class="kicker">Chapter one &middot; a revision, on paper</p>
+
+      <p>An early scene has you opening something you should not open. What was inside it explained roughly two thirds of the plot, on day five of six, to a player who had been aboard for about forty minutes.</p>
+
+      <p>Two separate problems, and they are both the same problem. It is not credible — the one person with the means and the motive and a two-day head start would simply have taken it. And it is not fun, because it hands over the answer before the questions have finished arriving.</p>
+
+      <p>So the scene now ends on <strong>an absence and a broken thing</strong> rather than a discovery. Somebody has already been here. What was in it is gone. The one document left behind is one you are physically incapable of reading, not because you are illiterate — although you might be, that is a whole other mechanic — but because reading it is a trade you do not have. You can see it is a course. You cannot see where it goes.</p>
+
+      <p>Which means you now have to get somebody else to read it for you, and every single person you could ask costs you something. That is a puzzle. What was there before was a cutscene.</p>
+
+      <p>The prose is written and is currently sitting with the director for a pass, because I have learned to stop applying my own dialogue on the same day I write it.</p>
+
+      <h2>Small things, quickly</h2>
+      <p class="kicker">Housekeeping</p>
+
+      <ul>
+        <li><strong>Narration is now vertically centred in the box.</strong> It has no speaker name above it, so at the same position as dialogue it left a blank band across the top that read as a missing element. On the old taller box you never noticed. On the new shorter one you notice instantly, which is the sort of thing that happens when you change one number and inherit a second problem for free.</li>
+        <li><strong>The journal got an icon</strong> to replace the word BOOK, and then got it again because the first cut came back with a blue rectangle behind it. The keying now works on the observation that the background is cool and the object is warm, which is true of every piece of art in this game and is going to keep being useful.</li>
+        <li><strong>The menu moved to the top left</strong>, above the clock and the thread count, where the eye already goes.</li>
+        <li><strong>The checker learned a new trick.</strong> It now catches any variable the game uses that nobody ever declared. There is a large rename coming, and a rename that misses one spot does not crash on launch — it crashes the first time a player reaches that one line, which is the most expensive possible place to find out. Verified the same way as last month's echo rule: put the bug in, watch it get caught, take it out again.</li>
+        <li><strong>A review sheet that has existed in documentation since August now exists in reality.</strong> Every character, every expression, at the real size, with a line showing where the dialogue box starts. It is how I checked this week's thirty-one new figures in about nine seconds instead of opening them one at a time like an animal.</li>
+      </ul>
+
+      <figure class="wide">
+        <img src="img/states-review.jpg" alt="A contact sheet: eight characters as rows, twelve expression states as columns, each cell a full character portrait, with a gold line across each row marking the top of the dialogue box." width="1400" height="1075" loading="lazy">
+        <figcaption><b>states_review.png</b> &nbsp;Eight rows, twelve columns, gold line where the dialogue box begins. What you are looking for is heads at the same height and size straight across a row — a row that steps halfway along means a sheet was drawn at the wrong scale and has to go back.</figcaption>
+      </figure>
+
+      <div class="readout">
+        <div class="head">State of the build</div>
+        <div class="stats">
+          <div class="stat"><span class="n">21</span><span class="l">script files</span></div>
+          <div class="stat"><span class="n">49</span><span class="l">labels</span></div>
+          <div class="stat"><span class="n">101</span><span class="l">images</span></div>
+          <div class="stat"><span class="n">15</span><span class="l">new pictures</span></div>
+          <div class="stat"><span class="n">31</span><span class="l">figures redrawn</span></div>
+          <div class="stat"><span class="n">8</span><span class="l">faces in the cast</span></div>
+          <div class="stat"><span class="n">7</span><span class="l">places aboard</span></div>
+          <div class="stat"><span class="n">14</span><span class="l">puzzles mapped</span></div>
+          <div class="stat"><span class="n">6</span><span class="l">dialogue boxes</span></div>
+          <div class="stat"><span class="n">0</span><span class="l">checker issues</span></div>
+        </div>
+      </div>
+
+      <h2>Open</h2>
+      <p class="kicker">Next up</p>
+
+      <div class="open">
+        <div class="row">
+          <div class="who">writing</div>
+          <div class="what"><b>The chapter one revision</b> — with the director for a prose pass, then it goes in and a batch of flags gets renamed. The new checker rule exists specifically to make that boring.</div>
+        </div>
+        <div class="row">
+          <div class="who">story</div>
+          <div class="what"><b>Sign-off on the chapter four outline</b>, particularly the order of its three big moments and the one thing chapter two now has to plant that nothing had thought of.</div>
+        </div>
+        <div class="row">
+          <div class="who art">art</div>
+          <div class="what"><b>The captain's sheet</b> — still the only one drawn at the wrong resolution, so he upscales about twice as hard as everybody else and reads softer for it. Nobody has mentioned it. I can see it.</div>
+        </div>
+        <div class="row">
+          <div class="who">design</div>
+          <div class="what"><b>Put prices on chapters three to six</b> so the resource economy becomes one. See above, and my dignity.</div>
+        </div>
+        <div class="row">
+          <div class="who">build</div>
+          <div class="what"><b>Then chapter two</b>, with the map live, the hours ticking and the ship starting to notice you. Which is the whole reason any of the above happened.</div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <footer>
+    Entry two. Still written so it can be read without spoiling anything — where a change turned on a plot point I have described the problem and the principle and left the reveal where it belongs. Everything in the pictures is either a face or a floor plan, both of which you would see in the first ten minutes anyway.
+    <br>
+    <a class="back" href="../index.html#games">
+      <img class="mark" src="../assets/brassneck-mark.png" alt="" width="772" height="834">
+      Back to the studio
+    </a>
+  </footer>
+
+</div>
+</body>
+</html>

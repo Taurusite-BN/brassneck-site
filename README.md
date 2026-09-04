@@ -57,9 +57,16 @@ brass) rather than the studio's. That is deliberate: stepping into an entry shou
 like stepping into the game's world, not reading a studio blog post about it.
 
 **To add an entry:** drop the new file in `devlog/`, copy the `.back` link from the existing
-entry, then add one `<li>` to `.logs` in the Games section of `index.html`. Newest first.
+entry, then add one `<li>` to `.logs` in the Games section of `index.html`. Newest first, and
+update the build number in the Articles `.meta` list while you are there.
 
 Every entry needs **the `.back` link** pointing at `../index.html#games`, see routing below.
+
+**Pictures live in `devlog/img/`**, referenced as `img/name.jpg` from the entry, one flat
+folder shared by every entry so names have to say which entry they belong to
+(`carrow-before-after.jpg`, `ships-plan.jpg`). Set `width` and `height` on every `<img>` so
+the page does not jump as they load, add `loading="lazy"`, and give a figure the `.wide`
+class when it should break out of the 66ch text column into the rail gutter.
 
 ## Service examples
 
