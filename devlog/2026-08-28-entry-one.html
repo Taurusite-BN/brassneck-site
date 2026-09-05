@@ -10,7 +10,26 @@
 <meta property="og:title" content="The Articles Devlog">
 <meta property="og:description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
 <link rel="icon" href="../assets/favicon.png" type="image/png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preload" href="../assets/fonts/ptserif-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/imfell-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  /* Served from this domain rather than Google Fonts, so reading a devlog
+     entry does not announce you to a third party. Same three families. */
+  @font-face { font-family: "IM Fell English"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/imfell-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IM Fell English"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/imfell-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/ptserif-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/ptserif-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: normal; font-weight: 700; font-display: swap;
+    src: url("../assets/fonts/ptserif-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/plexmono-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap;
+    src: url("../assets/fonts/plexmono-500-normal.woff2") format("woff2"); }
+</style>
 <style>
   /* ------------------------------------------------------------------
      The palette is the game's own, verbatim from claude/style-bible.md:

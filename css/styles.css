@@ -1,3 +1,50 @@
+  /* ================================================================
+     Typefaces, served from this domain.
+
+     These used to come from Google Fonts, which meant every visitor's
+     browser announced itself to Google before it had read a word. Self
+     hosting removes a third party, removes a render-blocking request to
+     someone else's server, and is one fewer line in the privacy policy.
+
+     Archivo is the variable file: one download covers 400 through 900.
+     Spectral has no variable version, so the five styles the site
+     actually uses are listed individually and nothing else is shipped.
+     ================================================================ */
+
+  @font-face {
+    font-family: Archivo;
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../assets/fonts/archivo-var.woff2") format("woff2-variations");
+  }
+
+  @font-face {
+    font-family: Spectral;
+    font-style: normal; font-weight: 300; font-display: swap;
+    src: url("../assets/fonts/spectral-300-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: Spectral;
+    font-style: italic; font-weight: 300; font-display: swap;
+    src: url("../assets/fonts/spectral-300-italic.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: Spectral;
+    font-style: normal; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/spectral-400-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: Spectral;
+    font-style: italic; font-weight: 400; font-display: swap;
+    src: url("../assets/fonts/spectral-400-italic.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: Spectral;
+    font-style: normal; font-weight: 600; font-display: swap;
+    src: url("../assets/fonts/spectral-600-normal.woff2") format("woff2");
+  }
+
   :root {
     --ink:        #101219;
     --wall:       #14161F;
@@ -619,8 +666,25 @@
 
   .footnote {
     border-top: 1px solid var(--rule);
-    padding: 1.5rem 0 3.5rem; color: var(--muted); font-size: .85rem;
-    display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
+    padding: 1.5rem 0 1.2rem; color: var(--muted); font-size: .85rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; justify-content: space-between;
+  }
+  .footnote:last-child { padding-bottom: 3.5rem; }
+
+  .foot-legal { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; }
+  .foot-legal a {
+    color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .foot-legal a:hover, .foot-legal a:focus-visible {
+    color: var(--brass-lit); border-bottom-color: var(--brass-dim);
+  }
+
+  .foot-reg {
+    margin: 0; padding: 0 0 3.5rem;
+    color: var(--muted); opacity: .72;
+    font-size: .72rem; line-height: 1.7; max-width: 70ch;
   }
 
 
@@ -1071,6 +1135,90 @@
     transform: rotate(45deg);
   }
   .doc-list b { color: var(--paper); font-family: Archivo, system-ui, sans-serif; font-weight: 700; font-size: .98em; }
+
+  .f-privacy {
+    margin: 1.1rem 0 0; max-width: 58ch;
+    color: var(--muted); font-size: .8rem; line-height: 1.6;
+  }
+  .f-privacy a { color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
+  .f-privacy a:hover { border-bottom-color: var(--brass-lit); }
+
+  /* ---- legal documents (privacy, terms) -------------------------- */
+
+  .legal-nav {
+    display: flex; flex-wrap: wrap; gap: .5rem .55rem;
+    margin: 1.6rem 0 0; padding: 0; list-style: none;
+    max-width: 74ch;
+  }
+  .legal-nav a {
+    display: block;
+    padding: .38rem .7rem;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .legal-nav a:hover, .legal-nav a:focus-visible {
+    color: var(--brass-lit); border-color: var(--brass-dim); background: rgba(176,141,87,0.06);
+  }
+
+  section.clause { scroll-margin-top: 1.5rem; }
+  .clause .n {
+    display: block;
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .62rem; font-weight: 700; letter-spacing: .2em;
+    color: var(--brass); margin-bottom: .5rem;
+  }
+  .clause .prose + .prose { margin-top: .9rem; }
+  .clause h3 {
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em;
+    color: var(--paper); margin: 1.6rem 0 .5rem;
+  }
+  .prose a, .doc-list a, .legal-table a {
+    color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim);
+  }
+  .prose a:hover, .doc-list a:hover, .legal-table a:hover { border-bottom-color: var(--brass-lit); }
+
+  .legal-table-wrap { overflow-x: auto; margin-top: 1.2rem; }
+  .legal-table {
+    border-collapse: collapse;
+    width: 100%; min-width: 560px;
+    font-size: var(--step-0);
+  }
+  .legal-table th, .legal-table td {
+    text-align: left; vertical-align: top;
+    padding: .8rem 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .legal-table th {
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .6rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--brass-dim);
+  }
+  .legal-table td { color: var(--muted); }
+  .legal-table td:first-child { color: var(--paper); font-family: Archivo, system-ui, sans-serif; font-weight: 600; white-space: nowrap; }
+
+  .legal-key {
+    margin: 1.3rem 0 0;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid var(--hairline);
+    background: rgba(176,141,87,0.05);
+    max-width: 74ch;
+  }
+  .legal-key b { color: var(--brass-lit); }
+
+  .legal-meta {
+    margin: 1.4rem 0 0;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .72rem; line-height: 1.9; color: var(--muted);
+  }
+  .legal-meta b { color: var(--paper); font-weight: 500; }
+  .legal-meta a { color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
+  .legal-meta a:hover { border-bottom-color: var(--brass-lit); }
 
   a.cta { text-decoration: none; }
   a.backlink { text-decoration: none; }

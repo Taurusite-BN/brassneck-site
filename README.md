@@ -110,6 +110,58 @@ Two things to hold to when editing these numbers:
 Markup is `.tiers` / `.tier` (the middle one carries `.is-pick` and the brass flag) and
 `.plans` / `.plan`, both in `#page-websites`. Both collapse to one column under 900px.
 
+## Typefaces
+
+**Self-hosted, from `assets/fonts/`. Do not put the Google Fonts `<link>` tags back.** They came
+out on 8 Sep 2026 because every visitor's browser was announcing itself to Google before it had
+read a word, which is a third-party transfer to disclose, a render-blocking request to somebody
+else's server, and an easy thing to remove.
+
+| Family | Files | Used by |
+|---|---|---|
+| Archivo | `archivo-var.woff2`, one variable file covering 400-900 | studio pages, via `css/styles.css` |
+| Spectral | five static styles: 300/400/600 normal, 300/400 italic | studio pages, via `css/styles.css` |
+| IM Fell English, PT Serif, IBM Plex Mono | seven static styles | devlog entries, via the inline `<style>` in each |
+
+The `@font-face` rules live at the top of `css/styles.css` for the studio families, and inside
+each devlog entry's own `<style>` block for the game families, because devlog pages never load
+the studio stylesheet. Paths are `../assets/fonts/…` in both cases: relative to the stylesheet
+for the former, relative to the document for the latter, and both resolve the same way.
+
+Every page preloads the two faces that paint first. **A new devlog entry needs the seven
+`@font-face` rules copied across with it** — copy the whole `<style>` block from the existing
+entry rather than retyping it.
+
+Files came from the `@fontsource` npm packages (latin subsets only, woff2 only, no `.woff`
+fallback since every browser that matters has supported woff2 since 2016). To add a weight,
+`npm install @fontsource/<family>`, copy the file out of `files/`, add the rule.
+
+## Legal pages
+
+`legal/privacy.html` and `legal/terms.html`, same `body.doc` pattern as the case studies.
+Linked from a `.foot-legal` row in every footnote (Privacy / Cookies / Terms), plus a
+`.f-privacy` line under the contact form, plus the statutory company disclosure in
+`.foot-reg` on the homepage.
+
+**Both pages carry the registered details and both have to change together** if the company
+name, number or registered office ever changes: Brassneck Studio Ltd, company number
+17431166, registered in England and Wales, registered office 4 Earls Acre, Plymouth,
+PL3 4HL. A limited company is legally required to show all four on its website.
+
+**The cookies position, because it is the unusual bit.** This site sets no cookies at all
+and writes nothing to the visitor's device, so there is no banner and no consent to collect.
+Umami is cookieless; the only thing it touches is a *read* of `localStorage["umami.disabled"]`,
+the switch used to keep our own visits out of the numbers, and the privacy page says so
+explicitly rather than claiming the script touches nothing. **If anything is ever added that
+does set a cookie or write to storage — a chat widget, an embedded video, an ads pixel,
+Google Analytics — that position collapses and the site needs a real consent banner.** Adding
+one is a much bigger job than adding the tag, so price it in before agreeing to it.
+
+The third parties named in the privacy table are the real ones and the list is exhaustive:
+Umami, Formspree, GitHub Pages, Google Fonts, Zoho. Anything added to the site gets a row.
+
+See `claude/legal-pages-and-compliance.md` for the two open compliance items.
+
 ## Case studies
 
 `work/*.html`, one standalone page each, same pattern as the devlog: real URL, `.doc-back`
