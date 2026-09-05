@@ -425,17 +425,17 @@
 
       <p>The game used to put its words in a black gradient panel across the bottom of the screen, which is what every visual novel does and which looked exactly like what it was: a thing switched on rather than a thing made. The note was that it should be paper, in ink, and left-aligned like something written rather than something printed.</p>
 
-      <p>So it became parchment. Then it was too big. Then the parchment had a ragged torn edge along the top which the director did not like, so the edge went straight and got a line of thread along it instead — which, given the player is a sailmaker, is roughly a thousand times better and I should have thought of it. Then the parchment became sailcloth. Then the sailcloth was translucent and feathered, and then it stopped being either, because <strong>a semi-transparent panel reads as a filter laid over the painting rather than a thing lying on top of it</strong>, and it was costing contrast for nothing. Then it lost forty pixels of height.</p>
+      <p>So it became parchment. Then it was too big. Then the parchment had a ragged torn edge along the top, which I hated on sight, so the edge went straight and got a line of stitching along it instead — which, given the player is a sailmaker, is roughly a thousand times better and I should have thought of it. Then the parchment became sailcloth. Then the sailcloth was translucent and feathered, and then it stopped being either, because <strong>a semi-transparent panel reads as a filter laid over the painting rather than a thing lying on top of it</strong>, and it was costing contrast for nothing. Then it lost forty pixels of height.</p>
 
       <p>Six versions. Every one of them was an improvement and I am not sure I have ever enjoyed anything less.</p>
 
       <h3>The bit that was not cosmetic</h3>
       <p>Going from a near-black panel to pale cloth broke <strong>every speaker name colour in the game.</strong> They had all been chosen against a dark background, and against cloth the worst of them was sitting at a contrast ratio of <strong>2.23 to 1</strong>, which is not a colour, it is a rumour. All six were re-solved keeping their hue and pushed back above five to one, and there is now a small script that will tell me the ratio of any colour against the actual composited background rather than against what I think the background looks like.</p>
 
-      <p>The font changed too — the text is handwritten now, and the brief was <em class="q">"looks like handwriting but remains legible"</em>, which are two requirements that spend most of their time arguing. Getting the files was its own adventure: the obvious download route returned a wall of 403s, so the fonts came down as npm packages and got converted out of web format into something Ren'Py would accept. Nothing about that sentence was in the plan for that afternoon.</p>
+      <p>The font changed too — the text is handwritten now. What I was after was handwriting that stays legible, which is two requirements that spend most of their time arguing with each other. Getting the files was its own adventure: the obvious download route returned a wall of 403s, so the fonts came down as npm packages and got converted out of web format into something Ren'Py would accept. Nothing about that sentence was in the plan for that afternoon.</p>
 
       <h3>Where the player's face goes, an argument in four rounds</h3>
-      <p>The player character now has a portrait, and it has been in four places. On top of the box, where it clipped through the parchment. Greyed out and permanently present, which was wrong. Greyed out only in conversations the player is in, which was also wrong, and was me overriding a perfectly clear instruction and being caught doing it. Then to the left of the box, out of what the director accurately called <em class="q">"prime real estate."</em> Then, finally, the box moved to the middle of the screen and the portrait came back inside it.</p>
+      <p>The player character now has a portrait, and it has been in four places. On top of the box, where it clipped straight through the parchment. Greyed out and permanently present, which made the screen feel crowded by somebody who was not talking. Greyed out only during conversations the player is actually in, which was a fudge and I knew it while I was writing it. Then out to the left of the box, because the middle of the screen is prime real estate and a face that appears on one line in fourteen has not earned it. Then, finally, the box moved to the centre and the portrait came back inside it, which is where it should have been on Tuesday.</p>
 
       <p>What settled it was measurement rather than opinion. Before moving anything, I wrapped <strong>every single line in the game through the real font at the real column width</strong> and counted. Result: the portrait costs <em>zero</em> extra lines of text, and the player only speaks on about <strong>7% of lines</strong> anyway — so the face appears rarely enough to mean something when it does. That same measurement is what let the box shrink twice, and it is the reason I now believe none of the arguing was necessary. Measure the thing. It is always cheaper than being right.</p>
 
@@ -464,11 +464,11 @@
 
       <h3>Bugs, with one genuinely humbling one</h3>
       <p><strong>The pause menu was eating clicks.</strong> Ask to quit and the confirmation appeared, and you could not press yes or no until you first pressed resume — because the menu underneath was still capturing the mouse. Every action now closes the thing it came from.</p>
-      <p><strong>The menus were illegible.</strong> Pale text on near-white template artwork left over from Ren'Py's default skin. I confidently attributed this to the recent change to ink-coloured text. The director pointed out that <em class="q">"that menu legibility has been in the game since the first iteration, not since the ink change"</em> — which was correct, and which I had in fact discovered ten minutes earlier and then explained wrongly out of sheer momentum. <strong>The menus have been unreadable since the day the project started</strong> and nobody looked at them, because everybody was looking at the game.</p>
+      <p><strong>The menus were illegible.</strong> Pale text on near-white template artwork left over from Ren'Py's default skin. My first instinct was to blame the switch to ink-coloured text a few days earlier, which was extremely convenient and completely wrong. <strong>The menus have been unreadable since the first build of this game.</strong> Nobody had ever mentioned it, including me, because nobody ever looks at the quit dialogue — everybody is looking at the game. It took somebody playing it properly for the first time to try and quit.</p>
       <p><strong>Picking up a second coin announced it as "Silver (2)"</strong>, which is an inventory count and not a thing that happens to you. The pickup now just says what you were handed and the counting happens quietly in the bag.</p>
 
       <h3>Ideas that were better than the notes they arrived in</h3>
-      <p><strong>Three scenes in one place, one picture.</strong> The player spends three separate moments on deck across a day and the deck looked identical every time, so no time appeared to pass. There are now morning, noon and late versions — all of them <em>recolours</em> of the same painting, generated in code, costing nothing, and it is startling how much day passes for free.</p>
+      <p><strong>Three scenes in one place, one picture.</strong> The player spends three separate moments on deck across a day and the deck looked identical every time, so no time appeared to pass. There are now morning, noon and late versions — all of them <em>recolours</em> of the same painting, done in code, costing nothing, and it is startling how much day passes for free.</p>
       <p><strong>Somebody asks whether you read a document, and the game let them ask it without knowing you can read.</strong> Whether the player character is literate is a real and deliberate uncertainty, so a character casually assuming it torpedoes the whole thing. That question is now gated on somebody actually having found out.</p>
       <p><strong>The best one:</strong> the player tells the crew that a page is missing from a book. The crew check. There is no page. And in the old version everybody just… accepted that, which is not what thirty armed people would do. Now you get called a liar, and somebody else in the room — not you — points out the physical evidence that proves you were telling the truth. It turns a flat beat into an accusation, a rescue, and a very good question about why <em>that particular person</em> spoke up.</p>
 
@@ -479,14 +479,14 @@
 
       <p>It was worse than that, though, and it took laying all five heads out in a row to see how. <strong>Four of the five had grey or silvering hair.</strong> In a setting where the life expectancy of the average pirate was — and I want to be delicate about this — not brilliant. I had built a crew of thirty desperate criminals and given them the hair of a bowls club.</p>
 
-      <p>The director's instruction was blunt and correct: not everybody should be going grey, and the two women in dark coats need to stop looking like sisters.</p>
+      <p>So: not everybody gets to go grey, and the two women in dark coats need to stop looking like sisters.</p>
 
       <h3>The bit that surprised me</h3>
-      <p>Here is the thing that made this worth writing down. <strong>The prompts had already said three completely different things.</strong> One was <em class="q">"short grey hair swept back"</em>, one was <em class="q">"dark curly hair tied back"</em>, one was <em class="q">"dark hair going white at the temples"</em>. Three descriptions, three distinct people, in writing, from the start.</p>
+      <p>Here is the thing that made this worth writing down. <strong>My own character notes had already said three completely different things.</strong> One was <em class="q">"short grey hair swept back"</em>, one <em class="q">"dark curly hair tied back"</em>, one <em class="q">"dark hair going white at the temples"</em>. Three descriptions. Three distinct people. Written down from the start, and I still ended up with sisters.</p>
 
-      <p>The generator read all three and handed back triplets.</p>
+      <p>Because those are all adjectives, and adjectives drift. Each new sheet gets made in the shadow of the last one, every description is doing its work three words at a time, and by the fifth character you have quietly converged on a house face and cannot see it because you have been staring at it for a fortnight.</p>
 
-      <p>So the fix was never going to be better adjectives, because that is exactly what I already had. <strong>Adjectives get averaged. Shapes do not.</strong> Every character now leads with a silhouette you could pick out from a black cut-out at the size they actually appear on screen, and the colour is the last decision rather than the first.</p>
+      <p>So the fix was never going to be better adjectives — that is exactly what I already had. <strong>Adjectives drift. Shapes do not.</strong> Every character now leads with a silhouette you could pick out from a black cut-out at the size they actually appear on screen, and the colour is the last decision rather than the first.</p>
 
       <p>The cast is now eight outlines and no two are alike: a covered head, a bald head, a braid forward over one shoulder, a club bound behind, loose and long, loose and short, cropped ragged, cropped close. If you cannot tell two of them apart in profile in a dark room, that is a bug now.</p>
 
@@ -507,11 +507,11 @@
 
       <h3>The neckcloth is load-bearing</h3>
       <p>Black hair. Dark navy coat. One light source, from the side, because the whole game has one light source. Congratulations: you have painted a floating head with no neck.</p>
-      <p>I only spotted it because I was writing the brief rather than looking at a picture, which is the one advantage of doing this in longhand first. So the first mate now wears a loosely knotted white neckcloth, the hair takes a lit edge along the top and nowhere else, and his head is attached to his body. <strong>Two of the more romantic details in the game exist because of contrast ratios</strong> and I would ask you not to think about that too hard.</p>
+      <p>I only spotted it because I was working the character up on paper rather than looking at a picture, which is the one real advantage of doing it in longhand first. So the first mate now wears a loosely knotted white neckcloth, the hair takes a lit edge along the top and nowhere else, and his head is attached to his body. <strong>Two of the more romantic details in the game exist because of contrast ratios</strong> and I would ask you not to think about that too hard.</p>
 
       <p>The navigator's rolled chart also went away and came back as a case on a strap. Same reasoning as the quartermaster's book last month: <strong>a prop held up becomes the pose, and then the pose lands on every line the character has.</strong> On a strap it is permanently part of her outline and can never take over. There is exactly one picture where the chart comes out, and it is the one where she reads the thing.</p>
 
-      <p>The damage: six sheets regenerated, thirty-one figures drawn, twenty-eight perfectly good ones binned. Worth it. Two suspects who look like sisters is not a preference in a murder mystery, it is a defect.</p>
+      <p>The damage: six sheets redrawn, thirty-one figures, twenty-eight perfectly good ones binned. Worth it. Two suspects who look like sisters is not a preference in a murder mystery, it is a defect.</p>
 
       <h2>Three new faces, and the states they don't get</h2>
       <p class="kicker">Art &middot; the crew who are not suspects</p>
@@ -553,7 +553,7 @@
       <h2>Somebody finally asked what the port is</h2>
       <p class="kicker">Story &middot; a hole that had been there since the pitch</p>
 
-      <p>There is a clock in the corner of the screen counting down to landfall. It has been there since the first build. This week the director asked the obvious question — <em class="q">what actually is that place?</em> — and the honest answer was that nobody had ever decided. It was a name on a timer.</p>
+      <p>There is a clock in the corner of the screen counting down to landfall. It has been there since the first build. This week I finally asked myself the obvious question — <em>what actually is that place?</em> — and the honest answer was that I had never decided. It was a name on a timer.</p>
 
       <p>It is now <strong>a pirate haven</strong>: forty taverns, fresh water, no law and no magistrate. And the load-bearing half of the decision is this — <strong>it is not where they are going. It is where they stop for water on the way.</strong></p>
 
@@ -562,7 +562,7 @@
       <p>And it turns a later moment from an abstraction into an emergency, because <strong>you do not sail past your water.</strong> A number on a screen becomes a thing thirty people would riot about. Same clock, same number, entirely different meaning — and not one line of code changed.</p>
 
       <h3>Fourteen puzzles, written down at last</h3>
-      <p>The other thing that did not exist was a list of the puzzles. Not the design of them — the <em>list</em>. The director's note was that without one <em class="q">"we are moving in the dark,"</em> which was polite, because we were.</p>
+      <p>The other thing that did not exist was a list of the puzzles. Not the design of them — the <em>list</em>. Six chapters planned in detail and no page anywhere saying what the player actually <em>does</em> in them, which I had known for about three weeks and had been carefully not writing down.</p>
       <p>There are now fourteen, mapped across all six chapters, with three rules over the top of them: <strong>every puzzle is solved by the player's trade or by a person, never by a hidden object; nothing on the critical path is ever locked behind one; and anything that would need a hint system is cut on sight.</strong> Four of the fourteen are things you can fail to notice. The other ten are decisions, which is a different and better kind of difficulty.</p>
       <p>Writing them down immediately paid for itself. Half of them turned out to already exist in the game as unused capability — the player has been carrying something since chapter one that opens things, and in a month of design nobody had thought to have it open anything.</p>
 
@@ -605,7 +605,7 @@
 
       <p>Which means you now have to get somebody else to read it for you, and every single person you could ask costs you something. That is a puzzle. What was there before was a cutscene.</p>
 
-      <p>The prose is written and is currently sitting with the director for a pass, because I have learned to stop applying my own dialogue on the same day I write it.</p>
+      <p>The new prose is written and is sitting in a drawer until the weekend, because I have learned the hard way not to put my own dialogue into the game on the day I write it. It always reads better on Tuesday and worse on Thursday.</p>
 
       <h2>Small things, quickly</h2>
       <p class="kicker">Housekeeping</p>
@@ -645,7 +645,7 @@
       <div class="open">
         <div class="row">
           <div class="who">writing</div>
-          <div class="what"><b>The chapter one revision</b> — with the director for a prose pass, then it goes in and a batch of flags gets renamed. The new checker rule exists specifically to make that boring.</div>
+          <div class="what"><b>The chapter one revision</b> — one more read-through, then it goes in and a batch of flags gets renamed. The new checker rule exists specifically to make that boring.</div>
         </div>
         <div class="row">
           <div class="who">story</div>
