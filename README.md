@@ -136,6 +136,23 @@ Files came from the `@fontsource` npm packages (latin subsets only, woff2 only, 
 fallback since every browser that matters has supported woff2 since 2016). To add a weight,
 `npm install @fontsource/<family>`, copy the file out of `files/`, add the rule.
 
+## Search, and the one real cost of the single-page design
+
+`robots.txt` and `sitemap.xml` sit at the repo root and are served from
+`brassneck.studio/robots.txt` and `/sitemap.xml`. **Add a row to the sitemap for every new
+devlog entry or case study**, and update `<lastmod>` on the homepage when the content changes.
+
+**The thing to understand about this site's URLs.** Websites, Games, Studio and Contact are
+fragments of the homepage (`#websites`, `#games`, …), not separate documents. A search engine
+cannot index a fragment as a page of its own, so **there is exactly one indexable page for the
+whole studio side of the site**, and the pricing, the services and the case-study preview all
+compete for one title, one description and one set of rankings. The devlog entries, the case
+study and the legal pages are real files and index normally.
+
+That was the right call for the door-and-dive idea, and it is worth knowing it has a price. If
+search ever needs to do real work, the fix is to give Websites and Games their own HTML files
+that the router enhances, rather than to abandon the threshold.
+
 ## Legal pages
 
 `legal/privacy.html` and `legal/terms.html`, same `body.doc` pattern as the case studies.

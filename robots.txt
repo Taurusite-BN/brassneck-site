@@ -1,0 +1,8 @@
+# Brassneck Studio
+# Everything here is meant to be read. Nothing is behind a login and
+# there is nothing to hide from a crawler.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://brassneck.studio/sitemap.xml

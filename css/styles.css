@@ -1010,6 +1010,17 @@
   }
   .quote.is-pending { background: rgba(241,239,236,0.022); border-style: dashed; }
 
+  /* a long, real testimonial: printed whole rather than filleted */
+  .quote-long { padding-top: 1.5rem; }
+  .quote-long blockquote { padding-left: 1.5rem; font-size: 1.06rem; }
+  .quote-long blockquote p { margin: 0 0 .85rem; }
+  .quote-long blockquote p:last-child { margin-bottom: 0; color: var(--paper); }
+  .quote-long figcaption { margin-top: 1.3rem; }
+  .quote-stars {
+    margin: 0 0 .9rem; padding-left: 1.5rem;
+    color: var(--brass); font-size: 1rem; letter-spacing: .28em; line-height: 1;
+  }
+
   /* ---- closing CTA ---------------------------------------------- */
 
   .closer {
