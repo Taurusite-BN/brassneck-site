@@ -835,44 +835,100 @@
       shot: "assets/example-web-design.png",
       ph: "Ember8 home, Dutch &middot; screenshot pending",
       body: "<p>Ember8 sells something delicate: therapy for people stuck in a pattern. Push the design too hard and it reads as a clinic; push too little and nobody books.</p>" +
-            "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>"
+            "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>",
+      prices: [
+        ["Basic", "&pound;800", "One page done properly: mobile-first, enquiry form, analytics."],
+        ["Standard", "&pound;1,500", "5 to 7 pages, copy shaped with you, analytics, search basics, form routing."],
+        ["Larger projects", "Quoted", "Multiple languages, booking flows, bespoke interaction."],
+        ["Extra page on an existing Brassneck site", "&pound;150", ""],
+        ["Redesign of a site we didn&rsquo;t build", "From &pound;1,500", ""]
+      ],
+      foot: "Every build includes the first year&rsquo;s hosting."
     },
     "seo": {
       title: "SEO",
       shot: "assets/example-seo.png",
       ph: "Two language trees, one site &middot; screenshot pending",
       body: "<p>Ember8 needed to be found in Dutch <em>and</em> English, by people searching for a feeling rather than a service name.</p>" +
-            "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>"
+            "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>",
+      lead: "<b>Included free in every build:</b> titles, meta descriptions, schema, sitemap, clean URLs, fast load, and the Google Business Profile link. Most agencies sell that as an extra. It is just building a site properly.",
+      prices: [
+        ["SEO health check", "&pound;250", "A written report on a site you already have: what is wrong, and what it is costing."],
+        ["SEO foundations on an existing site", "&pound;300", ""],
+        ["Local SEO setup", "&pound;350", "Google Business Profile, local schema, citations, review-request flow."],
+        ["Ongoing SEO", "&pound;300/month", "Three hours a month, three-month minimum."]
+      ]
     },
     "hosting": {
       title: "Hosting &amp; support",
       shot: "assets/example-hosting.png",
       ph: "Static build, nothing to photograph",
       body: "<p>A therapist should not be updating plugins between clients.</p>" +
-            "<p>Ember8 is plain HTML, one stylesheet, one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for. It will still load quickly in five years.</p>"
+            "<p>Ember8 is plain HTML, one stylesheet, one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for. It will still load quickly in five years.</p>",
+      lead: "<b>The first year is included with every build.</b>",
+      prices: [
+        ["Lights On", "&pound;20/month", "Hosting, domain, SSL, uptime monitoring, off-site backups, annual link-and-form check."],
+        ["Care", "&pound;60/month", "Above, plus 45 minutes of content edits a month (one month&rsquo;s rollover), a monthly traffic summary, and a reply inside two working days."],
+        ["Partner", "&pound;100/month", "Above, plus an hour and a half of changes a month, a quarterly review call, and first call on new pages."],
+        ["Migration of an existing site onto our hosting", "&pound;150", ""],
+        ["Hosting for a site we didn&rsquo;t build", "&pound;30/month", ""]
+      ]
     },
     "reports": {
       title: "Traffic reports",
       shot: "assets/example-reports.png",
       ph: "One page a month &middot; numbers withheld, they are the client&rsquo;s",
       body: "<p>Analytics went on Ember8 the day it launched, which is the part most freelance builds skip. You cannot report on what you did not measure, and the moment to start is before launch, not when somebody asks how it is going.</p>" +
-            "<p>What you get back is a page, not a PDF: who came, what they did, and the one thing we would change next.</p>"
+            "<p>What you get back is a page, not a PDF: who came, what they did, and the one thing we would change next.</p>",
+      lead: "<b>Included in the Care and Partner plans</b> as a monthly summary.",
+      prices: [
+        ["One-off traffic review", "&pound;120", "What the site is actually doing, and where it leaks."],
+        ["Analytics setup on an existing site", "&pound;100", ""]
+      ]
     },
     "branding": {
       title: "Branding",
       shot: "assets/example-branding.png",
-      ph: "The Brassneck mark at 16px, smaller than this caption",
-      body: "<p>Our own mark is the shortest example we have. A coiled brass tube opening into a bell, the literal reading of the name, so the joke carries the meaning and nothing needs explaining.</p>" +
-            "<p>Seven other shapes were drawn and thrown away because they failed the only test that matters: rendered at sixteen pixels in one colour, could you still tell what it was?</p>"
+      ph: "The Brassneck mark, at the size that breaks things",
+      body: "<p>A logo drawn in one room and a website built in another have to meet eventually, and they usually meet badly. Colours that were never going to sit together. A mark that needs a white box to survive. Type nobody checked against the body copy.</p>" +
+            "<p>So we do both at once. The same brief, the same fortnight, one set of work to approve, and a site that was designed around the mark rather than apologising for it afterwards.</p>" +
+            "<p>You get the mark, the palette and the type, tested at the sizes that actually break things: sixteen pixels in a browser tab, one colour on a receipt, and across the side of a van.</p>",
+      prices: [
+        ["Logo and identity, alongside a build", "From &pound;600", "The mark, the palette and the type, drawn in step with the site so nothing has to be retrofitted."]
+      ]
     },
     "graphic": {
       title: "Graphic design",
       shot: "assets/example-graphic.png",
       ph: "Devlog, in the game&rsquo;s own palette &middot; one click away",
       body: "<p>The Articles devlog is set in the game's palette rather than the studio's (bone, sea slate, bilge dark, wet oak, lamp brass) so that opening an entry feels like stepping into the game rather than reading a blog post about it.</p>" +
-            "<p>That is what this is for: everything around the main thing speaking in the same voice as the main thing.</p>"
+            "<p>That is what this is for: everything around the main thing speaking in the same voice as the main thing.</p>",
+      prices: [
+        ["Social kit", "&pound;250", "Profile image, header, three post templates."],
+        ["One-page PDF or flyer", "&pound;180", ""],
+        ["Business card and email signature", "&pound;150", ""],
+        ["Anything else", "&pound;60/hour or &pound;450/day", ""]
+      ],
+      foot: "Logos and identity are priced separately. See Branding."
     }
   };
+
+  // The prices live in the data above rather than in the markup, because the
+  // dialog is one component reused six times. Rows are [what, amount, note].
+  function priceBlock(ex) {
+    if (!ex.prices) return "";
+    const rows = ex.prices.map(r =>
+      '<li><span class="p-what">' + r[0] + '</span>' +
+      '<span class="p-amt">' + r[1] + '</span>' +
+      (r[2] ? '<span class="p-note">' + r[2] + '</span>' : '') +
+      '</li>').join("");
+    return '<div class="svc-prices">' +
+      '<p class="svc-prices-h">What it costs</p>' +
+      (ex.lead ? '<p class="svc-prices-lead">' + ex.lead + '</p>' : '') +
+      '<ul>' + rows + '</ul>' +
+      (ex.foot ? '<p class="svc-prices-foot">' + ex.foot + '</p>' : '') +
+      '</div>';
+  }
 
   function initExamples() {
     const modal = document.getElementById("svc-modal");
@@ -881,6 +937,7 @@
     const body = document.getElementById("svc-modal-body");
     const img = document.getElementById("svc-modal-img");
     const ph = document.getElementById("svc-modal-ph");
+    const prices = document.getElementById("svc-modal-prices");
 
     let origin = null;
     let closing = false;
@@ -907,11 +964,14 @@
         const ex = EXAMPLES[btn.dataset.svc];
         if (!ex) return;
         title.innerHTML = ex.title;
+        prices.innerHTML = priceBlock(ex);
         body.innerHTML = ex.body;
         ph.innerHTML = ex.ph;
         img.hidden = false;
         img.onerror = () => { img.hidden = true; };
         img.src = ex.shot;
+
+        modal.scrollTop = 0;
 
         origin = btn.getBoundingClientRect();
         modal.showModal();

@@ -843,6 +843,9 @@
 
   /* ---- services ------------------------------------------------- */
 
+  .price-vat { margin: -0.7rem 0 1.5rem; max-width: 70ch; }
+  .price-vat b { color: var(--brass-lit); font-weight: 600; }
+
   /* six services, so three across reads as two full rows rather than
      four-and-two with a hole in it */
   .services {
@@ -1626,7 +1629,58 @@
     text-align: center; padding: 0 1.4rem; line-height: 1.7;
   }
   .study-shot-ph { text-align: center; padding: 0 1.2rem; line-height: 1.7; }
+  .svc-prices {
+    margin: 0 0 1.5rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+    border: 1px solid var(--hairline);
+    background: rgba(176,141,87,0.05);
+  }
+  .svc-prices-h {
+    margin: 0 0 .8rem;
+    font-family: Archivo, system-ui, sans-serif;
+    font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--brass);
+  }
+  .svc-prices-lead {
+    margin: 0 0 .9rem; color: var(--dim);
+    font-size: var(--step-0); line-height: 1.55;
+  }
+  .svc-prices-lead b { color: var(--brass-lit); font-weight: 600; }
+  .svc-prices ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+  .svc-prices li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .1rem .9rem;
+    padding: .62rem 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .svc-prices li:first-child { border-top: 0; padding-top: 0; }
+  .p-what {
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 600; font-size: .95rem; color: var(--paper);
+  }
+  .p-amt {
+    font-family: Archivo, system-ui, sans-serif;
+    font-weight: 800; font-size: 1rem; color: var(--brass-lit);
+    white-space: nowrap; text-align: right;
+  }
+  .p-note {
+    grid-column: 1 / -1;
+    color: var(--muted); font-size: .84rem; line-height: 1.5;
+  }
+  .svc-prices-foot {
+    margin: .9rem 0 0; padding-top: .8rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted); font-size: .84rem; line-height: 1.5;
+  }
+
   .svc-modal-body p { margin: 0 0 .9rem; }
+  .svc-modal-body a {
+    color: var(--brass-lit); text-decoration: none;
+    border-bottom: 1px solid var(--brass-dim);
+  }
+  .svc-modal-body a:hover, .svc-modal-body a:focus-visible { border-bottom-color: var(--brass-lit); }
   .svc-modal-body p:last-child { margin-bottom: 1.4rem; }
 
   /* ---- restyled case study card --------------------------------- */
@@ -1683,10 +1737,13 @@
      Studio: the team, and the case for doing both
      ================================================================ */
 
+  /* Sized by content rather than a fixed count: the studio has been four
+     people and is now two, and a hard-coded repeat(4) leaves dead columns. */
   .crew {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
     gap: 1px;
+    max-width: 860px;
     background: var(--rule);
     border: 1px solid var(--rule);
   }
@@ -1724,6 +1781,13 @@
     font-weight: 800; font-size: 1.16rem; letter-spacing: -0.02em;
     color: var(--paper);
   }
+  .crew-name a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px solid var(--brass-dim);
+    transition: color .2s, border-color .2s;
+  }
+  .crew-name a:hover, .crew-name a:focus-visible { color: var(--brass-lit); border-bottom-color: var(--brass-lit); }
+
   .crew-role {
     margin: 0 0 .5rem;
     font-family: Archivo, system-ui, sans-serif;
