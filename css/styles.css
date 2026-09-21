@@ -1489,7 +1489,7 @@
   /* ---- the stage the roster swaps ------------------------------- */
 
   .trailer-stage .reel { transition: transform 90ms linear, opacity 90ms linear; }
-  #articles.is-swapping, .locked-msg.is-swapping { animation: swap-in 420ms var(--ease) both; }
+  .game-panel.is-swapping, .locked-msg.is-swapping { animation: swap-in 420ms var(--ease) both; }
   @keyframes swap-in {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: none; }
@@ -1523,7 +1523,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .trailer-stage { transition: none; }
-    #articles.is-swapping, .locked-msg.is-swapping { animation: none; }
+    .game-panel.is-swapping, .locked-msg.is-swapping { animation: none; }
   }
 
   /* ---- services as buttons + the example modal ------------------ */

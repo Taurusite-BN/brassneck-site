@@ -56,9 +56,26 @@ Each entry keeps *The Articles*' own palette (bone, sea slate, bilge dark, wet o
 brass) rather than the studio's. That is deliberate: stepping into an entry should feel
 like stepping into the game's world, not reading a studio blog post about it.
 
+**Naming.** `YYYY-MM-DD-<game>-<n>.html` since the second game arrived, e.g.
+`2026-09-20-scuttlers-one.html`. The two Articles entries predate that convention and keep their
+original names (`2026-08-28-entry-one.html`, `2026-09-04-entry-two.html`) because both are live
+URLs and are in the sitemap. Do not rename them; name everything new the new way.
+
 **To add an entry:** drop the new file in `devlog/`, copy the `.back` link from the existing
-entry, then add one `<li>` to `.logs` in the Games section of `index.html`. Newest first, and
-update the build number in the Articles `.meta` list while you are there.
+entry, then add one `<li>` to `.logs` **in that game's own panel** in `index.html`. Newest first,
+and update the build or milestone in the same panel's `.meta` list while you are there. Add a
+`<url>` to `sitemap.xml` too.
+
+**Each game's devlog carries its own visual world**, not the studio's. The Articles is dark
+(bone, sea slate, bilge dark, wet oak, lamp brass). Scuttlers is a photocopied school newsletter:
+yellowed paper, mint corridor paint, biro blue, with a dark mode. Stepping into an entry should
+feel like stepping into that game.
+
+**Scuttlers entries use the light-ground mark** (`brassneck-mark-light.png`) in the back link,
+swapped for the standard one under `prefers-color-scheme: dark`. The standard mark is keyed out of
+dark artwork, so its counters knock through and the face reads as a blob on pale ground. It is also
+set at 28px rather than 20px there, because the mark does not survive much below 30 (see
+`brand-identity.md`).
 
 Every entry needs **the `.back` link** pointing at `../index.html#games`, see routing below.
 
@@ -121,7 +138,8 @@ else's server, and an easy thing to remove.
 |---|---|---|
 | Archivo | `archivo-var.woff2`, one variable file covering 400-900 | studio pages, via `css/styles.css` |
 | Spectral | five static styles: 300/400/600 normal, 300/400 italic | studio pages, via `css/styles.css` |
-| IM Fell English, PT Serif, IBM Plex Mono | seven static styles | devlog entries, via the inline `<style>` in each |
+| IM Fell English, PT Serif, IBM Plex Mono | seven static styles | The Articles devlog entries |
+| Archivo Narrow, Silkscreen, Source Serif 4 | three static, one variable, one variable italic | Scuttlers devlog entries |
 
 The `@font-face` rules live at the top of `css/styles.css` for the studio families, and inside
 each devlog entry's own `<style>` block for the game families, because devlog pages never load
@@ -152,6 +170,27 @@ study and the legal pages are real files and index normally.
 That was the right call for the door-and-dive idea, and it is worth knowing it has a price. If
 search ever needs to do real work, the fix is to give Websites and Games their own HTML files
 that the router enhances, rather than to abandon the threshold.
+
+## The Games page holds more than one game
+
+**There is one `.game-panel` per game** (`#articles`, `#scuttlers`), all but one `hidden`, plus
+`#locked-msg` for the slots that are still question marks. The roster in the top right is the only
+control: a slot with `data-slot="<panel id>"` shows that panel, a slot with `data-quip` shows the
+locked message instead.
+
+**Adding a third game is a panel, a slot and nothing else.** `initRoster()` iterates
+`.game-panel` and has no game names in it. The "back" button out of a locked slot returns you to
+the game you were last looking at rather than always to The Articles, and relabels itself to match.
+
+Two things that had to be generalised when the second game arrived, and would bite again if
+anything else gets hard-coded to one game:
+
+- **`initTrailerScroll()`** scaled `#trailer-stage .reel`, a single element. It now walks every
+  `.trailer-stage .reel` and skips any whose panel is hidden, because a hidden panel measures as a
+  zero-height box and would otherwise be scaled to nothing and stay that way when revealed. The
+  roster calls back into it after a swap so the newly shown reel is measured at its real size.
+- **`#articles.is-swapping`** in the CSS is now `.game-panel.is-swapping`, in both the animation
+  rule and the reduced-motion override.
 
 ## Legal pages
 

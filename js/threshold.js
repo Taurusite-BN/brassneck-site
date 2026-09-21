@@ -754,52 +754,74 @@
    * 3d. The roster, the trailer, and the examples
    * ================================================================ */
 
+  // One panel per game, plus the locked message. Slots carry data-slot for a
+  // real game and data-quip for a locked one, so adding a third game is a
+  // panel, a slot, and nothing in here.
   function initRoster() {
-    const articles = document.getElementById("articles");
+    const panels = [...document.querySelectorAll(".game-panel")];
     const locked = document.getElementById("locked-msg");
     const quip = document.getElementById("locked-quip");
-    if (!articles || !locked) return;
+    if (!panels.length || !locked) return;
 
     const slots = [...document.querySelectorAll(".roster .slot")];
+    const first = slots.find(s => s.dataset.slot);
+    let lastGame = first ? first.dataset.slot : null;
 
-    const show = (showArticles, btn) => {
-      articles.hidden = !showArticles;
-      locked.hidden = showArticles;
-      const shown = showArticles ? articles : locked;
-      shown.classList.remove("is-swapping");
-      void shown.offsetWidth;
-      shown.classList.add("is-swapping");
-      slots.forEach(s => {
-        const on = s === btn;
-        s.classList.toggle("is-current", on);
-        if (s.dataset.slot === "articles") s.setAttribute("aria-pressed", String(on));
+    const swapIn = el => {
+      el.classList.remove("is-swapping");
+      void el.offsetWidth;
+      el.classList.add("is-swapping");
+    };
+
+    const show = (key, btn) => {
+      panels.forEach(pnl => { pnl.hidden = pnl.id !== key; });
+      locked.hidden = key !== null;
+      const shown = key === null ? locked : panels.find(pnl => pnl.id === key);
+      if (shown) swapIn(shown);
+      if (key !== null) lastGame = key;
+
+      slots.forEach(sl => {
+        const on = sl === btn;
+        sl.classList.toggle("is-current", on);
+        if (sl.dataset.slot) sl.setAttribute("aria-pressed", String(on));
       });
+
+      // the back button out of a locked slot returns you where you were
+      document.querySelectorAll(".locked-back").forEach(b => {
+        const name = document.querySelector('.roster .slot[data-slot="' + lastGame + '"] .slot-name');
+        b.textContent = "\u2190 Back to " + (name ? name.textContent : "the games");
+        b.dataset.slot = lastGame;
+      });
+
       if (pages.games) pages.games.scrollTop = 0;
+      if (typeof measureTrailers === "function") measureTrailers();
     };
 
     slots.forEach(btn => {
       btn.addEventListener("click", () => {
-        if (btn.dataset.slot === "articles") {
-          show(true, btn);
+        if (btn.dataset.slot) {
+          show(btn.dataset.slot, btn);
         } else {
           quip.textContent = btn.dataset.quip || "";
-          show(false, btn);
+          show(null, btn);
         }
       });
     });
 
     document.querySelectorAll(".locked-back").forEach(btn => {
-      btn.addEventListener("click", () => show(true, slots[0]));
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.slot || lastGame;
+        show(key, slots.find(sl => sl.dataset.slot === key));
+      });
     });
   }
 
-  // The trailer slot swells as it comes up to the middle of the screen and
-  // falls back as it leaves. Range is deliberately wide (0.84 to 1.0) so it
-  // reads as the page breathing rather than as a rendering wobble.
+  let measureTrailers = null;
+
   function initTrailerScroll() {
-    const slot = document.querySelector("#trailer-stage .reel");
+    const reels = [...document.querySelectorAll(".trailer-stage .reel")];
     const page = pages.games;
-    if (!slot || !page || reduce) return;
+    if (!reels.length || !page || reduce) return;
 
     const MIN = 0.84;
     const MAX = 1.0;
@@ -807,16 +829,21 @@
 
     const apply = () => {
       queued = false;
-      const r = slot.getBoundingClientRect();
-      if (!r.height) return;
       const vh = window.innerHeight;
-      const centre = r.top + r.height / 2;
-      // 1 when the slot sits dead centre, falling to 0 well before it leaves
-      const nearness = Math.max(0, 1 - Math.abs(centre - vh / 2) / (vh * 0.62));
-      const eased = nearness * nearness * (3 - 2 * nearness);
-      slot.style.transform = "scale(" + (MIN + (MAX - MIN) * eased).toFixed(4) + ")";
-      slot.style.opacity = (0.66 + 0.34 * eased).toFixed(3);
+      reels.forEach(slot => {
+        // a hidden panel measures as a zero-height box, so skip it
+        if (!slot.offsetParent) return;
+        const r = slot.getBoundingClientRect();
+        if (!r.height) return;
+        const centre = r.top + r.height / 2;
+        // 1 when the slot sits dead centre, falling to 0 well before it leaves
+        const nearness = Math.max(0, 1 - Math.abs(centre - vh / 2) / (vh * 0.62));
+        const eased = nearness * nearness * (3 - 2 * nearness);
+        slot.style.transform = "scale(" + (MIN + (MAX - MIN) * eased).toFixed(4) + ")";
+        slot.style.opacity = (0.66 + 0.34 * eased).toFixed(3);
+      });
     };
+    measureTrailers = apply;
 
     const onScroll = () => {
       if (queued) return;

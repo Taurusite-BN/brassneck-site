@@ -357,7 +357,7 @@
         <div class="games-head-text">
           <p class="eyebrow">Games</p>
           <h1>Made for evenings.</h1>
-          <p class="lede">One in the water. The rest still on the slipway.</p>
+          <p class="lede">Two in the water. The rest still on the slipway.</p>
         </div>
 
         <div class="roster-wrap">
@@ -373,9 +373,12 @@
               </button>
             </li>
             <li>
-              <button class="slot is-locked" type="button" data-quip="One game at a time. This one first.">
-                <span class="slot-art"><svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/></svg></span>
-                <span class="slot-foot"><span class="slot-name">?????</span></span>
+              <button class="slot is-unlocked" type="button" data-slot="scuttlers" aria-pressed="false">
+                <span class="slot-art">
+                  <img src="assets/scuttlers-cover.png" alt="" onerror="this.remove()">
+                  <span class="slot-ph">cover art, still a grey box</span>
+                </span>
+                <span class="slot-foot"><span class="slot-name">Scuttlers</span></span>
               </button>
             </li>
             <li>
@@ -394,7 +397,7 @@
         </div>
       </div>
 
-      <div id="articles">
+      <div class="game-panel" id="articles">
 
       <section class="band trailer-band">
         <div class="trailer-stage" id="trailer-stage">
@@ -462,6 +465,68 @@
           <span class="eta-label">Estimated</span>
           <span class="eta-date"><time datetime="2026-11">November 2026</time></span>
           <p class="eta-note">An estimate, not a promise. If it moves, the devlog will say so before the date does.</p>
+        </div>
+      </section>
+
+      </div>
+
+      <div class="game-panel" id="scuttlers" hidden>
+
+      <section class="band trailer-band">
+        <div class="trailer-stage">
+          <div class="reel">
+            <div>
+              <span>No trailer</span>
+              <em>Sixty-three per cent of this game is currently a grey rectangle with a label on it, and the rest is placeholder. There will be footage when there is something worth pointing a camera at.</em>
+            </div>
+          </div>
+
+          <div class="trailer">
+            <p class="tr-1">Every kid in this school has one.</p>
+            <p class="tr-1">Palm-sized plastic on wheels, tracks or legs, driven with a pistol-grip handset.</p>
+            <p class="tr-2">They fight them in bin lids, sinks, taped squares on the floor and the drain hollow behind the sports hall. There is an unwritten rulebook enforced by sixth-formers. There is a black market. There is a boy who will trade you a Series Two for whatever is in your pockets and is visibly not to be trusted.</p>
+            <p class="tr-2">The toys are the only things in the building with any colour in them.</p>
+            <p class="tr-3">Underneath the craze, there is something the school has quietly agreed not to talk about.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <h2 class="band-title">Scuttlers</h2>
+        <dl class="meta">
+          <div><dt>Form</dt><dd>Narrative RPG, dry satirical comedy</dd></div>
+          <div><dt>Setting</dt><dd>A run-down British secondary school</dd></div>
+          <div><dt>Status</dt><dd>Foundations done &middot; battle prototype next</dd></div>
+          <div><dt>Built with</dt><dd>Godot 4.6, 640&times;360 at 16px tiles</dd></div>
+          <div><dt>Art</dt><dd>Commissioned, once the fighting is proven fun</dd></div>
+          <div><dt>Follow</dt><dd>itch.io and Bluesky, handles to claim</dd></div>
+        </dl>
+      </section>
+
+      <section class="band">
+        <h2 class="band-title">Devlog</h2>
+        <p class="prose">A build log rather than a story one. It is mostly about what broke.</p>
+
+        <ul class="logs">
+          <li>
+            <a class="log" href="devlog/2026-09-20-scuttlers-one.html">
+              <span class="log-date"><time datetime="2026-09-20">20 Sep 2026</time></span>
+              <span class="log-main">
+                <span class="log-title">Devlog one: the school gets a shape</span>
+                <span class="log-sum">Eleven rooms, thirteen doors and three loops where there used to be a star with dead ends on it. A gym, a locked cupboard and the worst toilets in Britain. Plus a confession: every classroom door in the game has been a picture of a wardrobe for a fortnight.</span>
+              </span>
+              <span class="log-meta">M0 &middot; Godot 4.6</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="band">
+        <h2 class="band-title">Release</h2>
+        <div class="eta">
+          <span class="eta-label">When</span>
+          <span class="eta-date">No date yet</span>
+          <p class="eta-note">The next milestone is the only one that can kill this: two toys, one ring, no menus, no school. The test is whether people ask for a rematch without being prompted. Anybody giving you a date before that has guessed.</p>
         </div>
       </section>
 
