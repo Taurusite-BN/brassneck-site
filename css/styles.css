@@ -1138,6 +1138,18 @@
   .doc-meta a { color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
   .doc-meta a:hover { border-bottom-color: var(--brass-lit); }
 
+  .doc-shot { margin: 2.2rem 0 0; }
+  .doc-shot img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--rule);
+    background: #0B0C11;
+  }
+  .doc-shot figcaption {
+    margin-top: .7rem;
+    color: var(--muted); font-size: var(--step-0); line-height: 1.5;
+    max-width: 62ch;
+  }
+
   .doc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; max-width: 66ch; }
   .doc-list li { position: relative; padding-left: 1.4rem; color: var(--dim); }
   .doc-list li::before {
@@ -1703,7 +1715,13 @@
       radial-gradient(80% 80% at 30% 20%, rgba(176,141,87,0.12), transparent 70%),
       #0B0C11;
   }
-  .study-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* Website screenshots are wider than this box, so they get cropped. Anchor
+     top-left: that is where the logo, the nav and the headline are, and losing
+     the right-hand edge of a hero costs nothing. */
+  .study-shot img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: left top;
+  }
   .study-shot-ph {
     font-family: Archivo, system-ui, sans-serif;
     font-size: .66rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;

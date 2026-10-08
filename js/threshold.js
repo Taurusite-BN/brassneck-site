@@ -859,8 +859,8 @@
   const EXAMPLES = {
     "web-design": {
       title: "Web design",
-      shot: "assets/example-web-design.png",
-      ph: "Ember8 home, Dutch &middot; screenshot pending",
+      shot: "assets/ember8-preview.jpg",
+      ph: "Ember8 home",
       body: "<p>Ember8 sells something delicate: therapy for people stuck in a pattern. Push the design too hard and it reads as a clinic; push too little and nobody books.</p>" +
             "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>",
       prices: [
@@ -874,8 +874,8 @@
     },
     "seo": {
       title: "SEO",
-      shot: "assets/example-seo.png",
-      ph: "Two language trees, one site &middot; screenshot pending",
+      shot: "assets/ember8-preview-nl.jpg",
+      ph: "ember8.nl &middot; Dutch at the root, English mirrored beneath it",
       body: "<p>Ember8 needed to be found in Dutch <em>and</em> English, by people searching for a feeling rather than a service name.</p>" +
             "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>",
       lead: "<b>Included free in every build:</b> titles, meta descriptions, schema, sitemap, clean URLs, fast load, and the Google Business Profile link. Most agencies sell that as an extra. It is just building a site properly.",
