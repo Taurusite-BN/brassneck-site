@@ -31,7 +31,74 @@
     fx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  /* The hero particles form the BRASS / NECK / STUDIO lettering, taken
+     from the supplied Landscape lockup rather than typeset. The wordmark
+     is custom lettering and may not be recreated in Anton or anything
+     else, so this samples the real artwork.
+
+     The Landscape file is one path for the B character followed by
+     eleven for the lettering. The character is dropped here because the
+     masthead already carries it; the split is by geometry rather than by
+     index, so a re-export with the paths in a different order still
+     works. The icon occupies the left third of the viewBox (it ends at
+     x≈333 of 994) and the lettering starts at x≈457, so a cut at 40%
+     separates them with a wide margin either side.
+
+     Fetched and handed to Path2D rather than drawn through an <img>:
+     no canvas-tainting question, and the file on disk stays the only
+     copy of the artwork. */
+  let markPaths = null, markBox = null;
+
+  const LOCKUP_ICON_CUT = 0.40;
+
+  function loadMark() {
+    return fetch("assets/logo/icon-white.svg")
+      .then(() => fetch("assets/logo/landscape-white.svg"))
+      .then(r => (r.ok ? r.text() : Promise.reject(new Error(r.status))))
+      .then(txt => {
+        if (typeof Path2D !== "function" || typeof DOMParser !== "function") return false;
+        const vb = /viewBox="([-\d.\s]+)"/.exec(txt);
+        if (!vb) return false;
+        const n = vb[1].trim().split(/\s+/).map(Number);
+        const vbW = n[2], vbH = n[3];
+
+        // measured, not guessed: getBBox needs the node laid out, so the
+        // parsed SVG goes in hidden (visibility, not display: none would
+        // give every box zero size) and comes straight back out
+        const doc = new DOMParser().parseFromString(txt, "image/svg+xml");
+        const svg = doc.documentElement;
+        if (!svg || svg.querySelector("parsererror")) return false;
+        svg.setAttribute("style",
+          "position:absolute;left:-9999px;top:0;width:10px;height:10px;visibility:hidden");
+        document.body.appendChild(svg);
+
+        let keep = [], minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        try {
+          svg.querySelectorAll("path").forEach(node => {
+            const d = node.getAttribute("d");
+            if (!d) return;
+            const b = node.getBBox();
+            if (!b || !b.width) return;
+            if (b.x + b.width < vbW * LOCKUP_ICON_CUT) return;   // the character
+            keep.push(d);
+            minX = Math.min(minX, b.x);        minY = Math.min(minY, b.y);
+            maxX = Math.max(maxX, b.x + b.width); maxY = Math.max(maxY, b.y + b.height);
+          });
+        } finally {
+          svg.remove();
+        }
+
+        if (!keep.length || !isFinite(minX)) return false;
+        markPaths = keep.map(d => new Path2D(d));
+        markBox = { x: minX, y: minY, w: maxX - minX, h: maxY - minY, vbW: vbW, vbH: vbH };
+        return true;
+      })
+      .catch(() => false);
+  }
+
   function sampleWord() {
+    if (!markPaths) return;
+
     const rect = wordCanvas.getBoundingClientRect();
     const w = Math.max(1, Math.round(rect.width));
     const h = Math.max(1, Math.round(rect.height));
@@ -41,19 +108,14 @@
     off.width = w; off.height = h;
     const ox = off.getContext("2d");
 
-    const text = "BRASSNECK";
-    ox.textBaseline = "middle";
-    ox.textAlign = "center";
-    if ("letterSpacing" in ox) ox.letterSpacing = "-0.02em";
-
-    let size = Math.floor(h * 0.94);
-    for (let i = 0; i < 60; i++) {
-      ox.font = "900 " + size + "px Archivo, system-ui, sans-serif";
-      if (ox.measureText(text).width <= w * 0.94 || size <= 12) break;
-      size -= Math.max(1, Math.round(size * 0.04));
-    }
+    // contain the lettering's own ink box, then centre it
+    const scale = Math.min(w / markBox.w, h / markBox.h) * 0.96;
+    ox.setTransform(scale, 0, 0, scale,
+                    (w - markBox.w * scale) / 2 - markBox.x * scale,
+                    (h - markBox.h * scale) / 2 - markBox.y * scale);
     ox.fillStyle = "#fff";
-    ox.fillText(text, w / 2, h / 2);
+    markPaths.forEach(pa => ox.fill(pa));
+    ox.setTransform(1, 0, 0, 1, 0, 0);
 
     const data = ox.getImageData(0, 0, w, h).data;
     const step = cfg.density;
@@ -114,7 +176,7 @@
     const rad = cfg.radius, rad2 = rad * rad, push = cfg.force;
 
     if (cfg.dust) {
-      fx.fillStyle = "rgb(217,178,124)";
+      fx.fillStyle = "rgb(196,142,66)";
       for (const p of dust) {
         p.x += p.vx; p.y += p.vy;
         if (pointer.active) {
@@ -164,10 +226,12 @@
 
         const disp = Math.min(1, Math.hypot(p.x - hx, p.y - hy) / 60);
         const lum = 0.55 + p.tone * 0.3 + disp * 0.4;
+        // brass at rest, mixed toward brand white as a particle is
+        // displaced, so the cursor lights the mark rather than tinting it
         fx.fillStyle = "rgb(" +
-          Math.round(176 + 60 * lum) + "," +
-          Math.round(141 + 55 * lum) + "," +
-          Math.round(87 + 70 * lum) + ")";
+          Math.round(196 + 45 * lum) + "," +
+          Math.round(142 + 68 * lum) + "," +
+          Math.round(66 + 110 * lum) + ")";
         fx.globalAlpha = (0.55 + p.tone * 0.45) * wordAlpha;
         fx.fillRect(p.x, p.y, p.r * 2, p.r * 2);
       }
@@ -1085,7 +1149,8 @@
   function boot() {
     if (booted) return;
     booted = true;
-    sizeField(); measureHero(); sampleWord(); makeDust(); splitMagnetic();
+    sizeField(); measureHero(); makeDust(); splitMagnetic();
+    loadMark().then(ok => { if (ok) { sampleWord(); measureHero(); } });
     kickLeaves();
     markRoute();
     restoreRoute();

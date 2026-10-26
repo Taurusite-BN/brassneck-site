@@ -127,72 +127,138 @@ Two things to hold to when editing these numbers:
 Markup is `.tiers` / `.tier` (the middle one carries `.is-pick` and the brass flag) and
 `.plans` / `.plan`, both in `#page-websites`. Both collapse to one column under 900px.
 
-## Typefaces
+## The brand system
 
-**Self-hosted, from `assets/fonts/`. Do not put the Google Fonts `<link>` tags back.** They came
-out on 8 Sep 2026 because every visitor's browser was announcing itself to Google before it had
-read a word, which is a third-party transfer to disclose, a render-blocking request to somebody
-else's server, and an easy thing to remove.
+**Rebranded 26 Oct 2026** to the identity delivered by James Smith Design. The guidelines PDF in
+`~/Documents/Brassneck/Brassneck Studio Final Files/` is the source of truth; `claude/brand-identity.md`
+in the project summarises it.
 
-| Family | Files | Used by |
+### Four colours, and the rule about them
+
+| Token | Value | Role |
 |---|---|---|
-| Archivo | `archivo-var.woff2`, one variable file covering 400-900 | studio pages, via `css/styles.css` |
-| Spectral | five static styles: 300/400/600 normal, 300/400 italic | studio pages, via `css/styles.css` |
-| IM Fell English, PT Serif, IBM Plex Mono | seven static styles | The Articles devlog entries |
-| Archivo Narrow, Silkscreen, Source Serif 4 | three static, one variable, one variable italic | Scuttlers devlog entries |
+| `--brass` | `#C48E42` | the accent, and the closing CTA band |
+| `--maroon` / `--ink` | `#280700` | the page ground |
+| `--black` | `#0C0C0C` | recesses and voids only |
+| `--white` / `--paper` | `#F1EFEC` | text |
 
-The `@font-face` rules live at the top of `css/styles.css` for the studio families, and inside
-each devlog entry's own `<style>` block for the game families, because devlog pages never load
-the studio stylesheet. Paths are `../assets/fonts/…` in both cases: relative to the stylesheet
-for the former, relative to the document for the latter, and both resolve the same way.
+**Everything else in `:root` is one of those four, one of them at reduced alpha, or two of them
+mixed.** No fifth hue enters the system. The surface ramp (`--surface`, `--surface-hi`, the timber
+tones, the brass metal shading) is all Dark Maroon or Brass moved toward White or Black.
 
-Every page preloads the two faces that paint first. **A new devlog entry needs the seven
-`@font-face` rules copied across with it** — copy the whole `<style>` block from the existing
-entry rather than retyping it.
+There are **two documented departures**, both marked in the CSS where they occur:
 
-Files came from the `@fontsource` npm packages (latin subsets only, woff2 only, no `.woff`
-fallback since every browser that matters has supported woff2 since 2016). To add a weight,
-`npm install @fontsource/<family>`, copy the file out of `files/`, add the rule.
+1. **`--warn: #D98166`** for form validation. The palette has no red, and an error that is
+   indistinguishable from the accent colour is a usability defect. This is the Dark Maroon hue
+   lifted until it reads as red, at 6.5 : 1 on the ground.
+2. **`--brass-edge` / `--brass-glint`** exist only to light metal (the door furniture and casings).
+   They are Brass mixed with Black and with White, never used as flat colour.
 
-## Search, and the one real cost of the single-page design
+Text contrast on the ground is **16.3 : 1** (`--paper`), **10.1 : 1** (`--dim`) and **6.0 : 1**
+(`--muted`). Brass on the ground is 6.5 : 1.
 
-`robots.txt` and `sitemap.xml` sit at the repo root and are served from
-`brassneck.studio/robots.txt` and `/sitemap.xml`. **Add a row to the sitemap for every new
-devlog entry or case study**, and update `<lastmod>` on the homepage when the content changes.
+**White on brass is 2.5 : 1 and fails.** Anything sitting on a brass fill — the CTA band, the
+"most people want this one" flag, brass buttons — takes Dark Maroon or Black text. This is the one
+contrast trap in the palette and it is easy to walk into.
 
-**The thing to understand about this site's URLs.** Websites, Games, Studio and Contact are
-fragments of the homepage (`#websites`, `#games`, …), not separate documents. A search engine
-cannot index a fragment as a page of its own, so **there is exactly one indexable page for the
-whole studio side of the site**, and the pricing, the services and the case-study preview all
-compete for one title, one description and one set of rankings. The devlog entries, the case
-study and the legal pages are real files and index normally.
+### Typefaces
 
-That was the right call for the door-and-dive idea, and it is worth knowing it has a price. If
-search ever needs to do real work, the fix is to give Websites and Games their own HTML files
-that the router enhances, rather than to abandon the threshold.
+| Family | File | Used for |
+|---|---|---|
+| **Anton** | `anton-regular.woff2` | display, **all caps**, one weight |
+| **Darker Grotesque** | `darkergrotesque-var.woff2` | everything else, variable 300-900 |
 
-## The Games page holds more than one game
+Both converted from the supplied TTFs with fonttools. Archivo and Spectral are **gone** from the
+studio side; `archivo-var.woff2` and the five `spectral-*.woff2` files are now dead weight in
+`assets/fonts/` and can be deleted.
 
-**There is one `.game-panel` per game** (`#articles`, `#scuttlers`), all but one `hidden`, plus
-`#locked-msg` for the slots that are still question marks. The roster in the top right is the only
-control: a slot with `data-slot="<panel id>"` shows that panel, a slot with `data-quip` shows the
-locked message instead.
+Two things that will bite if forgotten:
 
-**Adding a third game is a panel, a slot and nothing else.** `initRoster()` iterates
-`.game-panel` and has no game names in it. The "back" button out of a locked slot returns you to
-the game you were last looking at rather than always to The Articles, and relabels itself to match.
+- **Anton ships one weight.** Every rule that uses it pins `font-weight: 400` and
+  `font-synthesis-weight: none`. Asking a single-weight face for 700 makes the browser smear a
+  synthetic bold onto it, which on a face this heavy turns to mud.
+- **Darker Grotesque's variable default is 300**, which is too light to set body copy in. `body`
+  sets 500 explicitly. **No rule may rely on `font-weight: normal`.**
 
-Two things that had to be generalised when the second game arrived, and would bite again if
-anything else gets hard-coded to one game:
+Headings stay sentence case in the HTML and are uppercased in CSS, so the markup still reads
+properly and the decision is one line to undo. The display set is defined in a block at the **end**
+of `styles.css`, which overrides the component rules above it by order — put new display selectors
+there, not inline.
 
-- **`initTrailerScroll()`** scaled `#trailer-stage .reel`, a single element. It now walks every
-  `.trailer-stage .reel` and skips any whose panel is hidden, because a hidden panel measures as a
-  zero-height box and would otherwise be scaled to nothing and stay that way when revealed. The
-  roster calls back into it after a swap so the newly shown reel is measured at its real size.
-- **`#articles.is-swapping`** in the CSS is now `.game-panel.is-swapping`, in both the animation
-  rule and the reduced-motion override.
+### The logo
 
-## Legal pages
+`assets/logo/`, six SVGs: Icon and Landscape in Brass and White, Landscape in Dark Maroon, Portrait
+in White. Straight from the delivered files, unaltered.
+
+**The usage rules are strict and the old site broke two of them.** The logo appears only as
+Landscape or Portrait; the icon may appear alone; **the wordmark may never appear without the
+icon**. The old masthead set "Brassneck STUDIO" in Archivo beside the mark, which is recreating the
+wordmark in type.
+
+The masthead is now **the Icon alone** (`icon-white.svg`), sized by height via `.lockup`
+(46px desktop, 32px on the doc back links, 38/28px under 560px). The icon standing alone is
+explicitly permitted. The full Landscape lockup is no longer used in the chrome.
+
+The fills are hard-coded in each file (`.cls-1 { fill: … }`), not `currentColor`, so **a colourway
+is changed by swapping the `src`, not from CSS.** That is deliberate: editing the file would be
+altering the logo.
+
+`favicon.png`, `apple-touch-icon.png` and `og-card.png` are generated from these by
+a Playwright rasteriser. **The icon is portrait (332.92 × 461.02), so tiles must be sized by
+height** or the feet get clipped. It holds at 16px, so no separate favicon glyph is needed.
+
+### The particle hero
+
+The homepage canvas used to typeset BRASSNECK and sample the letterforms. That broke the new rules
+twice: the wordmark must not be recreated, and Anton must not be used to imitate it. It now forms
+**the real lettering**, taken from `assets/logo/landscape-white.svg` — the actual artwork, never
+type standing in for it. Fetched rather than drawn through an `<img>` so no canvas-tainting
+question arises, and so the file on disk stays the only copy of the artwork.
+
+The character is dropped **by geometry, not by path index**: the parsed SVG is appended off-screen
+(`position:absolute; left:-9999px`, laid out but invisible, because `getBBox()` returns zeroes on a
+node that was never laid out), each path measured, and any path whose right edge falls left of
+`0.40 × viewBox width` discarded. That is the character. The eleven lettering paths are handed to
+`Path2D` and filled into an offscreen canvas, which is then sampled for particle targets. Index-based
+selection would silently break if the file were ever re-exported with a different path order.
+
+**Note the brand-rule tension:** the guidelines say the wordmark may not be used without the icon.
+The homepage masthead carries the icon on the same screen, which is the reading this is built on, but
+it is a judgement call and not something the PDF spells out.
+
+If the fetch fails the hero is simply empty; nothing else depends on it.
+
+### Section tones
+
+The ground is Dark Maroon throughout, which on a long page reads as one flat note. Sections now
+alternate: `section.band.tone-white`, `.tone-black` and `.tone-brass` paint inset blocks in the
+palette, the same move as the brass closer band on the Websites page.
+
+**A tone does not restyle components. It redefines tokens.** Each tone class sets `--paper`,
+`--dim`, `--muted`, `--rule`, `--hairline`, `--brass-lit`, `--brass-dim`, `--surface` and
+`--surface-hi` on the section, and every component rule inside inherits the right colour without
+knowing it is in a toned band. Adding a new component needs no tone-specific CSS; adding a new tone
+needs no component changes.
+
+Two tokens are deliberately **not** redefined:
+
+- **`--ink`** is the text colour printed *on* brass fills, so it must stay Dark Maroon everywhere.
+- **`--brass`** stays the literal brass for fills and metal. Brass-as-*text* is `--brass-lit`
+  instead, which a tone can darken — on White it becomes `#684D27` (brass at 50% toward black,
+  6.8 : 1) because brass on white is 2.5 : 1 and fails. All 27 brass text declarations use
+  `--brass-lit`; the handful of brass-text-on-dark-button rules are pinned back to `--brass`, as is
+  `.crew-initial`, which sits on a dark tile inside a white band.
+
+Current placement: 5 white and 3 black bands on the homepage, 2 white and 1 black on the Ember8 case
+study. **The Contact page has no toned band** — a light ground there would mean inverting every form
+control, and the dark form is the better-looking option. Devlogs keep their own game palettes
+entirely; only the studio back-link logo changed.
+
+A contrast audit over every page (`contrast.mjs` in the scratchpad) comes back clean. The only
+reported failure is `.nameplate`, a false positive: dark text on a brass *gradient* the audit cannot
+parse.
+
+## Legal pages## Legal pages
 
 `legal/privacy.html` and `legal/terms.html`, same `body.doc` pattern as the case studies.
 Linked from a `.foot-legal` row in every footnote (Privacy / Cookies / Terms), plus a

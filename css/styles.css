@@ -1,73 +1,104 @@
   /* ================================================================
      Typefaces, served from this domain.
 
-     These used to come from Google Fonts, which meant every visitor's
-     browser announced itself to Google before it had read a word. Self
-     hosting removes a third party, removes a render-blocking request to
-     someone else's server, and is one fewer line in the privacy policy.
+     Anton and Darker Grotesque, per the brand guidelines, converted
+     from the supplied TTFs. Archivo and Spectral are gone: nothing on
+     the studio side of the site uses them any more. The devlog entries
+     carry their own faces in their own <style> blocks and are not
+     affected by this file.
 
-     Archivo is the variable file: one download covers 400 through 900.
-     Spectral has no variable version, so the five styles the site
-     actually uses are listed individually and nothing else is shipped.
+     Darker Grotesque is variable on wght 300-900. Its default is 300,
+     which is too light for body copy, so `body` sets 500 explicitly
+     and no rule may rely on `font-weight: normal`.
      ================================================================ */
 
   @font-face {
-    font-family: Archivo;
+    font-family: Anton;
     font-style: normal;
-    font-weight: 100 900;
+    font-weight: 400;
     font-display: swap;
-    src: url("../assets/fonts/archivo-var.woff2") format("woff2-variations");
+    src: url("../assets/fonts/anton-regular.woff2") format("woff2");
   }
 
   @font-face {
-    font-family: Spectral;
-    font-style: normal; font-weight: 300; font-display: swap;
-    src: url("../assets/fonts/spectral-300-normal.woff2") format("woff2");
-  }
-  @font-face {
-    font-family: Spectral;
-    font-style: italic; font-weight: 300; font-display: swap;
-    src: url("../assets/fonts/spectral-300-italic.woff2") format("woff2");
-  }
-  @font-face {
-    font-family: Spectral;
-    font-style: normal; font-weight: 400; font-display: swap;
-    src: url("../assets/fonts/spectral-400-normal.woff2") format("woff2");
-  }
-  @font-face {
-    font-family: Spectral;
-    font-style: italic; font-weight: 400; font-display: swap;
-    src: url("../assets/fonts/spectral-400-italic.woff2") format("woff2");
-  }
-  @font-face {
-    font-family: Spectral;
-    font-style: normal; font-weight: 600; font-display: swap;
-    src: url("../assets/fonts/spectral-600-normal.woff2") format("woff2");
+    font-family: "Darker Grotesque";
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+    src: url("../assets/fonts/darkergrotesque-var.woff2") format("woff2-variations");
   }
 
   :root {
-    --ink:        #101219;
-    --wall:       #14161F;
-    --wall-lo:    #0D0F16;
-    --timber:     #272420;
-    --timber-lo:  #1A1815;
-    --timber-hi:  #322D27;
-    --recess:     #07080C;
-    --brass:      #B08D57;
-    --brass-lit:  #D9B27C;
-    --brass-hi:   #EBCB98;
-    --brass-dim:  #6B5738;
-    --paper:      #F1EFEC;
-    --dim:        #CFC9BC;
-    --muted:      #8A8578;
-    --hairline:   rgba(217,178,124,0.16);
-    --rule:       rgba(241,239,236,0.09);
+    /* ================================================================
+       Brassneck Studio, brand guidelines Oct 2026 (James Smith Design).
+       Four colours and no others. Everything below is one of the four,
+       one of them at reduced alpha, or two of them mixed. Two documented
+       departures are marked where they occur.
+       ================================================================ */
+    --brass:  #C48E42;
+    --maroon: #280700;
+    --black:  #0C0C0C;
+    --white:  #F1EFEC;
 
-    --step-0: 0.9375rem;
-    --step-1: 1.0625rem;
-    --step-2: 1.375rem;
-    --step-3: clamp(1.7rem, 3.4vw, 2.4rem);
-    --step-4: clamp(2.3rem, 5.6vw, 3.9rem);
+    /* ---- grounds ------------------------------------------------
+       Dark Maroon is the page. The guidelines call it "softer than
+       true black", and it is: same luminance as the blue-black it
+       replaces, but warm, so the site reads lighter without being
+       lighter. Black is kept for recesses and voids only. */
+    --ink:       #280700;
+    --wall:      #301009;
+    --wall-lo:   #1C0A05;
+    --recess:    #0C0C0C;
+    --surface:   #361711;
+    --surface-hi:#3E211A;
+
+    /* ---- the doors: maroon timber, brass furniture ---- */
+    --timber:    #351A12;
+    --timber-lo: #1C0A05;
+    --timber-hi: #432A20;
+
+    /* ---- brass -------------------------------------------------
+       The old system had three brasses. The new one has one, so the
+       lit/hi aliases resolve to the same value: anything that used
+       them for emphasis now simply gets brass. The two shaded
+       variants exist only to light metal (brass mixed with black and
+       with white) and are not used as flat colour anywhere. */
+    --brass-lit:  #C48E42;
+    --brass-hi:   #C48E42;
+    --brass-dim:  rgba(196,142,66,0.55);
+    --brass-edge: #8A6630;
+    --brass-glint:#D8B382;
+
+    /* ---- text: white at three strengths, all AA on the ground ----
+       16.3 : 1, 10.1 : 1 and 6.0 : 1 against Dark Maroon. */
+    --paper: #F1EFEC;
+    --dim:   #C5BCB8;
+    --muted: #9D8E89;
+
+    --hairline: rgba(196,142,66,0.26);
+    --rule:     rgba(241,239,236,0.12);
+
+    /* Departure 1 of 2: form validation. The palette has no red, and
+       an error that is not distinguishable from the accent colour is
+       a usability defect. This is the Dark Maroon hue lifted until it
+       reads as red, at 6.5 : 1 on the ground. Used nowhere else. */
+    --warn: #D98166;
+
+    /* ---- type ---------------------------------------------------
+       Anton for display, ALL CAPS, as the guidelines require.
+       Darker Grotesque for everything else at 500/600: its variable
+       default is 300, which is too light to set body copy in, so no
+       rule here may rely on `font-weight: normal`.
+       The scale is a step up from the old one because Darker
+       Grotesque is condensed and sets smaller at a given size. */
+    --display: Anton, "Arial Narrow", system-ui, sans-serif;
+    --body:    "Darker Grotesque", system-ui, -apple-system, sans-serif;
+
+    --step-0: 1rem;
+    --step-1: 1.1875rem;
+    --step-2: 1.5rem;
+    --step-3: clamp(1.9rem, 3.8vw, 2.8rem);
+    --step-4: clamp(2.6rem, 6.2vw, 4.4rem);
 
     --ease:  cubic-bezier(.62,.02,.2,1);
     --swing: cubic-bezier(.34,.01,.18,1);
@@ -81,6 +112,13 @@
 
   html {
     scrollbar-gutter: stable;
+    /* The contact shadow under each door is inset -22%, which on a narrow
+       screen pokes past the viewport and let the page scroll sideways by
+       about 19px. `clip` rather than `hidden`: hidden would make <html> a
+       scroll container, clip just cuts. It sits far above the door's own
+       perspective context, so it flattens nothing — checked against the
+       dive rather than assumed, given this file's history. */
+    overflow-x: clip;
     background: var(--ink);
   }
   html.is-locked { overflow: hidden; }
@@ -89,9 +127,11 @@
     margin: 0;
     background: var(--ink);
     color: var(--paper);
-    font-family: Spectral, Georgia, serif;
+    font-family: var(--body);
+    font-weight: 500;
     font-size: var(--step-1);
-    line-height: 1.62;
+    line-height: 1.5;
+    letter-spacing: 0.004em;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -152,28 +192,27 @@
     display: flex; align-items: center; gap: .7rem;
     background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: inherit;
   }
-  .wordmark .mark {
-    width: auto;
-    height: 48px;
-    flex: none;
-    display: block;
-    margin-right: .1rem;
-  }
-  .wordmark b {
-    font-family: Archivo, system-ui, sans-serif; font-weight: 800;
-    font-size: 1.02rem; letter-spacing: -0.015em;
-    display: block; line-height: 1; text-align: left; color: var(--paper);
-  }
-  .wordmark i {
-    font-family: Archivo, system-ui, sans-serif; font-style: normal;
-    font-size: .58rem; font-weight: 600; letter-spacing: .34em;
-    color: var(--muted); display: block; margin-top: .22rem; text-align: left;
+  /* The masthead and the document back links now carry the supplied
+     Landscape lockup as a single file. The studio name used to be set
+     here in type beside the mark, which under the new guidelines is
+     recreating the wordmark — not permitted. The lockup is sized by
+     height so the SVG's own proportions decide the width. */
+  /* The Icon alone, which the guidelines permit ("only the icon can be
+     used on its own"). It is portrait, so it is sized by height and runs
+     a little taller than the landscape lockup did to keep the same
+     optical weight in the masthead. */
+  .lockup { height: 46px; width: auto; display: block; }
+  .doc-back .lockup { height: 32px; }
+
+  @media (max-width: 560px) {
+    .lockup { height: 38px; }
+    .doc-back .lockup { height: 28px; }
   }
 
   .nav { display: flex; gap: 1.6rem; }
   .nav button, .backlink {
     background: none; border: 0; padding: 0 0 .2rem; cursor: pointer;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .72rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted); border-bottom: 1px solid transparent;
     transition: color 200ms, border-color 200ms;
@@ -190,11 +229,14 @@
     padding: clamp(1.6rem, 4.5vh, 3.2rem) 0 clamp(0.8rem, 2vh, 1.5rem);
     text-align: center;
   }
-  #wordfield { display: block; width: 100%; height: clamp(64px, min(11vw, 14vh), 138px); }
+  /* The lettering is BRASS over NECK, so roughly 1.6:1 rather than the
+     old single-line wordmark. Shorter than when this held the portrait
+     B, taller than when it held one line of caps. */
+  #wordfield { display: block; width: 100%; height: clamp(104px, min(17vh, 15vw), 190px); }
 
   .statement {
     font-size: clamp(1.02rem, 2vw, 1.42rem);
-    font-weight: 300; line-height: 1.45;
+    font-weight: 500; line-height: 1.45;
     max-width: 34ch; margin: 1.1rem auto 0;
     color: var(--dim);
   }
@@ -211,9 +253,9 @@
   }
 
   .eyebrow {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .68rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
-    color: var(--brass); margin: 0 0 clamp(1.1rem, 3vh, 2rem);
+    color: var(--brass-lit); margin: 0 0 clamp(1.1rem, 3vh, 2rem);
   }
   .threshold > .eyebrow { text-align: center; }
 
@@ -225,8 +267,8 @@
     top: clamp(4rem, 10vh, 6.5rem);
     bottom: 0;
     background:
-      radial-gradient(70% 60% at 50% 30%, rgba(176,141,87,0.045), transparent 70%),
-      linear-gradient(180deg, var(--wall-lo), var(--wall) 55%, #0F1118);
+      radial-gradient(64% 56% at 50% 26%, rgba(196,142,66,0.13), transparent 72%),
+      linear-gradient(180deg, #3E211A, #301009 52%, #230903);
     -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%);
     mask-image: linear-gradient(180deg, transparent, #000 22%);
     z-index: 0;
@@ -238,7 +280,7 @@
     width: 100vw;
     bottom: 0;
     height: clamp(5rem, 14vh, 9rem);
-    background: linear-gradient(180deg, transparent, rgba(5,6,10,0.7) 55%, var(--ink));
+    background: linear-gradient(180deg, transparent, rgba(12,12,12,0.45) 58%, var(--ink));
     z-index: 1;
   }
 
@@ -284,7 +326,7 @@
     top: 100%; left: -22%; right: -22%;
     height: 30px;
     background:
-      radial-gradient(50% 100% at 50% 0%, rgba(217,178,124,0.09), transparent 68%),
+      radial-gradient(50% 100% at 50% 0%, rgba(196,142,66,0.09), transparent 68%),
       radial-gradient(46% 100% at 50% 0%, rgba(0,0,0,0.8), transparent 74%);
     z-index: 0;
     pointer-events: none;
@@ -298,17 +340,17 @@
   .architrave {
     position: absolute;
     inset: -13px;
-    background: linear-gradient(160deg, var(--timber-hi), var(--timber) 40%, var(--timber-lo));
+    background: linear-gradient(160deg, var(--brass-glint), var(--brass) 42%, var(--brass-edge));
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.055),
-      0 18px 44px rgba(0,0,0,0.55);
+      inset 0 1px 0 rgba(241,239,236,0.22),
+      0 18px 44px rgba(12,12,12,0.5);
     z-index: 0;
   }
   /* the 1px brass reveal that lines the opening */
   .reveal {
     position: absolute;
     inset: -1px;
-    border: 1px solid rgba(217,178,124,0.22);
+    border: 1px solid rgba(12,12,12,0.55);
     z-index: 3;
     pointer-events: none;
   }
@@ -317,7 +359,7 @@
     position: absolute;
     inset: 0;
     overflow: hidden;
-    background: linear-gradient(180deg, #05060A, #0A0C12 62%, #0E1017);
+    background: linear-gradient(180deg, #0C0C0C, #170502 62%, #200803);
     z-index: 1;
   }
 
@@ -325,7 +367,7 @@
   .room-glow {
     position: absolute;
     inset: 0;
-    background: radial-gradient(58% 44% at 50% 58%, rgba(176,141,87,0.22), rgba(176,141,87,0.05) 55%, transparent 78%);
+    background: radial-gradient(58% 44% at 50% 58%, rgba(196,142,66,0.22), rgba(196,142,66,0.05) 55%, transparent 78%);
     transform-origin: 50% 58%;
     transition: transform 880ms var(--push);
   }
@@ -333,7 +375,7 @@
     position: absolute;
     left: 0; right: 0; bottom: 0;
     height: 22%;
-    background: linear-gradient(180deg, transparent, rgba(217,178,124,0.13));
+    background: linear-gradient(180deg, transparent, rgba(196,142,66,0.13));
     transform-origin: 50% 100%;
     transition: transform 880ms var(--push);
   }
@@ -344,7 +386,7 @@
     left: 5%; right: 5%;
     bottom: -3px;
     height: 7px;
-    background: radial-gradient(62% 100% at 50% 50%, rgba(217,178,124,0.6), rgba(217,178,124,0.18) 55%, transparent 80%);
+    background: radial-gradient(62% 100% at 50% 50%, rgba(196,142,66,0.6), rgba(196,142,66,0.18) 55%, transparent 80%);
     z-index: 4;
     opacity: .75;
     transition: opacity 420ms var(--ease);
@@ -395,7 +437,7 @@
     position: absolute;
     top: 4%; bottom: 4%; right: 0;
     width: 4px;
-    background: linear-gradient(180deg, transparent, rgba(217,178,124,0.75) 18%, rgba(217,178,124,0.75) 82%, transparent);
+    background: linear-gradient(180deg, transparent, rgba(196,142,66,0.75) 18%, rgba(196,142,66,0.75) 82%, transparent);
     opacity: 0;
     transition: opacity 300ms var(--ease);
   }
@@ -427,7 +469,7 @@
   .leaf-front {
     background:
       repeating-linear-gradient(92deg, rgba(255,255,255,0.014) 0 2px, transparent 2px 5px),
-      linear-gradient(102deg, var(--timber-hi), var(--timber) 46%, var(--timber-lo));
+      linear-gradient(102deg, #2E1510, #241009 46%, #170703);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.07),
       inset -1px 0 0 rgba(0,0,0,0.5);
@@ -441,7 +483,7 @@
     transform: translateZ(-13px) rotateY(180deg);
     background:
       repeating-linear-gradient(92deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 5px),
-      linear-gradient(100deg, #221E19, #1A1714 58%, #131110);
+      linear-gradient(100deg, #2E1510, #1C0A05 58%, #2B0F08);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.04),
       inset 0 0 46px rgba(0,0,0,0.6);
@@ -462,7 +504,7 @@
     width: 13px; height: 100%;
     transform-origin: left center;
     transform: rotateY(89.6deg);
-    background: linear-gradient(180deg, #38322B, #201D19);
+    background: linear-gradient(180deg, #4A3027, #2A110A);
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06);
   }
   .door[data-side="games"] .leaf-edge {
@@ -475,7 +517,7 @@
   .leaf-shade {
     position: absolute;
     inset: 0;
-    background: #05060A;
+    background: #0C0C0C;
     opacity: 0;
     pointer-events: none;
     transition: opacity 720ms var(--swing);
@@ -484,7 +526,7 @@
 
   .panel {
     flex: 1;
-    background: linear-gradient(178deg, var(--timber-lo), #1B1E27);
+    background: linear-gradient(178deg, #140402, #2A110A);
     box-shadow:
       inset 0 2px 5px rgba(0,0,0,0.65),
       inset 0 -1px 0 rgba(255,255,255,0.045),
@@ -504,10 +546,10 @@
   .nameplate {
     display: block;
     padding: .3rem .55rem;
-    background: linear-gradient(168deg, var(--brass-hi), var(--brass) 45%, #8A6E42);
+    background: linear-gradient(168deg, var(--brass-hi), var(--brass) 45%, #8A6630);
     box-shadow: 0 1px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
-    color: #2A2116;
-    font-family: Archivo, system-ui, sans-serif;
+    color: #3A2015;
+    font-family: var(--body);
     font-size: .52rem;
     font-weight: 700;
     letter-spacing: .2em;
@@ -524,7 +566,7 @@
     width: 10px; height: 34px;
     transform: translateY(-50%);
     border-radius: 2px;
-    background: linear-gradient(96deg, #C9A468, var(--brass) 40%, #6E5731);
+    background: linear-gradient(96deg, #D8B382, var(--brass) 40%, #8A6630);
     box-shadow: 0 1px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.3);
     z-index: 2;
   }
@@ -535,19 +577,19 @@
     width: 22px; height: 5px;
     transform: translateY(-50%);
     border-radius: 3px;
-    background: linear-gradient(180deg, var(--brass-hi), var(--brass) 45%, #7A6139);
+    background: linear-gradient(180deg, var(--brass-hi), var(--brass) 45%, #8A6630);
     box-shadow: 0 2px 5px rgba(0,0,0,0.65);
   }
   .door[data-side="games"] .lever { right: auto; left: 9%; }
   .door[data-side="games"] .lever::after { right: auto; left: 100%; }
-  .portal-btn:hover .lever { background: linear-gradient(96deg, #E0BC85, var(--brass-lit) 40%, #85683B); }
+  .portal-btn:hover .lever { background: linear-gradient(96deg, #D8B382, var(--brass-lit) 40%, #8A6630); }
 
   /* ---- the caption under each door ------------------------------- */
 
   .caption { display: block; text-align: center; max-width: 20ch; }
   .cap-title {
     display: block;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: 1.18rem; letter-spacing: -0.02em;
     color: var(--paper);
     margin-bottom: .15rem;
@@ -556,7 +598,7 @@
   .portal-btn:hover .cap-title, .portal-btn:focus-visible .cap-title { color: var(--brass-lit); }
   .cap-line {
     display: block;
-    font-size: .92rem; font-weight: 300; font-style: italic;
+    font-size: .92rem; font-weight: 500; font-style: italic;
     color: var(--muted); line-height: 1.4;
   }
 
@@ -566,15 +608,15 @@
 
   .page-head { padding: clamp(3rem, 8vh, 5rem) 0 clamp(2rem, 5vh, 3.2rem); }
   .page-head h1 {
-    font-family: Archivo, sans-serif; font-weight: 900;
+    font-family: var(--body); font-weight: 900;
     font-size: var(--step-4); letter-spacing: -0.035em; line-height: 1.02;
     margin: 0 0 1rem; color: var(--paper); text-wrap: balance;
   }
-  .page-head .lede { margin: 0; max-width: 56ch; color: var(--dim); font-size: var(--step-2); font-weight: 300; line-height: 1.5; }
+  .page-head .lede { margin: 0; max-width: 56ch; color: var(--dim); font-size: var(--step-2); font-weight: 500; line-height: 1.5; }
 
   section.band { padding: clamp(2.2rem, 6vh, 3.6rem) 0; border-top: 1px solid var(--rule); }
   h2.band-title {
-    font-family: Archivo, sans-serif; font-weight: 800;
+    font-family: var(--body); font-weight: 800;
     font-size: var(--step-3); letter-spacing: -0.02em; margin: 0 0 1.6rem; color: var(--paper);
   }
   .prose { max-width: 62ch; margin: 0; color: var(--dim); }
@@ -583,30 +625,30 @@
   .case {
     display: grid; grid-template-columns: 3.2rem 1fr; gap: 0 1.2rem;
     padding: 1.5rem 1.6rem;
-    background: rgba(241,239,236,0.026);
+    background: rgba(241,239,236,0.07);
     border: 1px solid var(--rule);
     border-left: 2px solid var(--brass-dim);
   }
-  .case.is-ready { border-left-color: var(--brass-lit); background: rgba(176,141,87,0.05); }
+  .case.is-ready { border-left-color: var(--brass-lit); background: rgba(196,142,66,0.10); }
   .case .idx {
-    font-family: Archivo, sans-serif; font-size: .72rem; font-weight: 700;
-    letter-spacing: .1em; color: var(--brass); font-variant-numeric: tabular-nums; padding-top: .3rem;
+    font-family: var(--body); font-size: .72rem; font-weight: 700;
+    letter-spacing: .1em; color: var(--brass-lit); font-variant-numeric: tabular-nums; padding-top: .3rem;
   }
   .case h3 {
-    font-family: Archivo, sans-serif; font-weight: 700; font-size: 1.15rem;
+    font-family: var(--body); font-weight: 700; font-size: 1.15rem;
     letter-spacing: -0.01em; margin: 0 0 .2rem; color: var(--paper);
   }
   .case h3 .host {
-    font-family: Archivo, sans-serif;
+    font-family: var(--body);
     font-weight: 600;
     font-size: .72rem;
     letter-spacing: .04em;
-    color: var(--brass);
+    color: var(--brass-lit);
     margin-left: .55rem;
   }
 
   .case .status {
-    font-family: Archivo, sans-serif; font-size: .6rem; font-weight: 600;
+    font-family: var(--body); font-size: .6rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem;
   }
   .case.is-ready .status { color: var(--brass-lit); }
@@ -619,22 +661,22 @@
   }
   .steps li:last-child { border-bottom: 0; padding-bottom: 0; }
   .steps b {
-    font-family: Archivo, sans-serif; font-weight: 600; font-size: .62rem;
+    font-family: var(--body); font-weight: 600; font-size: .62rem;
     letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-top: .25rem;
   }
   .steps .want, .prose .want, .quote .want { color: var(--muted); font-style: italic; }
-  .steps li.key b { color: var(--brass); }
+  .steps li.key b { color: var(--brass-lit); }
   .steps li.key { color: var(--paper); }
 
   .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.6rem 2.4rem; }
-  .three h3 { font-family: Archivo, sans-serif; font-weight: 700; font-size: 1.02rem; margin: 0 0 .35rem; color: var(--paper); }
+  .three h3 { font-family: var(--body); font-weight: 700; font-size: 1.02rem; margin: 0 0 .35rem; color: var(--paper); }
   .three p { margin: 0; color: var(--muted); font-size: var(--step-0); }
 
   .availability {
     display: flex; flex-wrap: wrap; align-items: baseline; gap: .8rem 2rem; justify-content: space-between;
-    padding: 1.4rem 1.6rem; border: 1px solid var(--hairline); background: rgba(176,141,87,0.05);
+    padding: 1.4rem 1.6rem; border: 1px solid var(--hairline); background: rgba(196,142,66,0.10);
   }
-  .availability strong { font-family: Archivo, sans-serif; font-weight: 700; color: var(--brass-lit); font-size: var(--step-0); }
+  .availability strong { font-family: var(--body); font-weight: 700; color: var(--brass-lit); font-size: var(--step-0); }
   .availability a { color: var(--paper); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
   .availability a:hover { border-bottom-color: var(--brass-lit); }
 
@@ -643,23 +685,23 @@
     border: 1px solid var(--hairline);
     background:
       repeating-linear-gradient(135deg, rgba(241,239,236,0.02) 0 12px, transparent 12px 24px),
-      radial-gradient(90% 120% at 50% 0%, rgba(176,141,87,0.12), transparent 65%),
-      #0B0C11;
+      radial-gradient(90% 120% at 50% 0%, rgba(196,142,66,0.12), transparent 65%),
+      #1A0603;
     display: grid; place-items: center; text-align: center; padding: 2rem; margin-bottom: 1.6rem;
   }
   .reel span {
-    font-family: Archivo, sans-serif; font-size: .68rem; font-weight: 600;
-    letter-spacing: .22em; text-transform: uppercase; color: var(--brass);
+    font-family: var(--body); font-size: .68rem; font-weight: 600;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--brass-lit);
   }
   .reel em {
     display: block; margin: .7rem auto 0; max-width: 46ch; color: var(--muted); font-size: var(--step-0);
-    font-style: italic; letter-spacing: 0; text-transform: none; font-family: Spectral, serif;
+    font-style: italic; letter-spacing: 0; text-transform: none; font-family: var(--body);
   }
 
   .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
   .meta div { border-top: 1px solid var(--rule); padding-top: .7rem; }
   .meta dt {
-    font-family: Archivo, sans-serif; font-size: .6rem; font-weight: 600;
+    font-family: var(--body); font-size: .6rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem;
   }
   .meta dd { margin: 0; font-size: var(--step-0); color: var(--dim); }
@@ -700,20 +742,20 @@
     padding: 1.15rem 1.3rem;
     text-decoration: none;
     color: inherit;
-    background: rgba(241,239,236,0.026);
+    background: rgba(241,239,236,0.07);
     border: 1px solid var(--rule);
     border-left: 2px solid var(--brass-dim);
     transition: background 220ms var(--ease), border-color 220ms var(--ease);
   }
   .log:hover, .log:focus-visible {
-    background: rgba(176,141,87,0.07);
+    background: rgba(196,142,66,0.14);
     border-left-color: var(--brass-lit);
   }
 
   .log-date {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .68rem; font-weight: 600; letter-spacing: .1em;
-    color: var(--brass);
+    color: var(--brass-lit);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
@@ -722,7 +764,7 @@
 
   .log-title {
     display: block;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em;
     color: var(--paper);
     margin-bottom: .3rem;
@@ -738,7 +780,7 @@
   .log-sum { display: block; font-size: var(--step-0); color: var(--muted); max-width: 62ch; }
 
   .log-meta {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
     color: var(--muted);
     white-space: nowrap;
@@ -760,7 +802,7 @@
     flex-wrap: wrap;
     gap: .1rem .7rem;
     margin: 1.4rem 0 1.6rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800;
     font-size: clamp(1.7rem, 4.8vw, 3.4rem);
     letter-spacing: -0.03em;
@@ -827,8 +869,8 @@
     padding: .78rem 1.4rem;
     background: var(--brass);
     border: 1px solid var(--brass);
-    color: #14110C;
-    font-family: Archivo, system-ui, sans-serif;
+    color: #1C0A05;
+    font-family: var(--body);
     font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
     cursor: pointer;
     transition: background 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
@@ -856,13 +898,13 @@
     border: 1px solid var(--rule);
   }
   .svc {
-    background: var(--ink);
+    background: var(--surface);
     padding: 1.5rem 1.5rem 1.7rem;
     transition: background 240ms var(--ease);
   }
-  .svc:hover { background: rgba(176,141,87,0.05); }
+  .svc:hover { background: var(--surface-hi); }
   .svc h3 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em;
     margin: 0 0 .45rem; color: var(--paper);
   }
@@ -881,7 +923,7 @@
     border: 1px solid var(--rule);
   }
   .tier {
-    background: var(--ink);
+    background: var(--surface);
     padding: 1.7rem 1.6rem 1.8rem;
     display: grid;
     align-content: start;
@@ -889,27 +931,27 @@
     position: relative;
     transition: background 240ms var(--ease);
   }
-  .tier:hover { background: rgba(176,141,87,0.045); }
+  .tier:hover { background: var(--surface-hi); }
   .tier.is-pick {
-    background: rgba(176,141,87,0.07);
+    background: var(--surface-hi);
     padding-top: 2.5rem;
   }
-  .tier.is-pick:hover { background: rgba(176,141,87,0.1); }
+  .tier.is-pick:hover { background: #46291F; }
   .tier-flag {
     position: absolute; top: 0; left: 0; right: 0;
     padding: .5rem 1.6rem .45rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
     color: var(--ink);
     background: var(--brass);
   }
   .tier-name {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .64rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .tier-price {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 900; font-size: clamp(2rem, 3.4vw, 2.7rem); letter-spacing: -0.03em;
     line-height: 1; color: var(--paper);
   }
@@ -929,13 +971,13 @@
   .tier-turn {
     margin-top: .7rem; padding-top: .7rem;
     border-top: 1px solid var(--rule);
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted);
   }
 
   h3.sub-title {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: var(--step-2); letter-spacing: -0.01em;
     margin: 2.8rem 0 1rem; color: var(--paper);
   }
@@ -948,16 +990,16 @@
   .plan {
     padding: 1.4rem 1.5rem 1.5rem;
     border: 1px solid var(--hairline);
-    background: rgba(176,141,87,0.04);
+    background: rgba(196,142,66,0.09);
     display: grid; align-content: start; gap: .45rem;
   }
   .plan-name {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .62rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .plan-price {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 900; font-size: 1.9rem; letter-spacing: -0.03em; line-height: 1;
     color: var(--paper);
   }
@@ -981,7 +1023,7 @@
   .quote {
     margin: 0;
     padding: 1.7rem 1.8rem;
-    background: rgba(176,141,87,0.05);
+    background: rgba(196,142,66,0.10);
     border: 1px solid var(--hairline);
     position: relative;
   }
@@ -989,7 +1031,7 @@
     content: "\201C";
     position: absolute;
     top: .3rem; left: 1rem;
-    font-family: Spectral, Georgia, serif;
+    font-family: var(--body);
     font-size: 3.4rem;
     line-height: 1;
     color: var(--brass-dim);
@@ -1003,15 +1045,15 @@
   }
   .quote figcaption { padding-left: 1.5rem; display: grid; gap: .15rem; }
   .quote .who {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: .92rem; color: var(--paper);
   }
   .quote .what {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .62rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
     color: var(--muted);
   }
-  .quote.is-pending { background: rgba(241,239,236,0.022); border-style: dashed; }
+  .quote.is-pending { background: rgba(241,239,236,0.07); border-style: dashed; }
 
   /* a long, real testimonial: printed whole rather than filleted */
   .quote-long { padding-top: 1.5rem; }
@@ -1021,28 +1063,43 @@
   .quote-long figcaption { margin-top: 1.3rem; }
   .quote-stars {
     margin: 0 0 .9rem; padding-left: 1.5rem;
-    color: var(--brass); font-size: 1rem; letter-spacing: .28em; line-height: 1;
+    color: var(--brass-lit); font-size: 1rem; letter-spacing: .28em; line-height: 1;
   }
 
   /* ---- closing CTA ---------------------------------------------- */
 
+  /* The closing call to action is a solid brass block. The guidelines
+     use the palette as big flat fields and this is the one place on a
+     page where that fits: it ends every section on the brand colour
+     rather than on more ground, and it is most of what makes the site
+     read brighter than it did.
+
+     Everything inside flips to Dark Maroon, because white on brass is
+     2.5 : 1 and fails. Maroon on brass is 6.5 : 1. */
   .closer {
     display: grid;
     justify-items: start;
     gap: .9rem;
-    padding: clamp(1.8rem, 4vw, 2.8rem);
-    border: 1px solid var(--hairline);
-    background:
-      radial-gradient(80% 120% at 0% 0%, rgba(176,141,87,0.09), transparent 60%),
-      rgba(176,141,87,0.03);
+    padding: clamp(2rem, 4.4vw, 3.2rem);
+    border: 0;
+    background: var(--brass);
+    color: var(--maroon);
   }
   .closer h2 {
-    font-family: Archivo, system-ui, sans-serif;
-    font-weight: 800; font-size: var(--step-3); letter-spacing: -0.02em;
-    margin: 0; color: var(--paper); text-wrap: balance;
+    margin: 0; color: var(--maroon); text-wrap: balance;
+    font-size: var(--step-3);
   }
-  .closer p { margin: 0; max-width: 54ch; color: var(--dim); }
-  .closer .cta { margin-top: .5rem; }
+  .closer p { margin: 0; max-width: 54ch; color: rgba(40,7,0,0.84); font-weight: 600; }
+  .closer .cta {
+    margin-top: .5rem;
+    background: var(--maroon);
+    color: var(--brass);
+    border-color: var(--maroon);
+  }
+  .closer .cta:hover, .closer .cta:focus-visible {
+    background: var(--black); color: var(--brass); border-color: var(--black);
+  }
+  .closer .cta-note { color: rgba(40,7,0,0.72); font-weight: 600; }
   .closer .cta-note { font-size: .85rem; }
 
 
@@ -1058,26 +1115,26 @@
     color: inherit;
     border: 1px solid var(--rule);
     border-left: 2px solid var(--brass-dim);
-    background: rgba(241,239,236,0.026);
+    background: rgba(241,239,236,0.07);
     transition: background 240ms var(--ease), border-color 240ms var(--ease);
   }
   .study:hover, .study:focus-visible {
-    background: rgba(176,141,87,0.06);
+    background: rgba(196,142,66,0.12);
     border-left-color: var(--brass-lit);
   }
 
   .study-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem .8rem; }
   .study-name {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800;
     font-size: clamp(1.5rem, 3.2vw, 2.1rem);
     letter-spacing: -0.03em;
     color: var(--paper);
   }
   .study-host {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .72rem; font-weight: 600; letter-spacing: .1em;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .study-line { display: block; color: var(--dim); max-width: 66ch; }
 
@@ -1090,14 +1147,14 @@
   .fact { display: block; font-size: var(--step-0); color: var(--muted); }
   .fact b {
     display: block;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
     margin-bottom: .25rem;
   }
 
   .study-go {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
     color: var(--brass-lit);
   }
@@ -1117,21 +1174,20 @@
     border: 1px solid var(--rule);
     color: var(--muted);
     text-decoration: none;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .64rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     transition: color .2s, border-color .2s, background .2s;
   }
   .doc-back:hover, .doc-back:focus-visible {
     color: var(--brass-lit);
     border-color: var(--brass-dim);
-    background: rgba(176,141,87,0.06);
+    background: rgba(196,142,66,0.12);
   }
-  .doc-back .mark { width: auto; height: 26px; flex: none; display: block; }
 
   .doc-meta {
     display: flex; flex-wrap: wrap; gap: .4rem .7rem;
     margin: 1.1rem 0 0;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .68rem; font-weight: 600; letter-spacing: .1em;
     color: var(--muted);
   }
@@ -1142,7 +1198,7 @@
   .doc-shot img {
     display: block; width: 100%; height: auto;
     border: 1px solid var(--rule);
-    background: #0B0C11;
+    background: #1A0603;
   }
   .doc-shot figcaption {
     margin-top: .7rem;
@@ -1160,7 +1216,7 @@
     background: var(--brass-dim);
     transform: rotate(45deg);
   }
-  .doc-list b { color: var(--paper); font-family: Archivo, system-ui, sans-serif; font-weight: 700; font-size: .98em; }
+  .doc-list b { color: var(--paper); font-family: var(--body); font-weight: 700; font-size: .98em; }
 
   .f-privacy {
     margin: 1.1rem 0 0; max-width: 58ch;
@@ -1182,24 +1238,24 @@
     border: 1px solid var(--rule);
     color: var(--muted);
     text-decoration: none;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
     transition: color .2s, border-color .2s, background .2s;
   }
   .legal-nav a:hover, .legal-nav a:focus-visible {
-    color: var(--brass-lit); border-color: var(--brass-dim); background: rgba(176,141,87,0.06);
+    color: var(--brass-lit); border-color: var(--brass-dim); background: rgba(196,142,66,0.12);
   }
 
   section.clause { scroll-margin-top: 1.5rem; }
   .clause .n {
     display: block;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .62rem; font-weight: 700; letter-spacing: .2em;
-    color: var(--brass); margin-bottom: .5rem;
+    color: var(--brass-lit); margin-bottom: .5rem;
   }
   .clause .prose + .prose { margin-top: .9rem; }
   .clause h3 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em;
     color: var(--paper); margin: 1.6rem 0 .5rem;
   }
@@ -1220,27 +1276,28 @@
     border-bottom: 1px solid var(--rule);
   }
   .legal-table th {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted);
     border-bottom-color: var(--brass-dim);
   }
   .legal-table td { color: var(--muted); }
-  .legal-table td:first-child { color: var(--paper); font-family: Archivo, system-ui, sans-serif; font-weight: 600; white-space: nowrap; }
+  .legal-table td:first-child { color: var(--paper); font-family: var(--body); font-weight: 600; white-space: nowrap; }
 
   .legal-key {
     margin: 1.3rem 0 0;
     padding: 1.1rem 1.3rem;
     border: 1px solid var(--hairline);
-    background: rgba(176,141,87,0.05);
+    background: rgba(196,142,66,0.10);
     max-width: 74ch;
   }
   .legal-key b { color: var(--brass-lit); }
 
   .legal-meta {
     margin: 1.4rem 0 0;
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    font-size: .72rem; line-height: 1.9; color: var(--muted);
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: .88rem; line-height: 1.8; color: var(--muted);
   }
   .legal-meta b { color: var(--paper); font-weight: 500; }
   .legal-meta a { color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
@@ -1266,15 +1323,15 @@
     background: var(--wall);
     border: 1px solid var(--brass-dim);
     color: var(--brass-lit);
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
     transition: background 240ms var(--ease), border-color 240ms var(--ease), color 240ms var(--ease);
   }
   .why-both:hover, .why-both:focus-visible {
-    background: rgba(176,141,87,0.14);
-    border-color: var(--brass);
+    background: rgba(196,142,66,0.14);
+    border-color: var(--brass-lit);
     color: var(--brass-hi);
   }
 
@@ -1330,9 +1387,9 @@
   section.trailer-band { border-top: 0; padding-top: 0; }
 
   .roster-head {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .54rem; font-weight: 700; letter-spacing: .32em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
     margin: 0 0 .55rem;
     text-align: right;
   }
@@ -1353,7 +1410,7 @@
     display: flex;
     flex-direction: column;
     border: 1px solid var(--rule);
-    background: rgba(241,239,236,0.02);
+    background: rgba(241,239,236,0.06);
     overflow: hidden;
     padding: 0;
     font: inherit;
@@ -1371,7 +1428,7 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    background: #0B0C11;
+    background: #1A0603;
   }
   .slot-art img {
     position: absolute;
@@ -1381,7 +1438,7 @@
     z-index: 1;
   }
   .slot-ph {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .44rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     color: var(--brass-dim);
     text-align: center;
@@ -1396,13 +1453,13 @@
     text-align: center;
   }
   .slot-name {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: .54rem; letter-spacing: .06em; line-height: 1.25;
     text-transform: uppercase;
     color: var(--paper);
   }
   .slot-sub {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .5rem; font-weight: 600; letter-spacing: .11em; text-transform: uppercase;
     line-height: 1.45;
     color: var(--muted);
@@ -1410,14 +1467,14 @@
 
   /* the one you can play */
   .slot.is-unlocked {
-    border-color: var(--brass);
-    box-shadow: 0 0 0 1px rgba(176,141,87,0.25), 0 18px 44px rgba(0,0,0,0.45);
-    background: rgba(176,141,87,0.05);
+    border-color: var(--brass-lit);
+    box-shadow: 0 0 0 1px rgba(196,142,66,0.25), 0 18px 44px rgba(0,0,0,0.45);
+    background: rgba(196,142,66,0.10);
   }
   .slot.is-unlocked .slot-art {
     background:
-      radial-gradient(80% 60% at 50% 30%, rgba(176,141,87,0.16), transparent 70%),
-      #0B0C11;
+      radial-gradient(80% 60% at 50% 30%, rgba(196,142,66,0.16), transparent 70%),
+      #1A0603;
   }
   .slot.is-unlocked .slot-foot { border-top-color: var(--brass-dim); }
 
@@ -1432,7 +1489,7 @@
   .slot.is-locked .slot-art {
     background:
       repeating-linear-gradient(135deg, rgba(241,239,236,0.035) 0 6px, transparent 6px 12px),
-      #0A0B0F;
+      #140402;
     color: var(--muted);
   }
   .slot.is-locked .lock { width: 16px; height: 16px; }
@@ -1455,7 +1512,7 @@
   .trailer { max-width: 54ch; display: grid; gap: .75rem; }
   .trailer p { margin: 0; text-wrap: balance; }
   .trailer .tr-1 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800;
     font-size: clamp(1.3rem, 3vw, 1.9rem);
     letter-spacing: -0.025em;
@@ -1464,7 +1521,7 @@
   }
   .trailer .tr-2 { color: var(--dim); font-size: var(--step-1); line-height: 1.6; }
   .trailer .tr-3 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700;
     font-size: clamp(1.05rem, 2.2vw, 1.35rem);
     letter-spacing: .01em;
@@ -1480,15 +1537,15 @@
     gap: .3rem;
     padding: 1.5rem 1.7rem;
     border: 1px solid var(--hairline);
-    background: rgba(176,141,87,0.04);
+    background: rgba(196,142,66,0.09);
   }
   .eta-label {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
     color: var(--muted);
   }
   .eta-date {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 900;
     font-size: clamp(1.9rem, 5vw, 3rem);
     letter-spacing: -0.035em;
@@ -1517,7 +1574,7 @@
   .locked-msg .lock { width: 30px; height: 30px; color: var(--muted); }
   .locked-quip {
     margin: 0;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800;
     font-size: clamp(1.3rem, 3vw, 1.9rem);
     letter-spacing: -0.025em;
@@ -1526,7 +1583,7 @@
   }
   .locked-back {
     background: none; border: 0; padding: 0; cursor: pointer;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
     color: var(--brass-lit);
     border-bottom: 1px solid var(--brass-dim);
@@ -1546,7 +1603,7 @@
     display: grid;
     align-content: start;
     gap: .45rem;
-    background: var(--ink);
+    background: var(--surface);
     border: 0;
     padding: 1.5rem 1.5rem 1.7rem;
     text-align: left;
@@ -1559,11 +1616,11 @@
       box-shadow 340ms var(--ease);
   }
   .svc:hover, .svc:focus-visible {
-    background: rgba(176,141,87,0.07);
+    background: rgba(196,142,66,0.14);
     transform: scale(1.035);
     z-index: 2;
     box-shadow:
-      0 0 0 1px rgba(217,178,124,0.28),
+      0 0 0 1px rgba(196,142,66,0.28),
       0 26px 60px rgba(0,0,0,0.55);
   }
   .svc:active { transform: scale(1.005); transition-duration: 90ms; }
@@ -1575,13 +1632,13 @@
     .svc:hover, .svc:focus-visible { transform: none; }
   }
   .svc-h {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em;
     color: var(--paper);
   }
   .svc-p { color: var(--muted); font-size: var(--step-0); }
   .svc-more {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
     color: var(--brass-dim);
     margin-top: .35rem;
@@ -1592,7 +1649,7 @@
   .svc-modal {
     width: min(640px, 92vw);
     padding: clamp(1.6rem, 3.5vw, 2.4rem);
-    background: var(--ink-2, #171A24);
+    background: var(--ink-2, #361711);
     border: 1px solid var(--hairline);
     color: var(--dim);
     position: relative;
@@ -1612,13 +1669,13 @@
   .svc-close:hover { color: var(--brass-lit); }
   .svc-modal-eyebrow {
     margin: 0 0 .3rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .svc-modal-title {
     margin: 0 0 1.1rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: clamp(1.4rem, 3.4vw, 1.9rem); letter-spacing: -0.025em;
     color: var(--paper);
   }
@@ -1631,11 +1688,11 @@
     border: 1px solid var(--rule);
     background:
       repeating-linear-gradient(135deg, rgba(241,239,236,0.02) 0 10px, transparent 10px 20px),
-      #0B0C11;
+      #1A0603;
   }
   .svc-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .svc-shot-ph {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
     color: var(--brass-dim);
     text-align: center; padding: 0 1.4rem; line-height: 1.7;
@@ -1645,13 +1702,13 @@
     margin: 0 0 1.5rem;
     padding: 1.1rem 1.2rem 1.2rem;
     border: 1px solid var(--hairline);
-    background: rgba(176,141,87,0.05);
+    background: rgba(196,142,66,0.10);
   }
   .svc-prices-h {
     margin: 0 0 .8rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .svc-prices-lead {
     margin: 0 0 .9rem; color: var(--dim);
@@ -1669,11 +1726,11 @@
   }
   .svc-prices li:first-child { border-top: 0; padding-top: 0; }
   .p-what {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 600; font-size: .95rem; color: var(--paper);
   }
   .p-amt {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: 1rem; color: var(--brass-lit);
     white-space: nowrap; text-align: right;
   }
@@ -1712,8 +1769,8 @@
     overflow: hidden;
     border-right: 1px solid var(--rule);
     background:
-      radial-gradient(80% 80% at 30% 20%, rgba(176,141,87,0.12), transparent 70%),
-      #0B0C11;
+      radial-gradient(80% 80% at 30% 20%, rgba(196,142,66,0.12), transparent 70%),
+      #1A0603;
   }
   /* Website screenshots are wider than this box, so they get cropped. Anchor
      top-left: that is where the logo, the nav and the headline are, and losing
@@ -1723,7 +1780,7 @@
     object-fit: cover; object-position: left top;
   }
   .study-shot-ph {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .66rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
     color: var(--brass-dim);
   }
@@ -1734,9 +1791,9 @@
     padding: clamp(1.5rem, 3vw, 2.1rem);
   }
   .study-eyebrow {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .study-facts { padding-top: .4rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem 1.2rem; }
   .study-go { margin-top: .3rem; }
@@ -1766,14 +1823,14 @@
     border: 1px solid var(--rule);
   }
   .crew-member {
-    background: var(--ink);
+    background: var(--surface);
     padding: 1.6rem 1.4rem 1.8rem;
     display: grid;
     align-content: start;
     gap: .4rem;
     transition: background 280ms var(--ease);
   }
-  .crew-member:hover { background: rgba(176,141,87,0.05); }
+  .crew-member:hover { background: var(--surface-hi); }
 
   .crew-face {
     position: relative;
@@ -1783,19 +1840,19 @@
     overflow: hidden;
     border: 1px solid var(--brass-dim);
     background:
-      radial-gradient(80% 80% at 40% 25%, rgba(176,141,87,0.16), transparent 70%),
-      #0B0C11;
+      radial-gradient(80% 80% at 40% 25%, rgba(196,142,66,0.16), transparent 70%),
+      #1A0603;
   }
   .crew-face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .crew-initial {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em;
     color: var(--brass);
   }
 
   .crew-name {
     margin: 0;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: 1.16rem; letter-spacing: -0.02em;
     color: var(--paper);
   }
@@ -1808,9 +1865,9 @@
 
   .crew-role {
     margin: 0 0 .5rem;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .crew-line { margin: 0; color: var(--muted); font-size: var(--step-0); }
 
@@ -1832,8 +1889,8 @@
     justify-self: center;
     padding: .32rem .7rem;
     border: 1px solid var(--brass-dim);
-    background: rgba(176,141,87,0.07);
-    font-family: Archivo, system-ui, sans-serif;
+    background: rgba(196,142,66,0.14);
+    font-family: var(--body);
     font-size: .58rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
     color: var(--brass-lit);
     white-space: nowrap;
@@ -1845,7 +1902,7 @@
   }
   .xfer-head .xfer-web,
   .xfer-head .xfer-game {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
     color: var(--muted);
   }
@@ -1860,12 +1917,12 @@
     padding: clamp(2rem, 5vw, 3.2rem);
     border: 1px solid var(--hairline);
     background:
-      radial-gradient(90% 140% at 0% 0%, rgba(176,141,87,0.11), transparent 62%),
-      rgba(176,141,87,0.035);
+      radial-gradient(90% 140% at 0% 0%, rgba(196,142,66,0.11), transparent 62%),
+      rgba(196,142,66,0.035);
   }
   .aud-line {
     margin: 0;
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800;
     font-size: clamp(1.5rem, 4vw, 2.6rem);
     letter-spacing: -0.032em;
@@ -1881,7 +1938,7 @@
     font-size: var(--step-0);
   }
   .aud-note strong {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 700;
     color: var(--paper);
   }
@@ -1916,9 +1973,9 @@
 
   .field { display: grid; gap: .4rem; }
   .f-label {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .62rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--brass);
+    color: var(--brass-lit);
   }
   .f-opt { color: var(--muted); letter-spacing: .1em; text-transform: none; font-style: italic; }
 
@@ -1927,16 +1984,16 @@
   .field textarea {
     width: 100%;
     padding: .72rem .85rem;
-    background: rgba(241,239,236,0.035);
+    background: rgba(241,239,236,0.08);
     border: 1px solid var(--rule);
     color: var(--paper);
-    font-family: Spectral, Georgia, serif;
+    font-family: var(--body);
     font-size: 1rem;
     line-height: 1.5;
   }
   .field textarea { resize: vertical; min-height: 8rem; }
   .field select {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .92rem;
     appearance: none;
     background-image: linear-gradient(45deg, transparent 50%, var(--brass) 50%), linear-gradient(135deg, var(--brass) 50%, transparent 50%);
@@ -1951,17 +2008,17 @@
   .field select:focus,
   .field textarea:focus {
     outline: none;
-    border-color: var(--brass);
+    border-color: var(--brass-lit);
     background: rgba(241,239,236,0.055);
   }
   .field.is-bad input,
-  .field.is-bad textarea { border-color: #C4796B; }
+  .field.is-bad textarea { border-color: #D98166; }
 
   .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
   .f-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1.2rem; margin-top: .3rem; }
   .f-status { margin: 0; font-size: var(--step-0); color: var(--muted); min-height: 1.4em; }
-  .f-status.is-bad { color: #E0A091; }
+  .f-status.is-bad { color: #D98166; }
   .f-status.is-good { color: var(--brass-lit); }
 
   .enquiry.is-sending { opacity: .6; pointer-events: none; }
@@ -1972,10 +2029,10 @@
     justify-items: start;
     padding: clamp(1.8rem, 4vw, 2.6rem);
     border: 1px solid var(--hairline);
-    background: rgba(176,141,87,0.05);
+    background: rgba(196,142,66,0.10);
   }
   .sent h2 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 800; font-size: var(--step-3); letter-spacing: -0.02em;
     margin: 0; color: var(--paper);
   }
@@ -1984,7 +2041,7 @@
   .contact-aside { display: grid; gap: 1.4rem; align-content: start; }
   .aside-block { border-top: 1px solid var(--rule); padding-top: .9rem; }
   .aside-block h3 {
-    font-family: Archivo, system-ui, sans-serif;
+    font-family: var(--body);
     font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted);
     margin: 0 0 .45rem;
@@ -2027,14 +2084,14 @@
 
   .tuner {
     position: fixed; right: 1rem; bottom: 1rem; z-index: 60;
-    background: rgba(16,18,25,0.94);
+    background: rgba(28,10,5,0.94);
     border: 1px solid var(--hairline);
     backdrop-filter: blur(8px);
-    font-family: Archivo, sans-serif; max-width: 252px;
+    font-family: var(--body); max-width: 252px;
   }
   .tuner > summary {
     list-style: none; cursor: pointer; padding: .55rem .85rem;
-    font-size: .62rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--brass);
+    font-size: .62rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--brass-lit);
   }
   .tuner > summary::-webkit-details-marker { display: none; }
   .tuner[open] > summary { border-bottom: 1px solid var(--hairline); }
@@ -2045,7 +2102,7 @@
   }
   .tuner .row { display: flex; justify-content: space-between; }
   .tuner .val { color: var(--brass-lit); font-variant-numeric: tabular-nums; }
-  .tuner input[type="range"] { width: 100%; accent-color: var(--brass); }
+  .tuner input[type="range"] { width: 100%; accent-color: var(--brass-lit); }
   .tuner .check { display: flex; align-items: center; gap: .5rem; }
   .tuner .fps { font-size: .6rem; color: var(--muted); letter-spacing: .1em; }
   .tuner .fps b { color: var(--brass-lit); font-variant-numeric: tabular-nums; }
@@ -2075,3 +2132,138 @@
       transition-duration: 1ms !important;
     }
   }
+
+
+  /* ================================================================
+     Toned sections
+
+     The page ground is Dark Maroon. A section can instead be a block of
+     White, Black or Brass, and pages alternate them so a long page has a
+     rhythm instead of one continuous brown.
+
+     A tone works by redefining the text and surface tokens rather than
+     restating every component rule, so cards, rules, headings and links
+     inside a toned band pick up the right colours on their own.
+
+     Two tokens are deliberately NOT redefined:
+
+       --ink   is the text colour printed ON brass fills (the CTA button,
+               the "most people want this one" flag). Flipping it would
+               put White on Brass, which is 2.5 : 1 and fails.
+       --brass stays brass so those fills stay brass.
+
+     All values below are measured: nothing here is under 5 : 1 except
+     decorative rules.
+     ================================================================ */
+
+  section.band.tone-white,
+  section.band.tone-black,
+  section.band.tone-brass {
+    border-top: 0;
+    padding-left: clamp(1.3rem, 3.2vw, 2.6rem);
+    padding-right: clamp(1.3rem, 3.2vw, 2.6rem);
+    margin: clamp(0.9rem, 2.2vh, 1.5rem) 0;
+  }
+
+  /* White block. Brass as *text* is 2.5 : 1 here and unusable, so
+     --brass-lit drops to Brass mixed halfway to Black, at 6.8 : 1.
+     Brass as a *fill* is untouched and still correct. */
+  section.band.tone-white {
+    background: var(--white);
+    --paper:      #280700;
+    --dim:        #4C312A;
+    --muted:      #745F5A;
+    --rule:       rgba(40,7,0,0.14);
+    --hairline:   rgba(40,7,0,0.24);
+    --brass-lit:  #684D27;
+    --brass-dim:  rgba(40,7,0,0.30);
+    --surface:    rgba(40,7,0,0.05);
+    --surface-hi: rgba(40,7,0,0.09);
+  }
+
+  /* Black block. White and Brass both pass comfortably on it, so only
+     the card surfaces move: they keep their warmth rather than going
+     grey, which would introduce a hue the palette does not have. */
+  section.band.tone-black {
+    background: var(--black);
+    --surface:    #1C0A05;
+    --surface-hi: #24100A;
+    --rule:       rgba(241,239,236,0.14);
+  }
+
+  /* Brass block, the same device as the closing call to action. */
+  section.band.tone-brass {
+    background: var(--brass);
+    --paper:      #280700;
+    --dim:        #280700;
+    --muted:      #411D0B;
+    --rule:       rgba(40,7,0,0.22);
+    --hairline:   rgba(40,7,0,0.32);
+    --brass-lit:  #280700;
+    --brass-dim:  rgba(40,7,0,0.45);
+    --surface:    rgba(40,7,0,0.07);
+    --surface-hi: rgba(40,7,0,0.12);
+  }
+  section.band.tone-brass .cta {
+    background: var(--maroon); color: var(--brass); border-color: var(--maroon);
+  }
+  section.band.tone-brass .cta:hover,
+  section.band.tone-brass .cta:focus-visible { background: var(--black); border-color: var(--black); }
+
+  /* A toned band that follows another gets no doubled gap, and the
+     hairline that separates untoned bands is pointless against one. */
+  section.band[class*="tone-"] + section.band { border-top: 0; }
+
+  /* ================================================================
+     Display type
+
+     Anton, in caps, as the guidelines require. It ships in one weight,
+     so every rule here pins font-weight: 400 — asking for 700 or 900
+     from a single-weight face makes the browser smear a synthetic bold
+     onto it, which on a face this heavy turns to mud.
+
+     Text stays sentence case in the HTML and is uppercased here, so the
+     markup still reads properly to a screen reader and to anyone
+     editing it, and so this is one line to undo.
+
+     This block sits last on purpose: it overrides the component rules
+     above at equal specificity, by order.
+     ================================================================ */
+
+  .page-head h1,
+  .cap-title,
+  .locked-quip,
+  h3.sub-title,
+  h2.band-title,
+  .closer h2,
+  .sent h2,
+  .svc-modal-title,
+  .study-name,
+  .tier-price,
+  .plan-price,
+  .eta-date,
+  .crew-initial,
+  .aud-line,
+  .reel-lead,
+  .reel-word,
+  .trailer .tr-1,
+  .trailer .tr-3 {
+    font-family: var(--display);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.012em;
+    font-synthesis-weight: none;
+  }
+
+  /* Anton is condensed and sets tight; these had tracking tuned for
+     Archivo Black and need it taken back out. */
+  .page-head h1 { letter-spacing: 0.004em; line-height: 0.98; }
+  h2.band-title { letter-spacing: 0.01em; line-height: 1.02; }
+  .tier-price, .plan-price, .eta-date { letter-spacing: 0.006em; }
+  .aud-line { letter-spacing: 0.01em; }
+  .reel-lead, .reel-word { letter-spacing: 0.01em; }
+
+  /* Darker Grotesque: 500 carries body, 600 the UI labels, 700 the
+     emphasis. Nothing is left at the variable default of 300. */
+  strong, b { font-weight: 700; }
+  .prose, .lede, .statement, p { font-weight: 500; }

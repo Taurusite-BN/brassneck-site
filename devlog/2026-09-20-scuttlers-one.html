@@ -148,14 +148,15 @@
     transition: color .2s, border-color .2s, background .2s;
   }
   .back:hover, .back:focus-visible { color: var(--mint); border-color: var(--mint); }
-  .back .mark { width: auto; height: 28px; flex: none; display: block; }
-  .back .mark.on-dark { display: none; }
+  /* Dark Maroon lockup on the paper ground, White on the dark one. */
+  .back .lockup { height: 26px; width: auto; flex: none; display: block; }
+  .back .lockup.on-dark { display: none; }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .back .mark.on-pale { display: none; }
-    :root:not([data-theme="light"]) .back .mark.on-dark { display: block; }
+    :root:not([data-theme="light"]) .back .lockup.on-pale { display: none; }
+    :root:not([data-theme="light"]) .back .lockup.on-dark { display: block; }
   }
-  :root[data-theme="dark"] .back .mark.on-pale { display: none; }
-  :root[data-theme="dark"] .back .mark.on-dark { display: block; }
+  :root[data-theme="dark"] .back .lockup.on-pale { display: none; }
+  :root[data-theme="dark"] .back .lockup.on-dark { display: block; }
   .colophon .back { margin-top: 20px; }
 
   /* ---------- masthead ---------- */
@@ -367,9 +368,8 @@
 <div class="wrap">
 
 <a class="back" href="../index.html#games">
-  <img class="mark on-pale" src="../assets/brassneck-mark-light.png" alt="" width="1200" height="1200">
-  <img class="mark on-dark" src="../assets/brassneck-mark.png" alt="" width="772" height="834">
-  Brassneck Studio
+  <img class="lockup on-pale" src="../assets/logo/landscape-maroon.svg" alt="Brassneck Studio" width="994" height="463">
+  <img class="lockup on-dark" src="../assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463">
 </a>
 
 <article>
@@ -588,9 +588,8 @@
   <p>Solo development, commissioned art, single-player. Godot 4.6, GDScript, 640&times;360 at 16px tiles.</p>
   <p>All art currently on screen is placeholder and none of it ships.</p>
   <a class="back" href="../index.html#games">
-    <img class="mark on-pale" src="../assets/brassneck-mark-light.png" alt="" width="1200" height="1200">
-    <img class="mark on-dark" src="../assets/brassneck-mark.png" alt="" width="772" height="834">
-    Back to the studio
+    <img class="lockup on-pale" src="../assets/logo/landscape-maroon.svg" alt="Back to Brassneck Studio" width="994" height="463">
+    <img class="lockup on-dark" src="../assets/logo/landscape-white.svg" alt="Back to Brassneck Studio" width="994" height="463">
   </a>
 </div>
 
