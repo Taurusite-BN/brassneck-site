@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northwell Plumbing &amp; Heating — emergency plumber, gas-safe heating engineer</title>
+<meta name="description" content="Demonstration site. Emergency plumbing and gas-safe heating repairs, same day where we can. Fixed call-out, no charge if we cannot fix it.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14362f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314362f'/><text x='16' y='23' font-size='18' font-family='Georgia,serif' fill='%23e8c56a' text-anchor='middle'>N</text></svg>">
+<style>
+/* ==================================================================
+   Northwell Plumbing & Heating — DEMONSTRATION SITE
+
+   Not a real business. Built by Brassneck Studio as a worked example
+   of the £800 Basic tier: one page, done properly.
+
+   Deliberately no web fonts, no framework and no script. Everything
+   is one file. It exists partly to be looked at and partly to prove
+   that a page can carry this much and still weigh almost nothing.
+   ================================================================== */
+
+:root{
+  --ink:#14362f; --ink-2:#0d241f; --paper:#f7f5f0; --paper-2:#eceae2;
+  --brass:#c58b2f; --rule:rgba(20,54,47,.16); --body:#2c3a37; --muted:#5d6b67;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--body);
+  font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.12;margin:0;color:var(--ink)}
+p{margin:0}
+a{color:var(--ink)}
+.wrap{width:min(1080px,92vw);margin-inline:auto}
+
+.demo-flag{background:var(--brass);color:var(--ink-2);text-align:center;
+  padding:.5rem 1rem;font:700 13px/1.4 var(--sans);letter-spacing:.04em}
+.demo-flag a{color:var(--ink-2)}
+
+.top{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:5}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.85rem 0}
+.logo{font-family:var(--serif);font-weight:700;font-size:1.22rem;color:var(--paper);
+  text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--brass)}
+.top nav{display:flex;align-items:center;gap:1.3rem}
+.top nav a{color:var(--paper);text-decoration:none;font-size:.9rem;opacity:.82}
+.top nav a:hover{opacity:1}
+.top nav a.call{background:#e0b05c;color:#140e02;padding:.6rem 1.05rem;border-radius:4px;
+  font-weight:700;text-decoration:none;font-size:.95rem;white-space:nowrap}
+@media(max-width:720px){.top nav a.hide-s{display:none}}
+
+.hero{background:var(--ink);color:var(--paper);padding:3.4rem 0 3.8rem}
+.hero h1{color:var(--paper);font-size:clamp(2rem,5.2vw,3.3rem);max-width:17ch}
+.hero h1 em{font-style:normal;color:var(--brass)}
+.hero p{margin-top:1rem;max-width:52ch;font-size:1.1rem;color:rgba(247,245,240,.82)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.7rem;align-items:center}
+.btn{display:inline-block;background:var(--brass);color:var(--ink-2);text-decoration:none;
+  padding:.85rem 1.4rem;border-radius:4px;font-weight:700}
+.btn.ghost{background:transparent;color:var(--paper);border:1px solid rgba(247,245,240,.4)}
+.hero small{display:block;margin-top:.9rem;color:rgba(247,245,240,.6);font-size:.92rem}
+
+.badges{background:var(--ink-2);color:rgba(247,245,240,.82);padding:.9rem 0;font-size:.9rem}
+.badges ul{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin:0;padding:0;list-style:none}
+.badges li::before{content:"✓ ";color:var(--brass);font-weight:700}
+
+.sec{padding:3.4rem 0}
+.sec.alt{background:var(--paper-2)}
+.sec h2{font-size:clamp(1.5rem,3.4vw,2.1rem);margin-bottom:.5rem}
+.sec .lede{color:var(--muted);max-width:56ch;margin-bottom:2rem}
+
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+.card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.3rem 1.6rem}
+.sec.alt .card{background:var(--paper)}
+.card h3{font-size:1.16rem;margin-bottom:.45rem}
+.card p{font-size:.98rem;color:var(--muted)}
+.card .from{display:block;margin-top:.8rem;font-weight:700;color:var(--ink);font-size:.95rem}
+
+.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+.price{border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.3rem 1.6rem;background:#fff}
+.price b{display:block;font-family:var(--serif);font-size:1.9rem;color:var(--ink);line-height:1.1}
+.price span{display:block;font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);margin-bottom:.5rem}
+.price p{font-size:.95rem;color:var(--muted);margin-top:.5rem}
+.note{margin-top:1.3rem;color:var(--muted);font-size:.95rem;max-width:62ch}
+
+.quote{background:var(--ink);color:var(--paper);padding:3rem 0}
+.quote blockquote{margin:0;font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.6rem);
+  line-height:1.4;max-width:30ch;color:var(--paper)}
+.quote cite{display:block;margin-top:1rem;font-style:normal;font-size:.92rem;
+  color:rgba(247,245,240,.62)}
+.quote-row{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+.stars{color:var(--brass);letter-spacing:.25em;margin-bottom:.8rem}
+
+.area ul{columns:3;column-gap:2rem;margin:0;padding:0;list-style:none;color:var(--muted)}
+.area li{padding:.35rem 0;border-bottom:1px solid var(--rule);break-inside:avoid;font-size:.97rem}
+
+.cta-band{background:var(--brass);color:var(--ink-2);padding:2.8rem 0;text-align:center}
+.cta-band h2{color:var(--ink-2)}
+.cta-band p{margin:.6rem auto 1.4rem;max-width:46ch;color:#231a06}
+.cta-band .btn{background:var(--ink);color:var(--paper)}
+
+.foot{background:var(--ink-2);color:rgba(247,245,240,.7);padding:2.4rem 0;font-size:.93rem}
+.foot-in{display:flex;flex-wrap:wrap;gap:1rem 2.5rem;justify-content:space-between}
+.foot a{color:rgba(247,245,240,.7)}
+
+@media(max-width:860px){
+  .grid,.prices{grid-template-columns:1fr 1fr}
+  .quote-row{grid-template-columns:1fr}
+  .area ul{columns:2}
+}
+@media(max-width:560px){
+  .grid,.prices{grid-template-columns:1fr}
+  .area ul{columns:1}
+}
+</style>
+</head>
+<body>
+
+<p class="demo-flag">Demonstration site &middot; Northwell Plumbing &amp; Heating is not a real business &middot; built by <a href="/">Brassneck Studio</a></p>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="#top">North<span>well</span></a>
+    <nav>
+      <a href="#what" class="hide-s">What we do</a>
+      <a href="#cost" class="hide-s">Cost</a>
+      <a href="#area" class="hide-s">Area</a>
+      <a class="call" href="#cta">01752 000 000</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>No heating, no hot water, <em>no hanging about.</em></h1>
+      <p>Emergency plumbing and gas-safe heating repairs across Plymouth and the South Hams. Same day where we can, and a straight answer about when if we can't.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#cta">Call 01752 000 000</a>
+        <a class="btn ghost" href="#cost">What it costs</a>
+      </div>
+      <small>Gas Safe registered &middot; 7am to 8pm, seven days</small>
+    </div>
+  </section>
+
+  <div class="badges">
+    <div class="wrap">
+      <ul>
+        <li>Gas Safe registered</li>
+        <li>Fixed call-out, quoted before we start</li>
+        <li>No fix, no fee</li>
+        <li>Fully insured</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="sec" id="what">
+    <div class="wrap">
+      <h2>What we do</h2>
+      <p class="lede">Repairs first. We would rather mend the boiler you have than sell you one you don't need, and we will tell you plainly when that stops being the cheaper option.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Emergency call-outs</h3>
+          <p>Burst pipes, no heating, no hot water, a leak coming through a ceiling. Seven days a week, 7am to 8pm, with an actual arrival window rather than "sometime Tuesday".</p>
+          <span class="from">From £85 call-out</span>
+        </article>
+        <article class="card">
+          <h3>Boiler repair &amp; servicing</h3>
+          <p>Annual services, landlord gas safety certificates, and repairs to every common make. Parts quoted before they are ordered, never after they are fitted.</p>
+          <span class="from">Service from £95</span>
+        </article>
+        <article class="card">
+          <h3>Bathrooms &amp; installations</h3>
+          <p>New bathrooms, replacement boilers, radiators, outside taps. Planned work, dated, with one person on the job from the first visit to the last.</p>
+          <span class="from">Quoted on site, free</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec alt" id="cost">
+    <div class="wrap">
+      <h2>What it costs</h2>
+      <p class="lede">Published, because every plumber's website says "competitive rates" and none of them mean anything. These are the real numbers and they include VAT.</p>
+      <div class="prices">
+        <div class="price">
+          <span>Call-out, weekdays</span>
+          <b>£85</b>
+          <p>First hour on site included. If we can't fix it, you don't pay the call-out.</p>
+        </div>
+        <div class="price">
+          <span>Evenings, weekends</span>
+          <b>£125</b>
+          <p>Same terms. After 6pm, and all day Saturday and Sunday.</p>
+        </div>
+        <div class="price">
+          <span>Hourly after the first</span>
+          <b>£55</b>
+          <p>Charged in half hours, not rounded up to the next one.</p>
+        </div>
+      </div>
+      <p class="note">Parts are charged at cost plus 10% and quoted before they are ordered. Planned work (bathrooms, boiler swaps) is quoted as a fixed price after a free visit, and that price is what you pay unless you change the job.</p>
+    </div>
+  </section>
+
+  <section class="quote">
+    <div class="wrap quote-row">
+      <div>
+        <div class="stars" aria-label="Five out of five">★★★★★</div>
+        <blockquote>"Came out at eight on a Sunday night, found it in ten minutes, charged exactly what he said on the phone."</blockquote>
+        <cite>A customer who does not exist, because this is a demonstration site</cite>
+      </div>
+      <div>
+        <p style="color:rgba(247,245,240,.82)">On a real build this is where the client's own reviews go, pulled from the places their customers already leave them. Three real ones beat thirty invented, which is why the one above says what it says.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec area" id="area">
+    <div class="wrap">
+      <h2>Where we cover</h2>
+      <p class="lede">Within about forty minutes of the yard. If you are outside it we will say so on the phone rather than quote you a travel charge you did not expect.</p>
+      <ul>
+        <li>Plymouth</li><li>Plympton</li><li>Plymstock</li><li>Saltash</li><li>Ivybridge</li>
+        <li>Yealmpton</li><li>Wembury</li><li>Tavistock</li><li>Modbury</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta-band" id="cta">
+    <div class="wrap">
+      <h2>Something leaking right now?</h2>
+      <p>Ring it through and we will tell you honestly whether it is a today job, a tomorrow job, or a turn-the-stopcock-and-sleep-on-it job.</p>
+      <a class="btn" href="tel:+441752000000">01752 000 000</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div>
+      <strong style="color:var(--paper)">Northwell Plumbing &amp; Heating</strong><br>
+      Gas Safe 000000 &middot; 7am&ndash;8pm, seven days
+    </div>
+    <div>
+      A demonstration site built by <a href="/">Brassneck Studio</a>.<br>
+      No such business exists and nothing here can be bought.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

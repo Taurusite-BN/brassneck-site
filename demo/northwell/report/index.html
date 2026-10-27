@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic report, September 2026 — Northwell Plumbing &amp; Heating</title>
+<meta name="description" content="Example of the monthly traffic report Brassneck Studio sends. One page, plain language, and the one thing we would change next.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#280700">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="preload" href="/assets/fonts/darkergrotesque-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/anton-regular.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ==================================================================
+   The monthly traffic report, as actually sent.
+
+   A page, not a forty-page PDF. Self-contained on purpose: a report
+   that lands in somebody's inbox should still read correctly in five
+   years, whatever the studio stylesheet is doing by then.
+
+   The figures are invented. There is no Northwell Plumbing & Heating.
+   The shape, the wording and the one recommendation at the end are
+   exactly what a real one carries.
+   ================================================================== */
+
+@font-face{font-family:Anton;font-style:normal;font-weight:400;font-display:swap;
+  src:url("/assets/fonts/anton-regular.woff2") format("woff2")}
+@font-face{font-family:"Darker Grotesque";font-style:normal;font-weight:300 900;font-display:swap;
+  src:url("/assets/fonts/darkergrotesque-var.woff2") format("woff2-variations")}
+
+:root{
+  --brass:#C48E42; --ink:#280700; --black:#0C0C0C; --paper:#F1EFEC;
+  --surface:#361711; --rule:rgba(241,239,236,.14); --hair:rgba(196,142,66,.26);
+  --dim:#C5BCB8; --muted:#9D8E89;
+  --display:Anton,"Arial Narrow",system-ui,sans-serif;
+  --body:"Darker Grotesque",system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--ink);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--paper);
+  font:500 19px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:400;font-synthesis-weight:none;
+  text-transform:uppercase;letter-spacing:.012em;line-height:.95;margin:0}
+p{margin:0}
+a{color:var(--brass)}
+.wrap{width:min(900px,92vw);margin-inline:auto}
+
+.flag{background:var(--brass);color:var(--ink);text-align:center;padding:.5rem 1rem;
+  font-size:.82rem;font-weight:700;letter-spacing:.06em}
+.flag a{color:var(--ink)}
+
+.head{padding:2.8rem 0 2rem;border-bottom:1px solid var(--hair)}
+.head .for{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--brass);margin-bottom:.9rem}
+.head h1{font-size:clamp(2rem,5.5vw,3.2rem)}
+.head .sub{margin-top:.8rem;color:var(--dim);max-width:58ch}
+
+section{padding:2.4rem 0;border-bottom:1px solid var(--rule)}
+section h2{font-size:clamp(1.3rem,3vw,1.8rem);margin-bottom:.4rem}
+section .lede{color:var(--muted);margin-bottom:1.6rem;max-width:62ch}
+
+/* ---- stat tiles: a number with its own job, not a chart ---------- */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+  background:var(--hair);border:1px solid var(--hair)}
+.tile{background:var(--surface);padding:1.2rem 1.1rem 1.3rem}
+.tile .k{font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);display:block;margin-bottom:.5rem}
+.tile .v{font-family:var(--display);font-weight:400;font-synthesis-weight:none;
+  font-size:2.3rem;line-height:1;color:var(--paper);display:block}
+.tile .d{display:block;margin-top:.5rem;font-size:.92rem;color:var(--dim)}
+.tile .d.up::before{content:"▲ ";color:var(--brass)}
+.tile .d.flat::before{content:"— ";color:var(--muted)}
+
+/* ---- one bar list, one hue ---------------------------------------
+   Five rows of the same measure, so this is magnitude on one scale:
+   a single brass fill, no legend, a value on every row (five is not
+   a dense series), and the share only on hover so the resting state
+   stays readable. Brass on the maroon ground is 6.5:1. */
+.bars{display:grid;gap:2px;margin-top:.4rem}
+.bar{display:grid;grid-template-columns:minmax(9rem,13rem) 1fr auto;gap:1rem;
+  align-items:center;padding:.45rem .2rem;border-radius:3px}
+.bar:hover{background:rgba(196,142,66,.07)}
+.bar .n{font-size:1rem;color:var(--dim)}
+.bar .t{height:14px;background:rgba(241,239,236,.07);border-radius:0 4px 4px 0;position:relative}
+.bar .f{height:100%;background:var(--brass);border-radius:0 4px 4px 0;display:block}
+.bar .v{font-variant-numeric:tabular-nums;font-size:1rem;min-width:4.5ch;text-align:right}
+.bar .pc{color:var(--muted);font-size:.9rem;opacity:0;transition:opacity .15s}
+.bar:hover .pc{opacity:1}
+.bar-foot{margin-top:1rem;color:var(--muted);font-size:.95rem}
+
+/* ---- plain rows --------------------------------------------------- */
+.rows{border-top:1px solid var(--rule)}
+.row{display:flex;justify-content:space-between;gap:1.5rem;align-items:baseline;
+  padding:.75rem 0;border-bottom:1px solid var(--rule)}
+.row .what{color:var(--paper)}
+.row .what small{display:block;color:var(--muted);font-size:.92rem;margin-top:.15rem}
+.row .num{font-family:var(--display);font-weight:400;font-synthesis-weight:none;
+  font-size:1.5rem;color:var(--brass);white-space:nowrap}
+
+.next{background:var(--brass);color:var(--ink);padding:2rem 0 2.2rem;border:0}
+.next h2{color:var(--ink)}
+.next p{color:rgba(40,7,0,.86);font-weight:600;max-width:60ch;margin-top:.7rem}
+.next .one{font-family:var(--display);font-weight:400;font-synthesis-weight:none;
+  text-transform:uppercase;font-size:clamp(1.4rem,3.4vw,2rem);margin-top:1rem;line-height:1}
+
+.foot{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem}
+.foot a{color:var(--brass)}
+
+@media(max-width:760px){
+  .tiles{grid-template-columns:1fr 1fr}
+  .bar{grid-template-columns:1fr auto;gap:.5rem}
+  .bar .t{grid-column:1/-1;order:3}
+  .bar .pc{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<p class="flag">Example report &middot; the figures are invented and Northwell Plumbing is not a real business &middot; <a href="/websites/">see what we charge</a></p>
+
+<main class="wrap" id="main">
+
+  <header class="head">
+    <p class="for">Northwell Plumbing &amp; Heating &middot; Care plan</p>
+    <h1>September 2026</h1>
+    <p class="sub">One page, as always. What happened, what it means, and the one thing we would change before next month. If any of it needs explaining, ring and we will explain it.</p>
+  </header>
+
+  <section>
+    <h2>The month in four numbers</h2>
+    <p class="lede">Compared with August. Visits are people, not page loads, and a visit is only counted once however many times somebody comes back that day.</p>
+    <div class="tiles">
+      <div class="tile"><span class="k">Visits</span><span class="v">1,284</span><span class="d up">16% on August</span></div>
+      <div class="tile"><span class="k">Phone tapped</span><span class="v">41</span><span class="d up">9 more than August</span></div>
+      <div class="tile"><span class="k">Enquiry forms</span><span class="v">12</span><span class="d up">4 more than August</span></div>
+      <div class="tile"><span class="k">Cost per enquiry</span><span class="v">£0</span><span class="d flat">No ads running</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where they came from</h2>
+    <p class="lede">The useful line here is the second one. A third of the month arrived through the Google Business Profile, which is free, and which is why we keep nagging about the photos.</p>
+
+    <div class="bars">
+      <div class="bar">
+        <span class="n">Google search</span>
+        <span class="t"><span class="f" style="width:100%"></span></span>
+        <span class="v">742 <span class="pc">58%</span></span>
+      </div>
+      <div class="bar">
+        <span class="n">Google Business Profile</span>
+        <span class="t"><span class="f" style="width:42.9%"></span></span>
+        <span class="v">318 <span class="pc">25%</span></span>
+      </div>
+      <div class="bar">
+        <span class="n">Typed it in directly</span>
+        <span class="t"><span class="f" style="width:19.0%"></span></span>
+        <span class="v">141 <span class="pc">11%</span></span>
+      </div>
+      <div class="bar">
+        <span class="n">Checkatrade</span>
+        <span class="t"><span class="f" style="width:7.0%"></span></span>
+        <span class="v">52 <span class="pc">4%</span></span>
+      </div>
+      <div class="bar">
+        <span class="n">Facebook</span>
+        <span class="t"><span class="f" style="width:4.2%"></span></span>
+        <span class="v">31 <span class="pc">2%</span></span>
+      </div>
+    </div>
+    <p class="bar-foot">Top five searches that found you: <em>emergency plumber plymouth</em>, <em>boiler not firing up</em>, <em>gas safe engineer near me</em>, <em>no hot water plymouth</em>, <em>plumber sunday plymouth</em>. Four of those five are somebody with a problem right now, which is the kind of traffic worth having.</p>
+  </section>
+
+  <section>
+    <h2>What they did</h2>
+    <p class="lede">The site is one page, so this is how far down it people got and what they touched on the way.</p>
+    <div class="rows">
+      <div class="row"><span class="what">Reached &ldquo;What it costs&rdquo;<small>613 of 1,284 visits &middot; 48%</small></span><span class="num">613</span></div>
+      <div class="row"><span class="what">Reached the bottom of the page<small>Read the lot, including the area list</small></span><span class="num">402</span></div>
+      <div class="row"><span class="what">Tapped a phone number<small>29 from the header, 12 from the band at the bottom</small></span><span class="num">41</span></div>
+      <div class="row"><span class="what">Sent the enquiry form<small>Nine of the twelve came in after 6pm</small></span><span class="num">12</span></div>
+      <div class="row"><span class="what">Left without scrolling<small>Normal. Most of them were checking the phone number</small></span><span class="num">287</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>On what</h2>
+    <p class="lede">Worth knowing because it decides what we test next. Nearly three quarters of this is somebody standing in a cold house holding a phone.</p>
+    <div class="rows">
+      <div class="row"><span class="what">Phone</span><span class="num">71%</span></div>
+      <div class="row"><span class="what">Desktop<small>Mostly weekday daytime: landlords and letting agents</small></span><span class="num">22%</span></div>
+      <div class="row"><span class="what">Tablet</span><span class="num">7%</span></div>
+    </div>
+  </section>
+
+</main>
+
+<section class="next">
+  <div class="wrap">
+    <h2>The one thing we would change next</h2>
+    <p class="one">Put the phone number back on screen when people scroll.</p>
+    <p>The header number was tapped more than twice as often as the one at the bottom, and seven in ten visits are on a phone where the header scrolls away after one swipe. A call button that stays put on mobile is about half an hour's work and it is the only change this month that we think is worth making. Say the word and it is done before the weekend.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Measured with Umami, which sets no cookies and records no personal data. Figures are rounded. Nothing here identifies an individual visitor, and nothing here is shared with anybody.</p>
+    <p style="margin-top:.8rem">This is an example of the report included with the Care and Partner plans. <a href="/websites/">What that costs</a> &middot; <a href="/demo/northwell/">the site it describes</a> &middot; <a href="/">Brassneck Studio</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

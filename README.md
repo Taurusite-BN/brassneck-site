@@ -1,22 +1,75 @@
 # Brassneck Studio — the site
 
-A particle wordmark and magnetic body text that answer to the cursor, two doors that open
-and dive through to Websites and Games, and behind them the real pages: services, prices,
-a case study, the studio, the devlog, and a working enquiry form.
+Hand-written static HTML on GitHub Pages at `brassneck.studio`. Five pages that sell the
+web work, a case study, two games with their devlogs, the legal pages, and a set of
+demonstration builds that the service examples open onto.
+
+**Restructured 27 Oct 2026.** It used to be one document with four views, a camera and a
+client-side router; every URL now serves its own page. See "The move to real pages" below.
 
 ## Run it
 
-1. Drop this whole `brassneck-site` folder anywhere in Finder.
-2. Open the folder in VS Code (**File → Open Folder**, pick `brassneck-site` — not the file).
-3. Right-click `index.html` in the sidebar → **Open with Live Server**.
+1. Open the `brassneck-site` folder in VS Code (**File → Open Folder** — pick the folder,
+   not a file).
+2. Right-click `index.html` → **Open with Live Server**.
 
-Live Server matters here: `threshold.js` reads pixel data back out of a canvas
-(`getImageData`) to build the particle wordmark. Opening `index.html` straight from
-Finder uses the `file://` protocol, where that read is blocked as a cross-origin
-violation and the wordmark comes out blank. Serving over `http://` fixes it.
+Live Server is not optional. Every path in the site is root-absolute (`/css/styles.css`,
+`/assets/...`, `/websites/`), which is what makes a directory-per-page layout work at any
+depth. Opened from Finder over `file://` those resolve against the filesystem root and
+nothing loads.
 
 If you don't have it: VS Code → Extensions → search "Live Server" (Ritwick Dey).
 
+## The move to real pages
+
+**The problem it solved.** Addresses looked like `index.html#games`. Every page shared one
+42 KB document and one 45 KB script, so arriving at the Games section still paid for the
+3D doors, the camera, the particle field and the router.
+
+**The shape now.** One directory per page, each with its own `index.html`:
+
+| URL | File |
+|---|---|
+| `/` | `index.html` |
+| `/websites/` | `websites/index.html` |
+| `/games/` | `games/index.html` |
+| `/studio/` | `studio/index.html` |
+| `/contact/` | `contact/index.html` |
+| `/work/ember8/` | `work/ember8/index.html` |
+| `/legal/privacy/`, `/legal/terms/` | `legal/*/index.html` |
+| `/devlog/<slug>/` | `devlog/<slug>/index.html` |
+
+Directory-plus-`index.html` rather than `websites.html`, because that serves correctly on
+any host. GitHub Pages happens to resolve `/websites` to `websites.html` too, but that is
+a host behaviour rather than a guarantee, and the canonical URL would then disagree with
+the file.
+
+**Nothing 404s.** Every old URL that was in the sitemap or linked from outside — the case
+study, both legal pages, all three devlog entries — still exists as a one-line redirect
+stub at its old path, carrying a canonical to the new one. `404.html` catches the rest and
+lists the whole site.
+
+**What went with it.** `js/threshold.js` (the particle field, the magnetic body text, the
+3D doors, the camera dive, the router and the tuning panel) is gone, replaced by
+`js/site.js` at less than half the size. 145 CSS rules that could no longer match anything
+went too — verified by screenshotting all ten pages at two widths before and after and
+diffing them pixel by pixel, which came back identical.
+
+## Files
+
+```
+index.html              the homepage
+websites/ games/        one directory per page, each an index.html
+studio/ contact/
+work/ember8/            the case study
+legal/privacy|terms/    the legal pages
+devlog/<slug>/          one directory per entry, each a standalone page
+demo/northwell/         a demonstration client site, its web app and its traffic report
+css/styles.css          tokens, then components in page order, then the homepage block
+js/site.js              the reel, the enquiry form, the roster, the service examples
+assets/                 logo colourways, fonts, example images, the door recording
+*.html (old paths)      redirect stubs, kept so existing links survive
+```
 
 ## The preview gate (removed, 3 Sep 2026)
 
@@ -27,23 +80,12 @@ polish. See `claude/website-service-marketing-plan.md`, Phase 0.
 
 What went with it: `#gate` and its inline script in `index.html`, the whole gate block in
 `styles.css` (including `html:not(.is-unlocked) body { overflow: hidden }`), section 0 of
-`threshold.js`, and the redirect scripts at the top of `work/*.html` and `devlog/*.html`.
+`js/site.js`, and the redirect stubs at the old `.html` paths.
 `restoreRoute()` is now called directly from `boot()`.
 
 If a future unfinished section needs hiding, do it on the host (Cloudflare Access in front
 of the deployment) rather than in the page. A doormat in JavaScript never stopped anybody
 who opened dev tools.
-
-## Files
-
-```
-index.html            all three views — home, websites, games
-css/styles.css        design tokens at the top, then components in page order
-js/threshold.js       particles, magnetic text, the door/dive sequence, routing
-assets/               the mark (PNG, transparent), favicon and touch icon
-devlog/               one file per entry, each a standalone page
-work/                 one file per case study, each a standalone page
-```
 
 
 ## The devlog
@@ -85,27 +127,107 @@ folder shared by every entry so names have to say which entry they belong to
 the page does not jump as they load, add `loading="lazy"`, and give a figure the `.wide`
 class when it should break out of the 66ch text column into the rail gutter.
 
-## Service examples
+## Service examples, how they work
 
 Each card in "What we do" is a `<button data-svc="...">` that opens a native `<dialog>`.
 The card lifts and scales on hover, and the dialog **grows out of the card you clicked and
 shrinks back into it** on close, via the Web Animations API against the card's measured
 rect. Both are disabled under `prefers-reduced-motion`.
-Copy lives in the `EXAMPLES` object in `threshold.js` — title, image path, placeholder
-caption, and HTML body. Every example is drawn from real work (mostly Ember8), not invented.
 
-Screenshots are optional: each looks for `assets/example-<name>.png` and falls back to a
-captioned placeholder panel if the file is not there. Drop the images in and they appear.
+Everything a card says — title, prices, body, the laptop's image or video, its caption and
+where it opens to — lives in the `EXAMPLES` object in `js/site.js`. Nothing is in the
+markup. The table of what each card shows is further down under "Service examples".
 
 Opening one sends `/websites/example/<name>` to Umami, so you can see which service people
 are actually curious about — useful for deciding what to write next.
 
 Because the close is animated, the dialog's own `cancel` event and its close buttons are
-intercepted (`preventDefault`) and `modal.close()` is called on `animation.onfinish`.
+intercepted (`preventDefault`) and `modal.close()` is called on `animation.onfinish`. The
+video is paused there too, or it carries on playing behind a closed dialog.
 
-**One trap worth knowing:** the global Escape handler that walks a visitor back to the
-threshold has to bail when `dialog[open]` matches. Without that guard, closing an example
-with Escape also closed the whole page.
+**A trap that is now gone:** the global Escape handler used to walk a visitor back to the
+threshold, and had to bail when `dialog[open]` matched or closing an example closed the
+whole page. There is no threshold any more, so there is no handler and no guard.
+
+## Demonstration builds
+
+`demo/northwell/` is a complete, fictional small-business site, plus a web app and a
+traffic report. Three of the seven service examples open onto it.
+
+**Northwell Plumbing & Heating does not exist**, and every page says so in a brass band
+across the top that cannot be missed. That matters: a demonstration site that could be
+mistaken for a real trader is a different thing entirely, and the phone number is
+`01752 000 000` for the same reason.
+
+| Path | What it is |
+|---|---|
+| `demo/northwell/` | The £800 Basic tier made real: one page, no framework, no script, 12 KB |
+| `demo/northwell/quote/` | A working quote calculator — the web-apps example |
+| `demo/northwell/report/` | A worked monthly traffic report, invented figures |
+
+All three carry `noindex`, deliberately. A fictional plumber ranking in Plymouth would be
+worse than useless. **The `Disallow` is deliberately NOT in `robots.txt`** — a crawler has
+to be able to fetch a page in order to read the `noindex` on it.
+
+The report is self-contained rather than pulling `/css/styles.css`, because the real thing
+lands in somebody's inbox and should still render correctly in five years.
+
+## Service examples
+
+Seven cards, each opening a dialog with prices, an explanation, and a laptop showing
+something real. `EXAMPLES` in `js/site.js` is the only place any of it is written down.
+
+| Card | What the laptop shows | Opens |
+|---|---|---|
+| Web design | The old door-and-dive homepage, recorded | The demo site |
+| SEO | ember8.nl | ember8.nl |
+| Hosting & support | The demo site | The demo site |
+| Traffic reports | The sample report | The report |
+| Branding | The mark at 128 / 48 / 32 / 16 px | — |
+| Graphic design | The Scuttlers devlog | The devlog |
+| Web apps & installable apps | The quote calculator, running | The live app |
+
+The web-design card is the one with motion in it, so it is a `<video>` rather than an
+image: `assets/video/door.webm` (85 KB) with an `.mp4` beside it. **The same recording as
+a GIF was 1.4 MB**, which is why it is not in the repo. There is no audio track at all,
+which is what lets it autoplay; `preload="none"` means nothing is fetched until a card
+that wants it is opened.
+
+The seventh card runs full width under the other six (`.svc-wide`) rather than leaving an
+orphan at the end of a three-column grid.
+
+## Performance
+
+**100 for performance and 100 for accessibility on every page**, measured with Lighthouse
+13 against a local server, mobile emulation. Best practices reports 96 only because the
+Umami script cannot be reached from the machine the test runs on; that is an artefact of
+the test environment, not of the site.
+
+Worth knowing before anyone claims a number publicly: **run it against the live URL first.**
+These figures come from a local static server with no compression, which is harsher than
+GitHub Pages in some ways and kinder in others.
+
+What the work actually was:
+
+- **145 dead CSS rules removed**, 18 KB. Verified by pixel-diffing ten pages at two widths.
+- **The images re-encoded** at the size they are displayed rather than 1600px.
+- **The light bands were redefining no tokens**, so `--brass-lit` stayed at full Brass and
+  the homepage step numbers sat at 2.5 : 1. Same bug class as the section pages had.
+- **The site footer was inheriting `opacity: .72`** from the old per-view footnote rule,
+  which pulled the company registration line to 3.6 : 1. The old rule is now scoped to
+  `.shell > .foot-reg` so it cannot reach the new footer.
+- **Five `<img>` tags pointed at files that have never existed** (game covers, team
+  photos). An `onerror` hid them, but every page view still fetched and still logged a
+  404. A fallback reached by failing is not a fallback.
+- **Landmarks and heading order**: the case study and the legal pages had no `<main>`, and
+  the contact page went from `h1` to `h3`.
+
+Over the wire, with the compression GitHub Pages applies: stylesheet 19 KB, script 8 KB,
+a page 4–5 KB, the full landscape lockup 33 KB.
+
+**Available but not taken:** Anton is 55 KB for what is only ever uppercase display text,
+and would subset to roughly a fifth of that. Left alone because the score is already 100
+and a subset that silently drops a glyph is a nasty failure mode.
 
 ## Pricing
 
@@ -207,32 +329,30 @@ altering the logo.
 a Playwright rasteriser. **The icon is portrait (332.92 × 461.02), so tiles must be sized by
 height** or the feet get clipped. It holds at 16px, so no separate favicon glyph is needed.
 
-### The particle hero
+### The particle hero (retired, 27 Oct 2026)
 
-The homepage canvas used to typeset BRASSNECK and sample the letterforms. That broke the new rules
-twice: the wordmark must not be recreated, and Anton must not be used to imitate it. It now forms
-**the real lettering**, taken from `assets/logo/landscape-white.svg` — the actual artwork, never
-type standing in for it. Fetched rather than drawn through an `<img>` so no canvas-tainting
-question arises, and so the file on disk stays the only copy of the artwork.
+The old homepage sampled the real wordmark out of `landscape-white.svg` into a particle
+field. It went with the rest of the homepage when direction C replaced it, and with it
+went the one open brand question on this site: the guidelines say the wordmark may not
+appear without the icon, and a hero made of the lettering alone was a judgement call.
+Nothing on the site now shows the wordmark except the full lockup in the footer, so the
+rule is satisfied outright rather than argued about.
 
-The character is dropped **by geometry, not by path index**: the parsed SVG is appended off-screen
-(`position:absolute; left:-9999px`, laid out but invisible, because `getBBox()` returns zeroes on a
-node that was never laid out), each path measured, and any path whose right edge falls left of
-`0.40 × viewBox width` discarded. That is the character. The eleven lettering paths are handed to
-`Path2D` and filled into an offscreen canvas, which is then sampled for particle targets. Index-based
-selection would silently break if the file were ever re-exported with a different path order.
-
-**Note the brand-rule tension:** the guidelines say the wordmark may not be used without the icon.
-The homepage masthead carries the icon on the same screen, which is the reading this is built on, but
-it is a judgement call and not something the PDF spells out.
-
-If the fetch fails the hero is simply empty; nothing else depends on it.
+The technique is worth keeping a note of in case it is ever wanted again: the character
+was dropped **by measured geometry, not by path index** — the parsed SVG appended
+off-screen but laid out (`getBBox()` returns zeroes on a node that was never laid out),
+each path measured, and any path whose right edge fell left of `0.40 × viewBox width`
+discarded. Index-based selection would have broken silently on a re-export.
 
 ### Section tones
 
 The ground is Dark Maroon throughout, which on a long page reads as one flat note. Sections now
 alternate: `section.band.tone-white`, `.tone-black` and `.tone-brass` paint inset blocks in the
 palette, the same move as the brass closer band on the Websites page.
+
+The homepage does the same thing under its own `.h-band.h-white` / `.h-brass` classes.
+It has to: a light band that does not redefine `--brass-lit` leaves brass text at 2.5 : 1,
+which is exactly the bug the accessibility pass found on the step numbers.
 
 **A tone does not restyle components. It redefines tokens.** Each tone class sets `--paper`,
 `--dim`, `--muted`, `--rule`, `--hairline`, `--brass-lit`, `--brass-dim`, `--surface` and
@@ -258,9 +378,9 @@ A contrast audit over every page (`contrast.mjs` in the scratchpad) comes back c
 reported failure is `.nameplate`, a false positive: dark text on a brass *gradient* the audit cannot
 parse.
 
-## Legal pages## Legal pages
+## Legal pages
 
-`legal/privacy.html` and `legal/terms.html`, same `body.doc` pattern as the case studies.
+`legal/privacy/` and `legal/terms/`, same `body.doc` pattern as the case studies.
 Linked from a `.foot-legal` row in every footnote (Privacy / Cookies / Terms), plus a
 `.f-privacy` line under the contact form, plus the statutory company disclosure in
 `.foot-reg` on the homepage.
@@ -370,7 +490,7 @@ public page. Get them read before launch.
 `#page-contact`. Live since 3 Sep 2026:
 
 ```js
-const FORM_ENDPOINT = "https://formspree.io/f/maeybwaz";   // js/threshold.js
+const FORM_ENDPOINT = "https://formspree.io/f/maeybwaz";   // js/site.js
 ```
 
 If that endpoint is ever cleared back to a `YOUR_FORM_ID` placeholder the form still
@@ -387,7 +507,7 @@ that fill it; the JS bails on it too, so it works either way.
 
 ## The service reel
 
-The rolling list on the Websites page (`REEL` in `threshold.js`). The rotating word is set
+The rolling list on the Websites page (`REEL` in `js/site.js`). The rotating word is set
 larger than the "We do" lead-in (`.reel-lead` is `.58em` of the line size) so the service is
 the thing that reads, not the verb. Words are plain strings
 — add, remove or reorder freely; the brass rule underneath measures each word and animates
@@ -432,127 +552,30 @@ Unlocking a slot later = swap `is-locked` for `is-unlocked`, replace the padlock
 an `<img>`, fill in the name. The greyed-out look is `filter: grayscale(1)` plus opacity,
 so a locked slot with real art in it would still read as locked.
 
-## Routing
-
-The homepage is a single page that swaps views, but `#websites`, `#games` and
-`#contact` are real addresses. Landing on one — from a devlog's back link, or a shared link — calls
-`showInstant()`, which puts you on the page with no dive. **The dive is the reward for
-choosing a door, not a toll on every visit.** Diving sets the hash via `history.replaceState`;
-coming home clears it.
-
-`restoreRoute()` runs from `boot()`, once the fonts have settled, so a deep link lands
-directly on its page with the title and the Umami view already set.
-
-**Contact and Studio have no door, and never fire one.** There are two doors on the threshold and that
-is the whole idea — a third would dilute it. both route through `fadeTo()` /
-`fadeHome()` rather than `diveTo()` / `backOut()`, in **both** directions: arriving at the
-contact page and leaving it are fades. Firing the door animation off a form page reads as
-decoration rather than as going somewhere.
-
-The door is reserved for: threshold → Websites/Games, and Websites ↔ Games.
-
-## The tuning panel
-
-Only on the threshold. `markRoute()` stamps `data-route` on `<html>` and CSS hides `.tuner`
-anywhere else, because the sliders only control the particle wordmark, which only exists on
-the home page. Delete the panel before this goes live.
-
 ## Where to change things
 
 **Colours and type scale** — the `:root` block at the top of `styles.css`. Everything
 else reads from those tokens, so changing `--brass` there changes it everywhere.
 
-**Particle behaviour** — the `cfg` object near the top of `threshold.js`:
+**The homepage is namespaced.** Every class in the `.home` block carries an `h-` prefix
+(`.h-band`, `.h-tier`, `.h-closer`, `.h-stars`) and every rule is scoped under `.home`.
+The concept was drawn with generic names that the section pages already use for different
+components — `.closer` in particular is a brass block on `/websites/` and a plain maroon
+one on the homepage. Scoping alone was not enough: a `.home .closer` rule wins on
+specificity but still inherits every property the scoped rule does not set, so the
+homepage closer came out brass. The prefix removes the whole class of bug rather than
+chasing leaks one at a time. **If you add anything to the homepage, prefix it.**
 
-```js
-const cfg = { density: 4, radius: 130, force: 1, speed: 1, dust: true, magnetic: true };
-```
+**The homepage animation** — one 20-second clock, five four-second beats, in the
+`.home` block at the end of `styles.css`. Every part of it (the layers, the captions, the
+pointer, both states of the address bar) runs on that same clock with a four-second offset
+per beat, so nothing can drift out of step. Reduced motion is switched off by hand there
+rather than inherited, because the global reset crushes durations to a millisecond, which
+would leave all five layers stacked on top of each other.
 
-The tuning panel in the bottom-right corner writes to this same object live. Play with
-the sliders, find numbers you like, then paste them into `cfg` as the new defaults and
-delete the panel (`<details class="tuner">` in `index.html`, plus its `.tuner` styles and
-the `bind(...)` calls at the bottom of the JS).
-
-**Dive timing** — the constants `LEAF / LEAD / FLY / FADE` above `diveTo()`, and the
-sequence at 1× speed:
-
-| t (ms) | step |
-|---|---|
-| 0 | scroll locked, leaf swings open to 108° (720ms) |
-| 400 | camera scales the real scene about the real aperture (900ms) |
-| 580 | leaf faces fade out — you are past the door, it is behind you |
-| 1300 | `transitionend` — the doorway now fills the screen; page fades onto it (420ms) |
-| 1760 | camera stood back down behind the opaque page; focus to the back link |
-
-The 108° swing and the leaf fade are both load-bearing. At a narrower angle the open
-leaf sits just outside the aperture's edge and stays in frame for the whole flight, then
-vanishes at the swap — which reads as a glitch, not a camera move. The overshoot on the
-scale (`* 1.26`) does the same job for the casing: it clears the frame well before the
-end rather than exactly at it.
-
-There is no stand-in element and no cross-fade between two copies of the doorway. The
-thing filling the screen at the end of the flight *is* the aperture you clicked, scaled
-about its own centre — so there is nothing to keep in register and nothing that can
-drift. The swap waits on `transitionend`, not a timer, with a timeout only as a guard
-against a dropped event.
-
-`section.roster-band` and `section.trailer-band` are written with the element prefix on
-purpose: plain `.roster-band` (0,1,0) loses to `section.band` (0,1,1) and the border-top
-override silently does nothing. Watch for that pattern anywhere in this stylesheet.
-
-Two things to leave alone unless you know why they're there: the scroll lock plus
-`scrollbar-gutter: stable` on `html` (without the gutter, hiding the scrollbar mid-flight
-shifts the whole layout ~15px), and the absence of `isolation`, `filter`, `opacity` or
-`overflow` on `.door` and its ancestors — any of those silently forces
-`transform-style: flat` and collapses the 3D leaf into a 2D squash. The opacity fade is
-applied to `.leaf-front` / `.leaf-back` / `.leaf-edge` individually for exactly this
-reason: they are leaf nodes, so fading them is safe; fading `.leaf-wrap` would flatten
-the whole thing.
-
-Also deliberate: `.door` takes its width from `calc(var(--leaf-h) * 0.44)` rather than
-`aspect-ratio` with `width: auto`. As a flex item that combination resolves late in
-WebKit, and the doors render at zero width until something forces a relayout — which is
-why they only appeared on hover. ### The leaf is never *still* inside a 3D rendering context
-
-This one took four attempts, so it is worth stating precisely. The failure was: the doors
-render blank (WebKit) whenever `.leaf-wrap` sits in a `transform-style: preserve-3d`
-context and nothing is animating. It paints fine *while moving*, and blanks the moment it
-comes to rest. Everything else was a symptom.
-
-The rule the code now follows: **`preserve-3d` exists only while the leaf is in motion.**
-
-| state | leaf-wrap | how it looks |
-|---|---|---|
-| shut | flat, no transform | ordinary 2D panel |
-| teased (hover / focus) | flat, `rotateY(±7deg)` under `.door`'s `perspective` | genuinely cracked open |
-| swinging / open | `preserve-3d`, `rotateY(±108deg)`, back + edge visible | a solid door |
-| shut again | flat, no transform | ordinary 2D panel |
-
-The tease is a *flat* element given a 3D rotation by the parent's `perspective` — the
-standard card-flip construct, not a 3D scene. Its size is `--tease` on `.door` (16°), and
-how dramatic it looks depends as much on `.door`'s `perspective` (620px — a short lens for
-a 150px-wide door) and its `perspective-origin`, which is set behind the hinge on each side
-so the free edge swings out toward the viewer rather than rotating on the spot. The tease
-runs at 400ms via `.door:not(.is-live) .leaf-wrap`; the full 720ms belongs to the dive. `.door` carries `perspective: 900px`; nothing
-above it is a 3D context any more (the old `preserve-3d` chain through `.threshold`,
-`.stage` and `.portal-btn` is gone). `preserve-3d` is added by JS (`wake`) at the start of
-a dive and torn down by `shutFlat` the moment the leaf is out of shot.
-
-`shutFlat` snaps the leaf closed with `transition: none` rather than animating it. That is
-deliberate: a compositor-driven transform transition on the leaf does **not** survive
-`#camera`'s layer being torn down at the end of the dive — it strands the leaf mid-swing,
-permanently. Since the leaf is faded out (`.is-through`) whenever `shutFlat` runs, the snap
-is never seen.
-
-Two smaller hazards removed at the same time, both inside what used to be the 3D subtree:
-`.leaf-edge` was rotated exactly `90deg` (a degenerate, zero-area matrix — now `89.6deg`),
-and `.sill` used `filter: blur()` (filters inside a 3D context are a known rasterisation
-hazard — the same softness now comes from a radial gradient).
-
-**Door copy and page content** — plain HTML in `index.html`: `#camera` holds the
-homepage, `#page-websites` and `#page-games` are the two sections. Case study cards use
-the six-step template; anything still missing is marked with `class="want"` and renders
-in muted italic, so the gaps are visible on the page rather than hidden in a to-do list.
+**Where the old door machinery went** — deleted. The recording of it is
+`assets/video/door.webm`, played inside the Web design example. If it is ever wanted back,
+it is in the git history up to the commit before 27 Oct 2026.
 
 ## Known gaps, deliberately
 

@@ -1,6 +1,10 @@
 # Brassneck Studio
 # Everything here is meant to be read. Nothing is behind a login and
 # there is nothing to hide from a crawler.
+#
+# preview/ is design work in progress. It carries its own noindex, which
+# is deliberately NOT backed up with a Disallow here: a crawler has to be
+# able to fetch a page to see that it must not index it.
 
 User-agent: *
 Allow: /

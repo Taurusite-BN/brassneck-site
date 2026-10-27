@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instant quote — Northwell Plumbing &amp; Heating</title>
+<meta name="description" content="Demonstration web app. A small installable tool that gives a caller a price before they ring.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14362f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314362f'/><text x='16' y='23' font-size='18' font-family='Georgia,serif' fill='%23e8c56a' text-anchor='middle'>N</text></svg>">
+<style>
+/* ==================================================================
+   Northwell — instant quote. DEMONSTRATION WEB APP.
+
+   Not a real business and not a real quote. Built by Brassneck Studio
+   as a worked example of the smallest useful kind of web app: one
+   page, no account, no back end, works offline once loaded, and
+   installable to a phone home screen.
+
+   The arithmetic is deliberately in plain sight at the bottom. A tool
+   that tells somebody a number without showing its working is a tool
+   they will ring up to check anyway.
+   ================================================================== */
+:root{
+  --ink:#14362f;--ink-2:#0d241f;--paper:#f7f5f0;--paper-2:#eceae2;
+  --brass:#c58b2f;--rule:rgba(20,54,47,.16);--body:#2c3a37;--muted:#5d6b67;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--body);font:400 17px/1.55 var(--sans)}
+h1,h2{font-family:var(--serif);font-weight:700;line-height:1.15;margin:0;color:var(--ink)}
+p{margin:0}
+.wrap{width:min(720px,92vw);margin-inline:auto}
+.flag{background:var(--brass);color:var(--ink-2);text-align:center;padding:.5rem 1rem;
+  font:700 13px/1.4 var(--sans);letter-spacing:.04em}
+.flag a{color:var(--ink-2)}
+.top{background:var(--ink);color:var(--paper);padding:1.5rem 0 1.7rem}
+.top .logo{font-family:var(--serif);font-weight:700;font-size:1.1rem;color:var(--paper);
+  text-decoration:none;display:inline-block;margin-bottom:.9rem}
+.top .logo span{color:#e3b45f}
+.top h1{color:var(--paper);font-size:clamp(1.5rem,4.5vw,2.1rem)}
+.top p{color:rgba(247,245,240,.78);margin-top:.5rem;max-width:46ch;font-size:1rem}
+
+form{padding:1.8rem 0 1rem}
+fieldset{border:0;margin:0 0 1.6rem;padding:0}
+legend{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1.1rem;
+  padding:0;margin-bottom:.2rem}
+.hint{color:var(--muted);font-size:.95rem;margin-bottom:.8rem}
+.opts{display:grid;gap:.5rem}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem 1rem;background:#fff;
+  border:1px solid var(--rule);border-radius:6px;cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt input{margin:.25rem 0 0;accent-color:var(--ink);flex:none}
+.opt b{display:block;color:var(--ink);font-weight:700}
+.opt small{display:block;color:var(--muted);font-size:.92rem;margin-top:.1rem}
+.opt:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+
+.out{background:var(--ink);color:var(--paper);border-radius:8px;padding:1.4rem 1.4rem 1.6rem;
+  margin:.5rem 0 1.2rem}
+.out .k{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#e3b45f}
+.out .v{font-family:var(--serif);font-size:clamp(2.2rem,7vw,3rem);line-height:1.05;
+  color:var(--paper);margin:.3rem 0 .2rem}
+.out .v small{font-size:.9rem;font-family:var(--sans);color:rgba(247,245,240,.7);
+  display:block;margin-top:.5rem;font-weight:400}
+.out ul{margin:1rem 0 0;padding:0;list-style:none;border-top:1px solid rgba(247,245,240,.18)}
+.out li{display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;
+  border-bottom:1px solid rgba(247,245,240,.1);font-size:.97rem;color:rgba(247,245,240,.86)}
+.out li b{font-weight:700;color:var(--paper);font-variant-numeric:tabular-nums}
+.call{display:inline-block;background:var(--brass);color:var(--ink-2);text-decoration:none;
+  padding:.85rem 1.4rem;border-radius:4px;font-weight:700;margin-top:1.1rem}
+.small{color:var(--muted);font-size:.93rem;margin-top:1rem}
+.foot{background:var(--ink-2);color:rgba(247,245,240,.7);padding:1.6rem 0 2.4rem;
+  font-size:.93rem;margin-top:2rem}
+.foot a{color:rgba(247,245,240,.7)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<p class="flag">Demonstration web app &middot; Northwell Plumbing is not a real business &middot; built by <a href="/">Brassneck Studio</a></p>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="/demo/northwell/">North<span>well</span></a>
+    <h1>What will it cost?</h1>
+    <p>Three questions and you get the real number before you ring. No account, no email, nothing recorded.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <form id="q">
+    <fieldset>
+      <legend>When do you need us?</legend>
+      <p class="hint">Evenings after 6pm and all day at the weekend are charged at the out-of-hours rate.</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="when" value="day" checked><span><b>Weekday, 7am to 6pm</b><small>£85 call-out, first hour included</small></span></label>
+        <label class="opt"><input type="radio" name="when" value="out"><span><b>Evening or weekend</b><small>£125 call-out, first hour included</small></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>What is it?</legend>
+      <p class="hint">A rough guide to how long these usually take. If it turns out to be quicker, you pay for the time we were there.</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="job" value="1" checked><span><b>Leak, dripping tap, blocked waste</b><small>Usually inside the first hour</small></span></label>
+        <label class="opt"><input type="radio" name="job" value="2"><span><b>No hot water or no heating</b><small>Usually one to two hours</small></span></label>
+        <label class="opt"><input type="radio" name="job" value="3"><span><b>Boiler fault, needs diagnosing</b><small>Usually two to three hours</small></span></label>
+        <label class="opt"><input type="radio" name="job" value="svc"><span><b>Annual service or gas certificate</b><small>Fixed price, booked in advance</small></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Will it need parts?</legend>
+      <p class="hint">We never fit a part without telling you the price first. This is only here so the estimate is not misleadingly low.</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="parts" value="0" checked><span><b>Don't know</b><small>Not included in the figure below</small></span></label>
+        <label class="opt"><input type="radio" name="parts" value="45"><span><b>Probably something small</b><small>Washer, valve, thermocouple &middot; around £45</small></span></label>
+        <label class="opt"><input type="radio" name="parts" value="180"><span><b>Probably something major</b><small>Pump, PCB, diverter &middot; around £180</small></span></label>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="out" id="out" aria-live="polite">
+    <span class="k">Estimate</span>
+    <p class="v" id="total">£85<small id="range">Most jobs like this come in at the call-out alone.</small></p>
+    <ul id="lines"></ul>
+  </div>
+
+  <a class="call" href="tel:+441752000000">Ring it through on 01752 000 000</a>
+  <p class="small">An estimate, not a quote: we have not seen it yet. The call-out is not charged at all if we cannot fix it. Everything above includes VAT.</p>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>A demonstration of the smallest useful kind of web app: one page, no account, no server, works offline once loaded, and installable to a phone home screen. Built by <a href="/">Brassneck Studio</a>.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("q");
+  var total = document.getElementById("total");
+  var range = document.getElementById("range");
+  var lines = document.getElementById("lines");
+
+  var CALLOUT = { day: 85, out: 125 };
+  var HOURLY  = 55;
+  var SERVICE = { day: 95, out: 135 };
+
+  function money(n) { return "£" + n.toLocaleString("en-GB"); }
+
+  function row(what, amount) {
+    var li = document.createElement("li");
+    var a = document.createElement("span"); a.textContent = what;
+    var b = document.createElement("b");    b.textContent = amount;
+    li.appendChild(a); li.appendChild(b);
+    lines.appendChild(li);
+  }
+
+  function calc() {
+    var d = new FormData(form);
+    var when = d.get("when");
+    var job = d.get("job");
+    var parts = Number(d.get("parts"));
+
+    lines.textContent = "";
+    var sum, note;
+
+    if (job === "svc") {
+      sum = SERVICE[when];
+      row("Annual service, fixed price", money(sum));
+      note = "A fixed price, booked in advance. Nothing else to add unless it fails and needs a repair.";
+    } else {
+      var hours = Number(job);
+      var callout = CALLOUT[when];
+      sum = callout;
+      row(when === "out" ? "Call-out, out of hours (first hour included)"
+                         : "Call-out, weekday (first hour included)", money(callout));
+      if (hours > 1) {
+        var extra = (hours - 1) * HOURLY;
+        sum += extra;
+        row((hours - 1) + " further hour" + (hours - 1 > 1 ? "s" : "") + " at " + money(HOURLY), money(extra));
+      }
+      note = hours > 1
+        ? "Charged in half hours. If it takes less time than this, you pay less than this."
+        : "Most jobs like this come in at the call-out alone.";
+    }
+
+    if (parts) {
+      sum += parts;
+      row("Parts, if needed (quoted before fitting)", "about " + money(parts));
+    }
+
+    total.childNodes[0].nodeValue = money(sum);
+    range.textContent = note;
+  }
+
+  form.addEventListener("change", calc);
+  calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games in development | Brassneck Studio</title>
+  <meta name="description" content="Two games in development: a point-and-click murder mystery aboard a brig, and a dry British comedy set in a secondary school. Devlogs as the work happens.">
+  <link rel="canonical" href="https://brassneck.studio/games/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Brassneck Studio">
+  <meta property="og:url" content="https://brassneck.studio/games/">
+  <meta property="og:title" content="Two games in development">
+  <meta property="og:description" content="Two games in development: a point-and-click murder mystery aboard a brig, and a dry British comedy set in a secondary school. Devlogs as the work happens.">
+  <meta property="og:image" content="https://brassneck.studio/assets/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Brassneck Studio logo: a capital B drawn as a character, with two eyes and a pair of legs.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="theme-color" content="#280700">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+  <link rel="preload" href="/assets/fonts/darkergrotesque-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/anton-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+  <header class="mast">
+    <a class="mast-home" href="/" aria-label="Brassneck Studio, home">
+      <img class="lockup" src="/assets/logo/icon-white.svg" alt="Brassneck Studio" width="333" height="461">
+    </a>
+    <nav class="mast-nav" aria-label="Main">
+      <a href="/websites/" class="nav-tight">Websites</a>
+      <a href="/games/" class="nav-tight" aria-current="page">Games</a>
+      <a href="/studio/" class="nav-tight">Studio</a>
+      <a href="/contact/" class="mast-cta">Get a price</a>
+    </nav>
+  </header>
+
+<main id="main" class="shell">
+      <div class="page-head games-head">
+        <div class="games-head-text">
+          <p class="eyebrow">Games</p>
+          <h1>Made for evenings.</h1>
+          <p class="lede">Two in the water. The rest still on the slipway.</p>
+        </div>
+
+        <div class="roster-wrap">
+          <p class="roster-head">Select</p>
+          <ul class="roster">
+            <li>
+              <button class="slot is-unlocked is-current" type="button" data-slot="articles" aria-pressed="true">
+                <span class="slot-art">
+                  <span class="slot-ph">cover art, in the post</span>
+                </span>
+                <span class="slot-foot"><span class="slot-name">The Articles</span></span>
+              </button>
+            </li>
+            <li>
+              <button class="slot is-unlocked" type="button" data-slot="scuttlers" aria-pressed="false">
+                <span class="slot-art">
+                  <span class="slot-ph">cover art, still a grey box</span>
+                </span>
+                <span class="slot-foot"><span class="slot-name">Scuttlers</span></span>
+              </button>
+            </li>
+            <li>
+              <button class="slot is-locked" type="button" data-quip="Currently a note in a phone.">
+                <span class="slot-art"><svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="slot-foot"><span class="slot-name">?????</span></span>
+              </button>
+            </li>
+            <li>
+              <button class="slot is-locked" type="button" data-quip="Ask again in a year.">
+                <span class="slot-art"><svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="slot-foot"><span class="slot-name">?????</span></span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="game-panel" id="articles">
+
+      <section class="band trailer-band">
+        <div class="trailer-stage" id="trailer-stage">
+          <div class="reel">
+            <div>
+              <span>Trailer pending</span>
+              <em>Twenty seconds of it, eventually. There is footage. There is also a man who has recut the first four frames eleven times and would like everyone to stop asking.</em>
+            </div>
+          </div>
+
+          <div class="trailer" id="trailer">
+            <p class="tr-1">Nine days at sea.</p>
+            <p class="tr-1">One dead captain at the foot of the mainmast.</p>
+            <p class="tr-2">Thirty-one men aboard the brig <em>Merciful</em>, and you slept ten feet from him, and heard nothing at all.</p>
+            <p class="tr-2">Open what you were never meant to open. Close it carefully and it costs you something you can't get back. Close it quickly and it leaves a mark.</p>
+            <p class="tr-3">Either way, somebody is keeping count.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band tone-white">
+        <h2 class="band-title">The Articles</h2>
+        <dl class="meta">
+          <div><dt>Form</dt><dd>Point-and-click murder mystery</dd></div>
+          <div><dt>Status</dt><dd>Chapter one in playtest &middot; build 0.4</dd></div>
+          <div><dt>Built with</dt><dd>Ren'Py 8.5.3</dd></div>
+          <div><dt>Platforms</dt><dd>Steam, iOS and Android</dd></div>
+          <div><dt>Follow</dt><dd>itch.io and Bluesky, handles to claim</dd></div>
+        </dl>
+      </section>
+
+      <section class="band">
+        <h2 class="band-title">Devlog</h2>
+        <p class="prose">Written spoiler-free.</p>
+
+        <ul class="logs">
+          <li>
+            <a class="log" href="/devlog/2026-09-04-entry-two/">
+              <span class="log-date"><time datetime="2026-09-04">4 Sep 2026</time></span>
+              <span class="log-main">
+                <span class="log-title">Entry two: everybody had the same haircut</span>
+                <span class="log-sum">Six versions of the dialogue box, a cast who all looked like siblings and had to be redrawn from the silhouette up, a ship that finally has a map of itself, seventy playtest notes that were all annoyingly correct, and an economy of scarcity in which nobody was ever short of anything.</span>
+              </span>
+              <span class="log-meta">build 0.4 &middot; chapter one</span>
+            </a>
+          </li>
+          <li>
+            <a class="log" href="/devlog/2026-08-28-entry-one/">
+              <span class="log-date"><time datetime="2026-08-28">28 Aug 2026</time></span>
+              <span class="log-main">
+                <span class="log-title">Entry one: what the playtest found</span>
+                <span class="log-sum">Two rounds of notes, a menu that was giving the game away, a new layer of plot that closed a hole the bible had carried for months, and the art pipeline learning to read a painted-in checkerboard.</span>
+              </span>
+              <span class="log-meta">build 0.3 · chapter one</span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="prose" style="margin-top:1.3rem">Weekly is the goal. Weekly is also what everybody says in entry one, so treat it as an ambition rather than a timetable.</p>
+      </section>
+
+      <section class="band tone-black">
+        <h2 class="band-title">Release</h2>
+        <div class="eta">
+          <span class="eta-label">Estimated</span>
+          <span class="eta-date"><time datetime="2026-11">November 2026</time></span>
+          <p class="eta-note">An estimate, not a promise. If it moves, the devlog will say so before the date does.</p>
+        </div>
+      </section>
+
+      </div>
+
+      <div class="game-panel" id="scuttlers" hidden>
+
+      <section class="band trailer-band">
+        <div class="trailer-stage">
+          <div class="reel">
+            <div>
+              <span>No trailer</span>
+              <em>Sixty-three per cent of this game is currently a grey rectangle with a label on it, and the rest is placeholder. There will be footage when there is something worth pointing a camera at.</em>
+            </div>
+          </div>
+
+          <div class="trailer">
+            <p class="tr-1">Every kid in this school has one.</p>
+            <p class="tr-1">Palm-sized plastic on wheels, tracks or legs, driven with a pistol-grip handset.</p>
+            <p class="tr-2">They fight them in bin lids, sinks, taped squares on the floor and the drain hollow behind the sports hall. There is an unwritten rulebook enforced by sixth-formers. There is a black market. There is a boy who will trade you a Series Two for whatever is in your pockets and is visibly not to be trusted.</p>
+            <p class="tr-2">The toys are the only things in the building with any colour in them.</p>
+            <p class="tr-3">Underneath the craze, there is something the school has quietly agreed not to talk about.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band tone-white">
+        <h2 class="band-title">Scuttlers</h2>
+        <dl class="meta">
+          <div><dt>Form</dt><dd>Narrative RPG, dry satirical comedy</dd></div>
+          <div><dt>Setting</dt><dd>A run-down British secondary school</dd></div>
+          <div><dt>Status</dt><dd>Foundations done &middot; battle prototype next</dd></div>
+          <div><dt>Built with</dt><dd>Godot 4.6, 640&times;360 at 16px tiles</dd></div>
+          <div><dt>Art</dt><dd>Commissioned, once the fighting is proven fun</dd></div>
+          <div><dt>Follow</dt><dd>itch.io and Bluesky, handles to claim</dd></div>
+        </dl>
+      </section>
+
+      <section class="band">
+        <h2 class="band-title">Devlog</h2>
+        <p class="prose">A build log rather than a story one. It is mostly about what broke.</p>
+
+        <ul class="logs">
+          <li>
+            <a class="log" href="/devlog/2026-09-20-scuttlers-one/">
+              <span class="log-date"><time datetime="2026-09-20">20 Sep 2026</time></span>
+              <span class="log-main">
+                <span class="log-title">Devlog one: the school gets a shape</span>
+                <span class="log-sum">Eleven rooms, thirteen doors and three loops where there used to be a star with dead ends on it. A gym, a locked cupboard and the worst toilets in Britain. Plus a confession: every classroom door in the game has been a picture of a wardrobe for a fortnight.</span>
+              </span>
+              <span class="log-meta">M0 &middot; Godot 4.6</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="band tone-black">
+        <h2 class="band-title">Release</h2>
+        <div class="eta">
+          <span class="eta-label">When</span>
+          <span class="eta-date">No date yet</span>
+          <p class="eta-note">The next milestone is the only one that can kill this: two toys, one ring, no menus, no school. The test is whether people ask for a rematch without being prompted. Anybody giving you a date before that has guessed.</p>
+        </div>
+      </section>
+
+      </div>
+
+      <div class="locked-msg" id="locked-msg" hidden>
+        <svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+        <p class="locked-quip" id="locked-quip"></p>
+        <button class="locked-back" type="button" data-slot="articles">← Back to The Articles</button>
+      </div>
+    
+</main>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <a href="/" aria-label="Brassneck Studio, home">
+        <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
+      </a>
+      <div class="foot-cols">
+        <a href="/websites/">Websites</a>
+        <a href="/games/">Games</a>
+        <a href="/studio/">Studio</a>
+        <a href="/contact/">Contact</a>
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/privacy/#cookies">Cookies</a>
+        <a href="/legal/terms/">Terms</a>
+      </div>
+    </div>
+    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+  </footer>
+
+  <script src="/js/site.js" defer></script>
+</body>
+</html>
