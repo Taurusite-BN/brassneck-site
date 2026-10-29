@@ -503,17 +503,18 @@
     white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: -0.005em;
-    will-change: transform, opacity;
+    will-change: transform, clip-path;
   }
   
   
 
   @keyframes reel-out {
-    to { opacity: 0; transform: translateY(-0.42em); }
+    from { clip-path: inset(-20% 0 0 0);   transform: translateY(0); }
+    to   { clip-path: inset(-20% 0 100% 0); transform: translateY(-0.3em); }
   }
   @keyframes reel-in {
-    from { opacity: 0; transform: translateY(0.42em); }
-    to   { opacity: 1; transform: none; }
+    from { clip-path: inset(100% 0 -20% 0); transform: translateY(0.3em); }
+    to   { clip-path: inset(-20% 0 -20% 0);  transform: none; }
   }
 
   /* Restored 29 Oct 2026. These were removed by the dead-rule prune:
@@ -698,7 +699,68 @@
 
   /* ---- testimonials --------------------------------------------- */
 
-  .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 1rem; }
+  /* ---- the reviews, as a deck ---------------------------------------
+     Three reviews of wildly different lengths side by side left one
+     column nearly empty and made the short ones look like filler. One
+     at a time, with arrows.
+
+     The track is a scroll-snap container, so it works with a swipe, a
+     trackpad, the keyboard and a screen reader before any JavaScript
+     runs. The arrows are hidden until the script turns them on, because
+     an arrow that does nothing is worse than no arrow. */
+
+  .quote-deck {
+    position: relative;
+    margin-top: .4rem;
+    padding-inline: clamp(2.7rem, 6vw, 4.4rem);
+  }
+  .quote-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    gap: 1rem;
+    align-items: start;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    transition: height 420ms var(--ease);
+  }
+  .quote-track::-webkit-scrollbar { display: none; }
+  .quote-track > .quote { scroll-snap-align: center; }
+  /* full-width slides give 110-character lines, which nobody reads */
+  .quote-track blockquote, .quote-track figcaption { max-width: 74ch; }
+  .quote-track:focus-visible { outline: 2px solid var(--brass-lit); outline-offset: 4px; }
+
+  .q-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    place-items: center;
+    width: clamp(2.2rem, 5vw, 2.9rem);
+    aspect-ratio: 1;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    color: var(--paper);
+    font-size: 1.05rem; line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+  }
+  .quote-deck.is-ready .q-arrow { display: grid; }
+  .q-prev { left: 0; }
+  .q-next { right: 0; }
+  .q-arrow:hover, .q-arrow:focus-visible {
+    background: var(--brass); border-color: var(--brass); color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quote-track { scroll-behavior: auto; }
+    .quote-track { transition: none; }
+  }
+
 
   .quote {
     margin: 0;
@@ -2629,88 +2691,128 @@
   }
 
   /* ---- Smeaton's Tower, and the other sort of lighthouse -----------
-     The score belongs somewhere, and a banner reading "100/100" is the
-     kind of thing this site exists not to do. So it is a joke told
-     straight: Google's Lighthouse, and the one on Plymouth Hoe.
+     One photograph, twice. The first copy is the whole frame with a
+     scrim over it; the second is the same frame with everything but the
+     tower keyed to transparent, sitting on top of the scrim. So the
+     tower is at full strength and its own surroundings are dimmed, and
+     because both layers are the same crop at the same size they line up
+     by construction rather than by arithmetic.
 
-     The tower is drawn rather than photographed. It is a few hundred
-     bytes of inline SVG with no request of its own, it is sharp at any
-     size, and it is in the brand's colours instead of the real tower's
-     red, which the palette does not have.
+     The first attempt cropped the tower out of the background to avoid
+     a doubled image and then placed the cut-out further right, which
+     stood it in the sea. Registering it over itself is the whole trick.
 
-     `--grow` runs 0 to 1 as the band crosses the viewport and drives
-     the whole thing: the tower is clipped from the ground up, so it
-     rises out of the plinth, and the lamp only lights once it is all
-     the way there. */
+     The glazed lantern could not be keyed (what is behind that glass is
+     sky) and is reconstructed. Below the skyline the tower does not
+     separate from the hills either, so the silhouette is carried down
+     on its fitted taper; registration makes a few pixels of slack
+     invisible. */
 
-  .h-hoe-in {
+  .h-hoe {
+    --grow: 0;
+    position: relative;
+    overflow: hidden;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-    gap: clamp(2rem, 6vw, 5rem);
     align-items: center;
+    min-height: min(50vw, 40rem);
   }
+  .h-hoe-bg { position: absolute; inset: 0; }
+  .h-hoe-bg img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 50%;
+    display: block;
+  }
+  .h-hoe-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg,
+        rgba(12,12,12,0.46) 0%,
+        rgba(12,12,12,0.58) 30%,
+        rgba(12,12,12,0.90) 60%,
+        rgba(12,12,12,0.95) 100%),
+      linear-gradient(180deg, rgba(12,12,12,0.45) 0%, rgba(12,12,12,0.20) 45%, rgba(12,12,12,0.55) 100%);
+  }
+  .h-hoe-lit {
+    transform: scale(calc(1 + var(--grow) * 0.28));
+    transform-origin: 24% 100%;
+    will-change: transform;
+  }
+
+  .h-hoe-in { position: relative; }
+  .h-hoe-say { max-width: 36rem; margin-left: auto; }
   .home .h-hoe-say .h-hoe-k {
     font-size: .7rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
     color: var(--brass); margin-bottom: 1rem;
   }
-  .h-hoe-say h2 { font-size: clamp(2.2rem, 5.2vw, 4rem); }
+  .h-hoe-say h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); }
   .home .h-hoe-say .h-hoe-p {
-    margin-top: 1.15rem; max-width: 52ch;
-    font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--paper);
+    margin-top: 1.1rem; max-width: 46ch;
+    font-size: clamp(1.02rem, 1.4vw, 1.18rem); color: var(--paper);
   }
-  .home .h-hoe-say .h-hoe-p:first-of-type { margin-top: 1.5rem; }
+  .home .h-hoe-say .h-hoe-p:first-of-type { margin-top: 1.4rem; }
   .h-hoe-p b { color: var(--brass); font-weight: 700; }
-  .home .h-hoe-say .h-hoe-n { margin-top: 1.9rem; max-width: 56ch; color: var(--muted); font-size: var(--step-0); }
-
-  .h-hoe-art { --grow: 0; margin: 0; display: grid; justify-items: center; }
-
-  /* A frame that opens from the middle outward as the band comes up the
-     screen: the crop grows rather than the picture fading in. Built to
-     hold a photograph; the drawn plate below is a stand-in until there
-     is one, and swapping it is replacing the <svg> with an <img>. */
-  .h-hoe-frame {
-    position: relative;
-    width: min(100%, 19rem);
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    border: 8px solid transparent;
-    background-image:
-      linear-gradient(var(--black), var(--black)),
-      linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    box-shadow: 0 40px 90px rgba(0,0,0,0.55);
-    clip-path: inset(calc((1 - var(--grow)) * 50%) 0 calc((1 - var(--grow)) * 50%) 0);
-    transform: scale(calc(0.96 + var(--grow) * 0.04));
-  }
-  /* The photograph, when there is one. object-position sits a little
-     above centre because the lantern is the part worth keeping in shot
-     while the crop is still narrow. */
-  .h-hoe-photo {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: 50% 32%;
-    display: block;
-  }
-  .h-hoe-plate {
-    position: absolute; inset: 8% 0 4%;
-    width: 100%; height: 84%;
-    overflow: visible;
-  }
-  .h-hoe-art .hoe-halo {
-    opacity: calc((var(--grow) - 0.78) * 4.5);
-    transform-box: fill-box;
-    transform-origin: center;
-    transform: scale(calc(0.45 + var(--grow) * 0.55));
-  }
-  .h-hoe-art .hoe-lamp { opacity: calc(0.35 + (var(--grow) - 0.78) * 3); }
 
   @media (max-width: 900px) {
-    .h-hoe-in { grid-template-columns: 1fr; }
-    .h-hoe-frame { width: min(100%, 15rem); }
+    .h-hoe { display: block; min-height: 0; padding-top: 0; }
+    .h-hoe-bg {
+      position: relative; inset: auto;
+      aspect-ratio: 5 / 4;
+      margin-bottom: clamp(1.6rem, 5vw, 2.4rem);
+    }
+    .h-hoe-bg img { object-position: 30% 50%; }
+    .h-hoe-say { max-width: none; margin-left: 0; }
+    .h-hoe-scrim {
+      background:
+        linear-gradient(180deg, rgba(12,12,12,0.30) 0%, rgba(12,12,12,0.12) 45%, rgba(12,12,12,0.86) 100%),
+        rgba(12,12,12,0.18);
+    }
   }
 
-  /* With motion turned down the tower is simply there, lit. */
-  @media (prefers-reduced-motion: reduce) {
-    .h-hoe-art { --grow: 1 !important; }
+  @media (prefers-reduced-motion: reduce) { .h-hoe { --grow: 1 !important; } }
+
+  /* ---- the demo builds, on the Websites page -----------------------
+     This took the slot the six-step process had. The process is on the
+     homepage, where it reads better and where somebody meets it before
+     they have decided anything; repeating it here was the same argument
+     twice. What belongs here instead is the proof, in one click rather
+     than three levels down inside a service card. */
+
+  .tryouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 1px;
+    margin-top: 2rem;
+    background: var(--rule);
+    border: 1px solid var(--rule);
   }
+  .tryout {
+    display: grid;
+    align-content: start;
+    gap: .45rem;
+    padding: 1.5rem 1.4rem 1.6rem;
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: background 240ms var(--ease), transform 240ms var(--ease);
+  }
+  .tryout:hover, .tryout:focus-visible { background: var(--surface-hi); transform: translateY(-2px); }
+  .tryout-k {
+    font-size: .66rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--brass-lit);
+  }
+  .tryout-h {
+    font-family: var(--body);
+    font-weight: 800; font-size: 1.22rem; letter-spacing: -0.02em;
+    color: var(--paper);
+  }
+  .tryout-p { color: var(--dim); font-size: var(--step-0); }
+  .tryout-go {
+    margin-top: .5rem;
+    font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--brass-lit);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tryout:hover, .tryout:focus-visible { transform: none; }
+  }
+

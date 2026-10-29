@@ -685,11 +685,79 @@
     apply();
   }
 
+  /* ================================================================ *
+   * The review deck
+   *
+   * The track scrolls and snaps on its own; this only adds the arrows
+   * and the counter, and sets the deck's height to the review being
+   * read so a two-line one does not sit in a box sized for a six
+   * paragraph one.
+   * ================================================================ */
+
+  function initQuoteDeck() {
+    const deck = document.querySelector("[data-deck]");
+    if (!deck) return;
+    const track = deck.querySelector(".quote-track");
+    const slides = track ? [...track.querySelectorAll(".quote")] : [];
+    const prev = deck.querySelector('[data-q="prev"]');
+    const next = deck.querySelector('[data-q="next"]');
+    if (!track || !prev || !next || slides.length < 2) return;
+
+    // The arrows only exist once this runs; an arrow that does nothing
+    // is worse than no arrow.
+    deck.classList.add("is-ready");
+
+    const index = () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bd = Infinity;
+      slides.forEach((s, i) => {
+        const d = Math.abs((s.offsetLeft + s.offsetWidth / 2) - mid);
+        if (d < bd) { bd = d; best = i; }
+      });
+      return best;
+    };
+
+    // Match the deck to the review being read, so a two-line one does
+    // not sit in a box sized for six paragraphs.
+    const fit = i => {
+      const h = slides[i].getBoundingClientRect().height;
+      if (h > 10) track.style.height = Math.ceil(h) + "px";
+    };
+
+    let queued = false;
+    const sync = () => { queued = false; fit(index()); };
+    track.addEventListener("scroll", () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(sync);
+    }, { passive: true });
+
+    // Wraps rather than stopping: with no counter on screen there is
+    // nothing to tell you why an arrow has gone dead, so none does.
+    const go = step => {
+      const n = slides.length;
+      const i = ((index() + step) % n + n) % n;
+      track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft,
+                       behavior: reduce ? "auto" : "smooth" });
+    };
+    prev.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+    track.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft")  { e.preventDefault(); go(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    });
+
+    window.addEventListener("resize", () => { track.style.height = ""; sync(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    sync();
+  }
+
   /* ---- wiring ----------------------------------------------------- */
 
   function boot() {
     initMastTone();
     initHoe();
+    initQuoteDeck();
     startReel();
     initEnquiry();
     initRoster();
