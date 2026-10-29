@@ -22,8 +22,11 @@
   <link rel="icon" href="/assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
-  <link rel="preload" href="/assets/fonts/darkergrotesque-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/anton-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" href="/assets/games/articles-key-800.webp"
+        imagesrcset="/assets/games/articles-key-800.webp 800w, /assets/games/articles-key-1200.webp 1200w, /assets/games/articles-key-1600.webp 1600w"
+        imagesizes="(min-width: 1830px) 1720px, (min-width: 700px) 94vw, 50vw" fetchpriority="high">
+  <link rel="preload" href="/assets/fonts/darkergrotesque-var-sub.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/anton-regular-sub.woff2" as="font" type="font/woff2" crossorigin>
 
   <link rel="stylesheet" href="/css/styles.css">
   <script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
@@ -32,7 +35,10 @@
 <a class="skip" href="#main">Skip to content</a>
   <header class="mast">
     <a class="mast-home" href="/" aria-label="Brassneck Studio, home">
-      <img class="lockup" src="/assets/logo/icon-white.svg" alt="Brassneck Studio" width="333" height="461">
+      <span class="mast-mark">
+        <img class="lockup mark-up" src="/assets/logo/icon-white.svg" alt="Brassneck Studio" width="333" height="461">
+        <img class="lockup mark-dn" src="/assets/logo/icon-white.svg" alt="" aria-hidden="true" width="333" height="461">
+      </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
       <a href="/websites/" class="nav-tight">Websites</a>
@@ -89,12 +95,14 @@
 
       <section class="band trailer-band">
         <div class="trailer-stage" id="trailer-stage">
-          <div class="reel">
-            <div>
-              <span>Trailer pending</span>
-              <em>Twenty seconds of it, eventually. There is footage. There is also a man who has recut the first four frames eleven times and would like everyone to stop asking.</em>
-            </div>
+          <div class="reel reel-art">
+            <img src="/assets/games/articles-key-1600.webp"
+                 srcset="/assets/games/articles-key-800.webp 800w, /assets/games/articles-key-1200.webp 1200w, /assets/games/articles-key-1600.webp 1600w"
+                 sizes="(min-width: 1830px) 1720px, (min-width: 700px) 94vw, 50vw"
+                 alt="Key art for The Articles: a sailmaker&rsquo;s hands stitching a folded letter into the seam of a canvas sail by lantern light, below deck on a brig."
+                 width="1600" height="900" fetchpriority="high" decoding="async">
           </div>
+          <p class="reel-note"><span>Key art</span> Not a trailer. Twenty seconds of one, eventually: there is footage, and there is also a man who has recut the first four frames eleven times and would like everyone to stop asking.</p>
 
           <div class="trailer" id="trailer">
             <p class="tr-1">Nine days at sea.</p>
@@ -162,12 +170,14 @@
 
       <section class="band trailer-band">
         <div class="trailer-stage">
-          <div class="reel">
-            <div>
-              <span>No trailer</span>
-              <em>Sixty-three per cent of this game is currently a grey rectangle with a label on it, and the rest is placeholder. There will be footage when there is something worth pointing a camera at.</em>
-            </div>
+          <div class="reel reel-art">
+            <img src="/assets/games/scuttlers-key-1600.webp"
+                 srcset="/assets/games/scuttlers-key-800.webp 800w, /assets/games/scuttlers-key-1200.webp 1200w, /assets/games/scuttlers-key-1600.webp 1600w"
+                 sizes="(min-width: 1830px) 1720px, (min-width: 700px) 94vw, 50vw"
+                 alt="Key art for Scuttlers: five schoolchildren crouched around a rusted bin lid in an autumn playground, watching two toy fighting machines collide inside it."
+                 width="1600" height="900" loading="lazy" decoding="async">
           </div>
+          <p class="reel-note"><span>Key art</span> Not a trailer. Sixty-three per cent of this game is currently a grey rectangle with a label on it, and the rest is placeholder. There will be footage when there is something worth pointing a camera at.</p>
 
           <div class="trailer">
             <p class="tr-1">Every kid in this school has one.</p>

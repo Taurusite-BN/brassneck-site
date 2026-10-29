@@ -8,9 +8,11 @@
   <meta name="description" content="Case study: a bilingual static site for Ember8, trauma release therapy and breathwork coaching in the Netherlands.">
 
   <link rel="icon" href="/assets/favicon.png" type="image/png">
-  <link rel="preload" href="/assets/fonts/darkergrotesque-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/anton-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/ember8-preview.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="/assets/fonts/darkergrotesque-var-sub.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/anton-regular-sub.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" href="/assets/ember8-preview-1000.webp"
+        imagesrcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w"
+        imagesizes="(min-width: 1180px) 1080px, 92vw" fetchpriority="high">
   <link rel="stylesheet" href="/css/styles.css">
 
   <!-- Umami: privacy-friendly analytics -->
@@ -38,7 +40,9 @@
   </div>
 
   <figure class="doc-shot">
-    <img src="/assets/ember8-preview.jpg"
+    <img src="/assets/ember8-preview-1400.webp"
+         srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w"
+         sizes="(min-width: 1180px) 1080px, 92vw"
          alt="The Ember8 home page: a bare concrete room with light falling across a stencilled BREAK THE LOOP on the wall, a backpack on the floor, and the headline &ldquo;What are you still carrying&hellip; that was never yours to begin with?&rdquo;"
          width="1400" height="791" fetchpriority="high" decoding="async">
     <figcaption>The home page. One question, one thing to do about it, and a great deal of space around both.</figcaption>

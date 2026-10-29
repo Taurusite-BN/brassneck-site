@@ -47,32 +47,58 @@
     if (!word || !rule) return;
 
     let i = 0;
+    let busy = false;
+    let onScreen = true;
+
     const measure = () => { rule.style.width = word.offsetWidth + "px"; };
+    const show = n => { word.textContent = REEL[n]; measure(); };
 
-    const settle = () => {
-      word.textContent = REEL[i];
-      measure();
-    };
-
+    show(0);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-    settle();
+    window.addEventListener("resize", measure);
 
-    const step = () => {
-      // nothing to animate if nobody is looking at it
-      if (document.hidden) return;
-      word.classList.remove("is-in");
-      word.classList.add("is-out");
-      setTimeout(() => {
-        i = (i + 1) % REEL.length;
-        word.textContent = REEL[i];
-        word.classList.remove("is-out");
-        word.classList.add("is-in");
-        measure();
-      }, reduce ? 0 : 240);
+    // Nothing is gained by animating a word that has been scrolled past.
+    if (typeof IntersectionObserver === "function") {
+      new IntersectionObserver(es => { onScreen = es[0].isIntersecting; })
+        .observe(word);
+    }
+
+    if (reduce) {
+      setInterval(() => {
+        if (document.hidden || !onScreen) return;
+        show(i = (i + 1) % REEL.length);
+      }, 2600);
+      return;
+    }
+
+    // Removing a class and adding another in the same frame does not
+    // restart an animation on its own; the layout read in between is
+    // what forces it.
+    const restart = (off, on) => {
+      word.classList.remove(off);
+      void word.offsetWidth;
+      word.classList.add(on);
     };
 
-    setInterval(step, 2200);
-    window.addEventListener("resize", measure);
+    // Driven by the animation finishing rather than by a timer set to
+    // roughly its length. The old code swapped the text 20ms before
+    // reel-out ended, which showed the new word for a frame at the old
+    // one's position, and drifted further out of step on a busy main
+    // thread.
+    word.addEventListener("animationend", e => {
+      if (e.animationName !== "reel-out") return;
+      i = (i + 1) % REEL.length;
+      word.textContent = REEL[i];
+      restart("is-out", "is-in");
+      measure();
+      busy = false;
+    });
+
+    setInterval(() => {
+      if (document.hidden || !onScreen || busy) return;
+      busy = true;
+      restart("is-in", "is-out");
+    }, 2400);
   }
 
   const FORM_ENDPOINT = "https://formspree.io/f/maeybwaz";
@@ -272,12 +298,12 @@
     "web-design": {
       title: "Web design",
       video: "/assets/video/door",
-      poster: "/assets/ember8-preview.jpg",
       cap: "The old Brassneck homepage: hover, open, and through. Recorded off the real thing.",
       open: "/demo/northwell/",
       openLabel: "See a finished site",
-      body: "<p>Ember8 sells something delicate: therapy for people stuck in a pattern. Push the design too hard and it reads as a clinic; push too little and nobody books.</p>" +
-            "<p>The answer was a dark, quiet page with a great deal of space in it, the logo in white, and exactly one thing to do on every screen. The design gets out of the way of what is being asked of the reader.</p>",
+      body: "<p>Design is what the page asks of somebody, and how little work it makes them do to say yes. That is layout, type and structure before it is anything decorative.</p>" +
+            "<p>The recording above is the old front page of this site: a door you could hover, open and walk through, built in the browser with no library behind it. It is here because it answers the only question that matters on this card, which is whether we can actually build the thing rather than describe it.</p>" +
+            "<p>Most work is quieter than that. One idea per screen, one obvious thing to do, and a page that still reads at arm&rsquo;s length on a phone in bad light.</p>",
       prices: [
         ["Basic", "&pound;800", "One page done properly: mobile-first, enquiry form, analytics."],
         ["Standard", "&pound;1,500", "5 to 7 pages, copy shaped with you, analytics, search basics, form routing."],
@@ -289,12 +315,13 @@
     },
     "seo": {
       title: "SEO",
-      shot: "/assets/ember8-preview-nl.jpg",
-      cap: "ember8.nl · Dutch at the root, English mirrored beneath it.",
-      open: "https://ember8.nl",
-      openLabel: "Open ember8.nl",
-      body: "<p>Ember8 needed to be found in Dutch <em>and</em> English, by people searching for a feeling rather than a service name.</p>" +
-            "<p>That is a structure problem before it is a keyword problem: a full Dutch site at the root and a full English mirror beneath it, each written rather than machine-translated, each page titled for what somebody would actually type at eleven at night.</p>",
+      shot: "/assets/example-seo.jpg",
+      cap: "Where a month of visits came from, and the five searches that found the site.",
+      open: "/demo/northwell/report/",
+      openLabel: "See it in a full report",
+      body: "<p>Being found is a structure problem before it is a keyword problem. What the pages are, what each one is called, and whether the thing somebody types at eleven at night matches anything you have written down.</p>" +
+            "<p>So we title pages for the question rather than the service. &ldquo;No hot water&rdquo; is what gets typed; &ldquo;heating solutions&rdquo; is what gets written. The second one is why most small-business sites are invisible.</p>" +
+            "<p>Where a site needs more than one language, each version is written rather than machine-translated, and sits at its own address so it can be found on its own terms.</p>",
       lead: "<b>Included free in every build:</b> titles, meta descriptions, schema, sitemap, clean URLs, fast load, and the Google Business Profile link. Most agencies sell that as an extra. It is just building a site properly.",
       prices: [
         ["SEO health check", "&pound;250", "A written report on a site you already have: what is wrong, and what it is costing."],
@@ -309,8 +336,9 @@
       cap: "A whole site in one file: no database, no CMS, nothing that can update itself and break.",
       open: "/demo/northwell/",
       openLabel: "Open the demo site",
-      body: "<p>A therapist should not be updating plugins between clients.</p>" +
-            "<p>Ember8 is plain HTML, one stylesheet, one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for. It will still load quickly in five years.</p>",
+      body: "<p>Nobody running a business should be updating plugins between jobs.</p>" +
+            "<p>Everything we build is plain HTML, one stylesheet and one small script, served static. There is no CMS to be trained on, no database to go down, and nothing that can be broken by an update nobody asked for.</p>" +
+            "<p>That is also why these sites are quick, and why they will still be quick in five years: there is almost nothing there to be slow. The example behind this card is a whole site in a single file.</p>",
       lead: "<b>The first year is included with every build.</b>",
       prices: [
         ["Lights On", "&pound;20/month", "Hosting, domain, SSL, uptime monitoring, off-site backups, annual link-and-form check."],
@@ -318,7 +346,8 @@
         ["Partner", "&pound;100/month", "Above, plus an hour and a half of changes a month, a quarterly review call, and first call on new pages."],
         ["Migration of an existing site onto our hosting", "&pound;150", ""],
         ["Hosting for a site we didn&rsquo;t build", "&pound;30/month", ""]
-      ]
+      ],
+      foot: "For what it is worth: every page on this site scores 100 for performance in Google Lighthouse, which is the tool Google uses to measure it. You can run it on this page yourself in about half a minute. We mention it here rather than on a banner because it is a consequence of building this way, not a feature we sell."
     },
     "reports": {
       title: "Traffic reports",
@@ -326,8 +355,9 @@
       cap: "A worked example, start to finish, with invented figures for a business that does not exist.",
       open: "/demo/northwell/report/",
       openLabel: "Read the whole report",
-      body: "<p>Analytics went on Ember8 the day it launched, which is the part most freelance builds skip. You cannot report on what you did not measure, and the moment to start is before launch, not when somebody asks how it is going.</p>" +
-            "<p>What you get back is a page, not a PDF: who came, what they did, and the one thing we would change next.</p>",
+      body: "<p>Analytics go on before launch, not when somebody eventually asks how it is going. You cannot report on what you did not measure, and the first month is the one worth having.</p>" +
+            "<p>What comes back is a page, not a forty-page PDF: who came, what they did, and the one thing we would change next. Written so it can be read standing up.</p>" +
+            "<p>The example behind this card is a full month, start to finish. The business is invented, so the figures are too; the shape and the wording are exactly what a real one carries.</p>",
       lead: "<b>Included in the Care and Partner plans</b> as a monthly summary.",
       prices: [
         ["One-off traffic review", "&pound;120", "What the site is actually doing, and where it leaks."],
@@ -508,9 +538,158 @@
   }
 
 
+  /* ================================================================ *
+   * The masthead mark, against whatever is behind it
+   *
+   * The bar has no ground of its own, so the mark would disappear the
+   * moment a White or Brass band scrolled under it. Each of the four
+   * grounds gets a different one of the four brand colourways, swapped
+   * by src: the fills are baked into the supplied files and the
+   * guidelines are explicit that a colourway is changed by swapping
+   * the file, not by recolouring it.
+   * ================================================================ */
+
+  const MARK = {
+    ground: "/assets/logo/icon-white.svg",   // Dark Maroon page
+    black:  "/assets/logo/icon-brass.svg",
+    white:  "/assets/logo/icon-maroon.svg",
+    brass:  "/assets/logo/icon-black.svg"
+  };
+
+  function initMastTone() {
+    const mast = document.querySelector(".mast");
+    const wrap = mast && mast.querySelector(".mast-mark");
+    const up = wrap && wrap.querySelector(".mark-up");
+    const dn = wrap && wrap.querySelector(".mark-dn");
+    if (!mast || !up || !dn) return;
+
+    const warm = () => Object.keys(MARK).forEach(k => { new Image().src = MARK[k]; });
+    if (document.readyState === "complete") setTimeout(warm, 1200);
+    else window.addEventListener("load", () => setTimeout(warm, 1200), { once: true });
+
+    const TONED = ".closer, .tone-white, .tone-black, .tone-brass," +
+                  " .h-white, .h-black, .h-brass";
+
+    // What is behind one point, and which element decides it.
+    const probe = y => {
+      const r = wrap.getBoundingClientRect();
+      const stack = document.elementsFromPoint(Math.round(r.left + r.width / 2), Math.round(y));
+      const under = stack.find(el => !mast.contains(el));
+      const hit = under && under.closest(TONED);
+      if (!hit) return { tone: "ground", el: null };
+      const c = hit.classList;
+      const tone = (c.contains("closer") || c.contains("tone-brass") || c.contains("h-brass")) ? "brass"
+                 : (c.contains("tone-white") || c.contains("h-white")) ? "white"
+                 : "black";
+      return { tone: tone, el: hit };
+    };
+
+    const setSrc = (img, tone) => { if (img.dataset.tone !== tone) { img.dataset.tone = tone; img.src = MARK[tone]; } };
+
+    let queued = false;
+    const apply = () => {
+      queued = false;
+      const r = wrap.getBoundingClientRect();
+      if (!r.height) return;
+
+      const top = probe(r.top + 1);
+      const bot = probe(r.bottom - 1);
+
+      // the nav and the button follow whatever the bar is mostly over
+      const mid = probe(r.top + r.height / 2).tone;
+      if (mast.dataset.tone !== mid) mast.dataset.tone = mid;
+
+      if (top.tone === bot.tone) {
+        setSrc(up, top.tone);
+        dn.style.clipPath = "inset(100% 0 0 0)";
+        return;
+      }
+
+      // A band edge is crossing the mark. Find where, in page coordinates:
+      // either the lower band starts inside it, or the upper band ends there.
+      let edge = null;
+      if (bot.el) {
+        const t = bot.el.getBoundingClientRect().top;
+        if (t > r.top && t < r.bottom) edge = t;
+      }
+      if (edge === null && top.el) {
+        const bm = top.el.getBoundingClientRect().bottom;
+        if (bm > r.top && bm < r.bottom) edge = bm;
+      }
+      if (edge === null) edge = r.top + r.height / 2;
+
+      setSrc(up, top.tone);
+      setSrc(dn, bot.tone);
+      const cut = Math.max(0, Math.min(r.height, edge - r.top));
+      dn.style.clipPath = "inset(" + cut.toFixed(2) + "px 0 0 0)";
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    apply();
+  }
+
+  /* ================================================================ *
+   * Smeaton's Tower
+   *
+   * One custom property, set from the band's position in the viewport,
+   * which the CSS turns into a clip, a scale and the lamp coming on.
+   * Gated on an IntersectionObserver so nothing is computed while the
+   * band is nowhere near the screen.
+   * ================================================================ */
+
+  function initHoe() {
+    const art = document.getElementById("hoe");
+    if (!art) return;
+    if (reduce) { art.style.setProperty("--grow", "1"); return; }
+
+    let near = false, queued = false, last = -1;
+
+    const apply = () => {
+      queued = false;
+      const r = art.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      // 0 when the top of it is at the bottom of the screen, 1 by the
+      // time its middle has risen to just above the centre.
+      const travel = vh * 0.78;
+      const g = Math.max(0, Math.min(1, (vh - r.top) / travel));
+      const v = Math.round(g * 100) / 100;
+      if (v === last) return;
+      last = v;
+      art.style.setProperty("--grow", String(v));
+    };
+
+    const onScroll = () => {
+      if (queued || !near) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    };
+
+    if (typeof IntersectionObserver === "function") {
+      new IntersectionObserver(es => {
+        near = es[0].isIntersecting;
+        if (near) onScroll();
+      }, { rootMargin: "120px 0px 120px 0px" }).observe(art);
+    } else {
+      near = true;
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    apply();
+  }
+
   /* ---- wiring ----------------------------------------------------- */
 
   function boot() {
+    initMastTone();
+    initHoe();
     startReel();
     initEnquiry();
     initRoster();

@@ -22,8 +22,8 @@
   <link rel="icon" href="/assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
-  <link rel="preload" href="/assets/fonts/darkergrotesque-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/anton-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/darkergrotesque-var-sub.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/anton-regular-sub.woff2" as="font" type="font/woff2" crossorigin>
 
   <link rel="stylesheet" href="/css/styles.css">
   <script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
@@ -32,7 +32,10 @@
 <a class="skip" href="#main">Skip to content</a>
   <header class="mast">
     <a class="mast-home" href="/" aria-label="Brassneck Studio, home">
-      <img class="lockup" src="/assets/logo/icon-white.svg" alt="Brassneck Studio" width="333" height="461">
+      <span class="mast-mark">
+        <img class="lockup mark-up" src="/assets/logo/icon-white.svg" alt="Brassneck Studio" width="333" height="461">
+        <img class="lockup mark-dn" src="/assets/logo/icon-white.svg" alt="" aria-hidden="true" width="333" height="461">
+      </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
       <a href="/websites/" class="nav-tight" aria-current="page">Websites</a>
@@ -175,72 +178,36 @@
       </section>
 
       <section class="band tone-brass">
-        <h2 class="band-title">How it goes</h2>
-        <p class="prose">Six steps, and you are told which one you are on every time. There is no stage where the site disappears for a fortnight and comes back finished. What we need from you is in the second column, because the thing that actually delays a build is almost never the building.</p>
+        <h2 class="band-title">See one working</h2>
+        <p class="prose">Rather than describe it: here is a whole build, open to anybody. A site, a working web app, and a month of traffic reported the way we report it. <b>Northwell Plumbing &amp; Heating is not a real business</b>, every page says so across the top, and the figures in the report are invented. Everything else is exactly what you would get.</p>
 
-        <ol class="steps">
-          <li class="step">
-            <span class="step-n">01</span>
-            <div class="step-b">
-              <h3>Free consultation</h3>
-              <p>Half an hour, on the phone or in person, about what the site is for and who has to act on it. It sometimes ends with us saying you do not need one, or that the thing you actually need is a booking app somebody else already sells for a tenner a month.</p>
-              <p class="step-you"><b>From you:</b> nothing. Not even a brief.</p>
-            </div>
-            <span class="step-t">Half an hour</span>
-          </li>
-          <li class="step">
-            <span class="step-n">02</span>
-            <div class="step-b">
-              <h3>Planning and design</h3>
-              <p>Structure first: what pages exist, what each one is for, and what you want somebody to do at the end of it. Then the look. Both are agreed before a line of code is written, because moving a page is cheap at this stage and expensive later.</p>
-              <p class="step-you"><b>From you:</b> your logo and any photography you own, and an hour to look at the plan properly.</p>
-            </div>
-            <span class="step-t">Week one</span>
-          </li>
-          <li class="step">
-            <span class="step-n">03</span>
-            <div class="step-b">
-              <h3>Development</h3>
-              <p>Built by hand on a private link you can open any time and watch fill up. No staging password to remember, no screenshots emailed over, and no surprise at the end.</p>
-              <p class="step-you"><b>From you:</b> your words, or an hour of talking while we write them for you.</p>
-            </div>
-            <span class="step-t">Weeks one to four</span>
-          </li>
-          <li class="step">
-            <span class="step-n">04</span>
-            <div class="step-b">
-              <h3>Revisions and feedback</h3>
-              <p>Two full rounds. You go through it on your own phone, in your own hands, and try to break it before anybody else gets the chance. Small changes after launch are not charged for.</p>
-              <p class="step-you"><b>From you:</b> one list rather than six emails, if you can manage it.</p>
-            </div>
-            <span class="step-t">Allow a week</span>
-          </li>
-          <li class="step">
-            <span class="step-n">05</span>
-            <div class="step-b">
-              <h3>Launch</h3>
-              <p>Domain, SSL, analytics and the Google Business Profile link, all on from the first hour rather than switched on later when somebody asks how it is doing. We point the domain; you do not need to touch anything.</p>
-              <p class="step-you"><b>From you:</b> your domain login, or permission for us to buy the domain for you.</p>
-            </div>
-            <span class="step-t">One afternoon</span>
-          </li>
-          <li class="step">
-            <span class="step-n">06</span>
-            <div class="step-b">
-              <h3>Maintenance, security and reports</h3>
-              <p>Hosting, domain renewal, SSL, backups and uptime monitoring, plus a plain monthly page on who came, what they did, and the one thing we would change next. The first twelve months of hosting are included in the build.</p>
-              <p class="step-you"><b>From you:</b> a reply when the report asks you a question.</p>
-            </div>
-            <span class="step-t">Ongoing, from &pound;20/mo</span>
-          </li>
-        </ol>
+        <div class="tryouts">
+          <a class="tryout" href="/demo/northwell/">
+            <span class="tryout-k">The site</span>
+            <span class="tryout-h">One page, done properly</span>
+            <span class="tryout-p">The &pound;800 build, made real. No framework, no CMS, no script at all, and the whole thing is a single file of about twelve kilobytes.</span>
+            <span class="tryout-go">Open the site <span aria-hidden="true">&rarr;</span></span>
+          </a>
+          <a class="tryout" href="/demo/northwell/quote/">
+            <span class="tryout-k">The web app</span>
+            <span class="tryout-h">A working quote calculator</span>
+            <span class="tryout-p">Three questions and a real number, with the arithmetic shown underneath. No account, no server, and installable to a phone home screen.</span>
+            <span class="tryout-go">Use the app <span aria-hidden="true">&rarr;</span></span>
+          </a>
+          <a class="tryout" href="/demo/northwell/report/">
+            <span class="tryout-k">The report</span>
+            <span class="tryout-h">A month, on one page</span>
+            <span class="tryout-p">Who came, what they did, and the one thing we would change next. What arrives every month on the Care and Partner plans.</span>
+            <span class="tryout-go">Read the report <span aria-hidden="true">&rarr;</span></span>
+          </a>
+        </div>
       </section>
 
       <section class="band tone-black">
         <h2 class="band-title">A recent one, in full</h2>
         <a class="study" href="/work/ember8/">
           <span class="study-shot">
-            <img src="/assets/ember8-preview.jpg" alt="The Ember8 home page: a bare concrete room with BREAK THE LOOP stencilled on the wall, and the headline &ldquo;What are you still carrying&hellip;&rdquo;" loading="lazy" width="1400" height="791" onerror="this.remove()">
+            <img src="/assets/ember8-preview-1400.webp" srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w" sizes="(min-width: 1180px) 1080px, 92vw" alt="The Ember8 home page: a bare concrete room with BREAK THE LOOP stencilled on the wall, and the headline &ldquo;What are you still carrying&hellip;&rdquo;" loading="lazy" width="1400" height="791" onerror="this.remove()">
             <span class="study-shot-ph">ember8.nl</span>
           </span>
           <span class="study-body">
