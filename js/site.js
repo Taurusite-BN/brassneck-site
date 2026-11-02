@@ -305,11 +305,11 @@
             "<p>The recording above is the old front page of this site: a door you could hover, open and walk through, built in the browser with no library behind it. It is here because it answers the only question that matters on this card, which is whether we can actually build the thing rather than describe it.</p>" +
             "<p>Most work is quieter than that. One idea per screen, one obvious thing to do, and a page that still reads at arm&rsquo;s length on a phone in bad light.</p>",
       prices: [
-        ["Basic", "&pound;800", "One page done properly: mobile-first, enquiry form, analytics."],
-        ["Standard", "&pound;1,500", "5 to 7 pages, copy shaped with you, analytics, search basics, form routing."],
-        ["Larger projects", "Quoted", "Multiple languages, booking flows, bespoke interaction."],
+        ["Basic", "&pound;950", "One page done properly: mobile-first, enquiry form, analytics."],
+        ["Standard", "&pound;1,650", "5 to 7 pages, copy shaped with you, analytics, search basics, form routing."],
+        ["Larger projects", "Ask", "Multiple languages, booking flows, bespoke interaction."],
         ["Extra page on an existing Brassneck site", "&pound;150", ""],
-        ["Redesign of a site we didn&rsquo;t build", "From &pound;1,500", ""]
+        ["Redesign of a site we didn&rsquo;t build", "From &pound;1,650", ""]
       ],
       foot: "Every build includes the first year&rsquo;s hosting."
     },

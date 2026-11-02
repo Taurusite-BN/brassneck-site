@@ -692,6 +692,16 @@
 
   .price-foot { margin-top: 1.6rem; color: var(--muted); font-size: var(--step-0); }
 
+  /* Sits under the three build tiers. It has to be noticed without
+     competing with them, so: a brass rule rather than a brass fill. */
+  .price-aside {
+    margin: 1.5rem 0 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--brass);
+    color: var(--dim);
+  }
+  .price-aside b { color: var(--brass-lit); font-weight: 600; }
+
   @media (max-width: 900px) {
     .tiers, .plans { grid-template-columns: 1fr; }
     .tier.is-pick { padding-top: 2.5rem; }
@@ -2451,7 +2461,7 @@
 .home .h-tier.h-pick { background: var(--ink); color: var(--paper); font-weight: 500; }
 .home .h-tier .h-nm { font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; opacity: .86; }
 .home .h-tier.h-pick .h-nm { color: var(--brass); opacity: 1; }
-.home .h-tier .h-pr { font-family: var(--display); font-weight: 400; font-synthesis-weight: none; font-size: 2.8rem; line-height: 1; }
+.home .h-tier .h-pr { font-family: var(--display); font-weight: 400; font-synthesis-weight: none; font-size: 2.8rem; line-height: 1; text-transform: uppercase; }
 .home .h-tier p { font-size: 1rem; opacity: .85; }
 .home .h-price-note { margin-top: 1.6rem; font-size: 1.02rem; }
 
