@@ -42,10 +42,18 @@
       </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
-      <a href="/websites/" class="nav-tight">Websites</a>
-      <a href="/games/" class="nav-tight" aria-current="page">Games</a>
-      <a href="/studio/" class="nav-tight">Studio</a>
-      <a href="/contact/" class="mast-cta">Get a price</a>
+      <div class="nav-drop" data-open="false">
+        <button class="nav-top" type="button" aria-expanded="false" aria-controls="nav-sites">Websites
+          <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+        </button>
+        <div class="nav-menu" id="nav-sites">
+          <a href="/websites/">Websites</a>
+          <a href="/apps/">Apps</a>
+        </div>
+      </div>
+      <a href="/games/" aria-current="page">Games</a>
+      <a href="/studio/">Studio</a>
+      <a class="mast-cta" href="/contact/">Get in contact</a>
     </nav>
   </header>
 
@@ -119,7 +127,7 @@
         <h2 class="band-title">The Articles</h2>
         <dl class="meta">
           <div><dt>Form</dt><dd>Point-and-click murder mystery</dd></div>
-          <div><dt>Status</dt><dd>Chapter one in playtest &middot; build 0.4</dd></div>
+          <div><dt>Status</dt><dd>Two chapters of six playable &middot; build 0.4</dd></div>
           <div><dt>Built with</dt><dd>Ren'Py 8.5.3</dd></div>
           <div><dt>Platforms</dt><dd>Steam, iOS and Android</dd></div>
           <div><dt>Follow</dt><dd>itch.io and Bluesky, handles to claim</dd></div>
@@ -131,6 +139,16 @@
         <p class="prose">Written spoiler-free.</p>
 
         <ul class="logs">
+          <li>
+            <a class="log" href="/devlog/2026-11-02-entry-three/">
+              <span class="log-date"><time datetime="2026-11-02">2 Nov 2026</time></span>
+              <span class="log-main">
+                <span class="log-title">Entry three: the rule I broke four weeks after writing it</span>
+                <span class="log-sum">The release date moves to April 2027 and the arithmetic behind it is shown in full. Then a prose tic that came back after being fixed and written up, so the rule became a build check that can only ever shrink; a scroll-back that rewinds everything except a decision; and twenty-one notes out of forty that were already fixed before they were sent.</span>
+              </span>
+              <span class="log-meta">build 0.4 &middot; two chapters</span>
+            </a>
+          </li>
           <li>
             <a class="log" href="/devlog/2026-09-04-entry-two/">
               <span class="log-date"><time datetime="2026-09-04">4 Sep 2026</time></span>
@@ -237,6 +255,7 @@
         <button class="locked-back" type="button" data-slot="articles">← Back to The Articles</button>
       </div>
     
+
 </main>
 
   <footer class="foot">
@@ -244,18 +263,12 @@
       <a href="/" aria-label="Brassneck Studio, home">
         <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
       </a>
-      <div class="foot-cols">
-        <a href="/websites/">Websites</a>
-        <a href="/games/">Games</a>
-        <a href="/studio/">Studio</a>
-        <a href="/contact/">Contact</a>
-        <a href="/legal/privacy/">Privacy</a>
-        <a href="/legal/privacy/#cookies">Cookies</a>
-        <a href="/legal/terms/">Terms</a>
+      <div class="foot-links">
+        <a href="/websites/">Websites</a><a href="/apps/">Apps</a><a href="/games/">Games</a><a href="/studio/">Studio</a><a href="/contact/">Contact</a><a href="/legal/privacy/">Privacy</a><a href="/legal/privacy/#cookies">Cookies</a><a href="/legal/terms/">Terms</a>
       </div>
     </div>
-    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
-    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+    <p class="foot-fine"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-fine">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
   </footer>
 
   <script src="/js/site.js" defer></script>

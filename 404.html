@@ -39,10 +39,18 @@
       </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
-      <a href="/websites/" class="nav-tight">Websites</a>
-      <a href="/games/" class="nav-tight">Games</a>
-      <a href="/studio/" class="nav-tight">Studio</a>
-      <a href="/contact/" class="mast-cta">Get a price</a>
+      <div class="nav-drop" data-open="false">
+        <button class="nav-top" type="button" aria-expanded="false" aria-controls="nav-sites">Websites
+          <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+        </button>
+        <div class="nav-menu" id="nav-sites">
+          <a href="/websites/">Websites</a>
+          <a href="/apps/">Apps</a>
+        </div>
+      </div>
+      <a href="/games/">Games</a>
+      <a href="/studio/">Studio</a>
+      <a class="mast-cta" href="/contact/">Get in contact</a>
     </nav>
   </header>
 
@@ -76,18 +84,12 @@
       <a href="/" aria-label="Brassneck Studio, home">
         <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
       </a>
-      <div class="foot-cols">
-        <a href="/websites/">Websites</a>
-        <a href="/games/">Games</a>
-        <a href="/studio/">Studio</a>
-        <a href="/contact/">Contact</a>
-        <a href="/legal/privacy/">Privacy</a>
-        <a href="/legal/privacy/#cookies">Cookies</a>
-        <a href="/legal/terms/">Terms</a>
+      <div class="foot-links">
+        <a href="/websites/">Websites</a><a href="/apps/">Apps</a><a href="/games/">Games</a><a href="/studio/">Studio</a><a href="/contact/">Contact</a><a href="/legal/privacy/">Privacy</a><a href="/legal/privacy/#cookies">Cookies</a><a href="/legal/terms/">Terms</a>
       </div>
     </div>
-    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
-    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+    <p class="foot-fine"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-fine">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
   </footer>
 
   <script src="/js/site.js" defer></script>

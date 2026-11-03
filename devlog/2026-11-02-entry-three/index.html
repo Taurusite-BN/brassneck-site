@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Articles Devlog</title>
+  <link rel="canonical" href="https://brassneck.studio/devlog/2026-11-02-entry-three/">
+<meta name="description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<meta name="theme-color" content="#12171b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Articles Devlog — entry three">
+<meta property="og:description" content="Development log for The Articles, a point-and-click murder mystery aboard an 18th-century brig. Written spoiler-free.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="preload" href="/assets/fonts/ptserif-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/imfell-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/plexmono-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  /* Served from this domain rather than Google Fonts, so reading a devlog
+     entry does not announce you to a third party. Same three families. */
+  @font-face { font-family: "IM Fell English"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("/assets/fonts/imfell-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IM Fell English"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("/assets/fonts/imfell-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("/assets/fonts/ptserif-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("/assets/fonts/ptserif-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "PT Serif"; font-style: normal; font-weight: 700; font-display: swap;
+    src: url("/assets/fonts/ptserif-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("/assets/fonts/plexmono-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap;
+    src: url("/assets/fonts/plexmono-500-normal.woff2") format("woff2"); }
+</style>
+<style>
+  /* ------------------------------------------------------------------
+     The palette is the game's own, verbatim from claude/style-bible.md:
+     bone #D9D2C3 · sea slate #4A5A63 · bilge dark #1B2328 ·
+     wet oak #6E5236 · lamp brass #C9A227. Brass is the only saturated
+     colour and it appears only where light physically is.
+
+     This page commits to one visual world rather than shipping a light
+     theme, because the game does. Every colour is painted explicitly.
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:   #12171b;
+    --panel:    #1b2328;
+    --panel-2:  #202a30;
+    --rule:     #2b363d;
+    --bone:     #d9d2c3;
+    --body:     #c6c0b2;
+    --muted:    #8a97a0;
+    /* Lifted from #5d6b76 (3.3:1) on 3 Nov 2026. Same hue and saturation,
+       light enough that 10px text clears 4.5:1 on the ground and on the
+       readout panel. Everything else in the palette is the game's own. */
+    --faint:    #7c8b98;
+    --brass:    #c9a227;
+    --brass-lt: #e6c860;
+    --oak:      #6e5236;
+    --measure:  66ch;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--body);
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ---------------- masthead ---------------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 34px 0 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ship {
+    font-family: "IM Fell English", Georgia, serif;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1;
+    color: var(--bone);
+    text-wrap: balance;
+  }
+  .ship em {
+    font-style: italic;
+    color: var(--brass);
+  }
+  .standfirst {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 62ch;
+    line-height: 1.7;
+  }
+
+  /* ---------------- entry ---------------- */
+
+  .entry {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    gap: 0 40px;
+    padding-top: 52px;
+  }
+
+  .rail { position: relative; }
+  .rail-inner {
+    position: sticky;
+    top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+  }
+  .rail .date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+  }
+  .rail .meta {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.8;
+  }
+  .diamond {
+    width: 9px; height: 9px;
+    background: var(--brass);
+    transform: rotate(45deg);
+    margin: 10px 0 4px 1px;
+  }
+
+  /* min-width:0 because this is a grid item, and a grid item defaults to
+     min-width:auto — which means it refuses to shrink below the widest
+     unbreakable thing inside it. The terminal readout is white-space:pre,
+     so without this the whole column is held open at the width of its
+     longest line and the page scrolls sideways on a phone. Its own
+     overflow-x:auto then does the scrolling, which is what it is for. */
+  .body { max-width: var(--measure); min-width: 0; }
+
+  .lede {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--bone);
+    margin: 0 0 8px;
+    text-wrap: pretty;
+  }
+
+  h2 {
+    font-family: "IM Fell English", Georgia, serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--bone);
+    margin: 52px 0 0;
+    text-wrap: balance;
+  }
+  h2 + .kicker { margin-top: 6px; }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 14px;
+  }
+
+  h3 {
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--bone);
+    margin: 30px 0 0;
+  }
+
+  p { margin: 14px 0 0; }
+  p:first-child { margin-top: 0; }
+
+  strong { color: var(--bone); font-weight: 700; }
+  em.q {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.86em;
+    color: var(--brass-lt);
+    background: #ffffff08;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  ul { margin: 14px 0 0; padding-left: 0; list-style: none; }
+  li {
+    position: relative;
+    padding-left: 22px;
+    margin-top: 9px;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 0.66em;
+    width: 5px; height: 5px;
+    background: var(--oak);
+    transform: rotate(45deg);
+  }
+
+  /* ---------------- before / after ---------------- */
+
+  .swap {
+    margin: 20px 0 0;
+    border-left: 2px solid var(--rule);
+    padding: 2px 0 2px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .swap .before,
+  .swap .after { font-size: 16px; line-height: 1.5; }
+  .swap .before { color: var(--faint); }
+  .swap .before s { text-decoration-color: var(--oak); }
+  .swap .after { color: var(--bone); }
+  .swap .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------------- terminal readout ---------------- */
+
+  .term {
+    margin: 22px 0 0;
+    background: #0d1215;
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: #9fb0ba;
+    white-space: pre;
+  }
+  .term b { color: var(--brass); font-weight: 500; }
+  .term i { color: #c4614f; font-style: normal; }
+
+  /* The longest checker line is wider than the 66ch reading measure, so on a
+     wide screen the block breaks out to the right into the grid gutter and is
+     read whole. Narrower than that it stays put and scrolls itself. Same move
+     as figure.wide in the earlier entries. */
+  @media (min-width: 1040px) {
+    .term { width: calc(100% + 190px); }
+  }
+
+  /* ---------------- readout panel ---------------- */
+
+  .readout {
+    margin: 26px 0 0;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: 20px 22px;
+    overflow-x: auto;
+  }
+  .readout .head {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 14px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 18px 24px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .n {
+    display: block;
+    font-size: 26px;
+    color: var(--brass);
+    line-height: 1.1;
+  }
+  .stat .l {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  /* ---------------- open items ---------------- */
+
+  .open {
+    margin: 22px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .open .row {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 4px 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .open .who {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-top: 2px;
+  }
+  .open .who.art  { color: var(--brass); }
+  .open .what { color: var(--body); }
+  .open .what b { color: var(--bone); }
+
+  /* ---------------- footer ---------------- */
+
+  footer {
+    margin-top: 72px;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.9;
+    max-width: 70ch;
+  }
+
+  /* ---------------- back to the studio ---------------- */
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    padding: 7px 12px 7px 10px;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .back:hover, .back:focus-visible {
+    color: var(--brass-lt);
+    border-color: var(--oak);
+    background: #ffffff06;
+  }
+  .back .lockup { height: 26px; width: auto; flex: none; display: block; }
+
+  footer .back { margin-top: 22px; }
+
+  @media (max-width: 800px) {
+    .entry { grid-template-columns: 1fr; gap: 0; }
+    .rail-inner {
+      position: static;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 22px;
+    }
+    .diamond { display: none; }
+    .rail .meta { line-height: 1.5; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry { animation: rise .5s ease-out both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+</style>
+<!-- Umami — privacy-friendly analytics -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
+
+</head>
+<body>
+<div class="page">
+
+  <a class="back" href="/games/">
+    <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463">
+  </a>
+
+  <header class="masthead">
+    <div class="ship">The Articles <em>— devlog</em></div>
+    <div class="standfirst">
+      A point-and-click murder mystery aboard the brig Merciful · Ren'Py 8.5.3 · macOS
+    </div>
+  </header>
+
+  <main id="main">
+  <article class="entry">
+  
+      <div class="rail">
+        <div class="rail-inner">
+          <div class="date">2 Nov 2026</div>
+          <div class="diamond"></div>
+          <div class="meta">
+            build 0.4<br>
+            entry three<br>
+            two chapters playable
+          </div>
+        </div>
+      </div>
+  
+      <div class="body">
+  
+        <p class="lede">This site has said November since the summer. It is November, the game is two chapters into six, and it is not coming out this month. The new date and the arithmetic behind it are immediately below, because I said any change would be announced here rather than quietly edited. After that: chapter two went to a tester who took it apart with great precision and no mercy, and the most useful thing in his notes was a fault I had already found, already fixed once, written a rule about, and then committed again four weeks later in the chapter I wrote after writing the rule.</p>
+  
+        <h2>November was the date. It is November.</h2>
+        <p class="kicker">The delay, said plainly</p>
+  
+        <p>The game is not coming out this month and it was never going to be close. <strong>The new date is April 2027.</strong></p>
+  
+        <p>I am not going to dress that up, so here is the actual arithmetic instead. There are six chapters. <strong>Two of them exist.</strong> The observed pace is roughly one chapter a month — and that is for the two shortest chapters in the game, with chapter four still ahead and already identified as carrying more writing than any other scene in the project. There is also an audio pass that has not been started, because a game about confinement and tension currently makes no sound whatsoever.</p>
+  
+        <p>Four chapters, one audio pass, five months. That is the sum. It is tight and it is honest, and it assumes the remaining chapters get built the way chapter two was — spine first at full quality, the optional content lean, filled out after it has been tested rather than before.</p>
+  
+        <h3>Why the date was wrong, which is not the same as the game being late</h3>
+        <p>I did not miss November because of one bad month. <strong>I set the date before chapter one had been through a single playtest.</strong></p>
+  
+        <p>Three rounds of testing have happened since. They found a prose fault running through the whole script, an entire chapter's worth of contradictions, a time economy that punishes curiosity, and a hidden system whose feedback reads as the game contradicting itself. None of that was in the estimate, because you cannot budget for what testing is going to tell you — that is the entire point of testing. Every one of those findings has made the game better and every one of them cost weeks.</p>
+  
+        <p>So the date was a guess made at the least informed moment in the project, and it was wrong in the direction guesses usually are.</p>
+  
+        <h3>What would move it again</h3>
+        <p>Worth naming now rather than in March. <strong>Audio is the one genuine unknown.</strong> Everything else left on the list is work of a kind I have already done once and can estimate. Audio has never been started, has no plan behind it, and has to be in before strangers play the game — a silent build tests a different game than the one being made. If April slips, that is where I would put money.</p>
+  
+        <p>And the one thing I can say without hedging: <strong>nobody has paid for anything.</strong> There are no pre-orders, no early access, no store page. The only thing a late game costs you at this point is the waiting, and I would rather be straight about the length of it than quietly move a number on a web page and hope nobody had it written down.</p>
+  
+        <h2>The rule I broke four weeks after writing it</h2>
+        <p class="kicker">Playtest three &middot; the one that stung</p>
+  
+        <p>Back in August a tester told me the prose was over-explaining — a sentence lands an image, and then a second clause trots along behind it explaining what the image was for. Sixty-nine lines got rewritten. I wrote the diagnosis down as a rule: <strong>a trailing clause survives only if it hands the player a fact they cannot get anywhere else.</strong> Filed, dated, done.</p>
+  
+        <p>Then I wrote chapter two, and this round's notes came back with, among other things:</p>
+  
+        <div class="swap">
+          <div class="before"><span class="tag">the note</span>We've returned to "the way something something".</div>
+        </div>
+  
+        <p>Reader, we had. The specific tic is the <strong>hollow simile</strong> — the comparison that compares a thing to itself and tells you nothing. <em class="q">"The deck wakes you the way it always does."</em> <em class="q">"Canvas over wood, the way they all are."</em> It <em>sounds</em> like observation. It is grammatically a simile and semantically a shrug.</p>
+  
+        <p>Here is the part worth writing down, because it is not really about prose:</p>
+  
+        <p><strong>A rule nobody can run gets forgotten.</strong> I had turned a real finding into a document, and a document is a thing you agree with and then stop reading. The fix was not more discipline. It was to make the rule fail the build.</p>
+  
+        <h3>So the linter reads my writing now</h3>
+        <p>Three new checks, and the third is the one I would steal if I were you:</p>
+        <ul>
+          <li><strong>Hollow similes fail.</strong> Not "the way" — that is a perfectly good construction and the voice needs it. Specifically the self-referential form. Nine earned similes sit on an allow-list with a one-line note each explaining why that one is doing a job.</li>
+          <li><strong>Density is budgeted.</strong> More than three of them in a single file and the check fails regardless of whether each one is defensible. Individually fine, collectively a tic.</li>
+          <li><strong>The known offenders are baselined, and the baseline only shrinks.</strong> The five I already knew about are listed so the build stays green while the rewrites are reviewed — and the list is allowed to get shorter and never longer. That is the whole trick. A ratchet costs nothing and it means the fault can only ever be going away.</li>
+        </ul>
+  
+        <div class="term"><b>$ python3 check.py</b>
+  checked 22 files · 74 labels · 18 screens · 102 images
+  
+  <i>PROSE WATCH</i>  chapter2.rpy   line 51   hollow simile: "the way it always does"
+  <i>PROSE WATCH</i>  chapter2.rpy   line 84   trailing explainer clause
+  </div>
+  
+        <p>There is also a softer advisory pass for trailing explainers and sentences with four commas in them. That one does not fail the build, because this game's voice is long and rhythmic on purpose and I am not going to let a script bully it into staccato. Advisory is the right strength for a matter of taste. Failing is the right strength for a tic.</p>
+  
+        <h2>Re-read, but never retaken</h2>
+        <p class="kicker">Two correct and opposite requests</p>
+  
+        <p>In August I turned the scroll-back off. Not to be difficult: scroll-back in this engine lets you rewind the game state, and that meant you could undo the central decision in the game — committing a length of thread you cannot get back — and simply have the thread again. The only economy the game has, dismantled by a mouse wheel.</p>
+  
+        <p>This round the tester wanted it back, because he was cross-examining the script and could not re-read the line he had just clicked past. Also correct. A tester who cannot look at the previous sentence is being asked to review from memory.</p>
+  
+        <p>Both requests are right and they sound mutually exclusive. They are not:</p>
+  
+        <p><strong>Scroll-back is on, and a single call blocks it at the exact moment a decision is written down.</strong> You can rewind freely through everything that was said. You cannot rewind <em>past a choice</em>. The rewind hits the moment you decided and stops dead there, which is also — and I did not plan this — a rather good metaphor for the entire game.</p>
+  
+        <p>It is one line in the function that records decisions. Everything else came for free, because every choice in the game already goes through that one place.</p>
+  
+        <h2>Twenty-one of forty</h2>
+        <p class="kicker">The humbling one</p>
+  
+        <p>Before touching anything, I checked every line the notes quoted against the actual source. <strong>Twenty-one of the forty were already fixed.</strong> Some of them months ago.</p>
+  
+        <p>Which means either his build predates September, or he is keeping a cumulative list and re-sending it. Either way an evening of somebody's attention went on a version of the game that does not exist, and I did not find that out until I went looking.</p>
+  
+        <p>The lesson is entirely mine and it is embarrassingly basic. <strong>Send dated builds. Put the version number on the title screen.</strong> Ask which one they played before reading a word of the notes. A tester whose feedback appears to be ignored stops giving you feedback, and he would have been completely right to conclude that, because from where he was sitting that is exactly what it looked like.</p>
+  
+        <h2>One scene, two notes, one bug</h2>
+        <p class="kicker">And the other one was the game working</p>
+  
+        <p>Two of the reported contradictions came from the same few minutes of play, and they turned out to be opposites.</p>
+  
+        <p>The game has a hidden exposure value. Do your trade in the open and it goes down; be somewhere you have no reason to be and it goes up. The cook's dialogue reads off it: at low exposure he has nothing to say to you, and higher up he starts repeating your own movements back to you as gossip.</p>
+  
+        <p><strong>The note was that the cook contradicts the premise</strong> — the game says nobody watches you, and then a man tells you he knows where you have been. But that was the system working. He said it because the player had been seen, which is precisely what the mechanic is for.</p>
+  
+        <p>The real fault is one layer down: <strong>the value is invisible, so its feedback reads as the game contradicting itself rather than as consequence.</strong> That is not a dialogue problem and it cannot be fixed in dialogue. It wants the one-line atmosphere reading that has been specced since the summer and is still unbuilt — a single sentence on the ship's plan telling you how the ship is currently looking at you. Still unbuilt. Now clearly load-bearing.</p>
+  
+        <p>And the other note from the same scene: <strong>the bosun really was a bug.</strong> His <em class="q">"I am told you have been busy"</em> fired unconditionally, including at zero exposure, where it is simply false. One missing condition. Same scene, two complaints, one of them a mechanic and one of them me not gating a line.</p>
+  
+        <h2>Four keys or six</h2>
+        <p class="kicker">Nobody reported this, which is the interesting part</p>
+  
+        <p>While cross-checking the notes I found a divergence nobody had noticed, including me.</p>
+  
+        <p>There is a ring of keys that matters a great deal, and the number of them is a clue. <strong>The design documents say six, with a seventh missing. The code says four, with a fifth missing</strong> — consistently, in nine separate places, because at some point the art came back with four keys painted on it and I changed the writing to match the picture and never went back to the documents.</p>
+  
+        <p>No tester will ever catch it, because the <em>game</em> is internally consistent. Only the canon is wrong. Which is its own small lesson about documentation: the thing most likely to be out of date is the thing nobody has to run.</p>
+  
+        <h2>The trailer is not going to be a trailer</h2>
+        <p class="kicker">A decision made early so it cannot be made badly later</p>
+  
+        <p>Trailer work is months away, but I wanted the approach settled before anybody is tired and in a hurry, because that is when you make this particular mistake.</p>
+  
+        <p><strong>This is a static-image game.</strong> A trailer full of swooping cinematic motion would misrepresent it even if every frame were beautiful — and the people who wishlist on that basis are precisely the people who leave the refund reviews. Steam's own rules are the same point in colder language: the store page has to represent the product.</p>
+  
+        <p>So the plan is animated stills, type cards and sound. Slow push-ins on paintings that already exist, cuts that hold a face completely still for two full seconds, and no score at all until the last fifteen seconds. Which is, as it happens, simply how the good trailers in this genre are made.</p>
+  
+        <p>The most important shot in it is <strong>screen-recorded from the running game</strong>: the moment you have opened something, taken what was inside, and the two buttons appear — close it quickly, or close it properly — while the footsteps overhead keep counting. Six seconds, and it is the only proof in the whole piece that this is a game rather than a book. That goes three-quarters of the way through, where trailers put their hook.</p>
+  
+        <div class="readout">
+          <div class="head">State of the build</div>
+          <div class="stats">
+            <div class="stat"><span class="n">22</span><span class="l">script files</span></div>
+            <div class="stat"><span class="n">74</span><span class="l">labels</span></div>
+            <div class="stat"><span class="n">102</span><span class="l">images</span></div>
+            <div class="stat"><span class="n">2</span><span class="l">chapters playable</span></div>
+            <div class="stat"><span class="n">3</span><span class="l">playtest rounds</span></div>
+            <div class="stat"><span class="n">5</span><span class="l">similes on the ratchet</span></div>
+            <div class="stat"><span class="n">0</span><span class="l">checker issues</span></div>
+          </div>
+        </div>
+  
+        <h2>Open</h2>
+        <p class="kicker">Next up</p>
+  
+        <div class="open">
+          <div class="row">
+            <div class="who">writing</div>
+            <div class="what"><b>The prose pass</b> — fifteen changes waiting on a read-through. One of them is not from the notes at all: the narrator gives away the chapter's turn six lines before a character reveals it, which breaks the oldest rule in the project. The narrator does not get to know the future.</div>
+          </div>
+          <div class="row">
+            <div class="who">design</div>
+            <div class="what"><b>Make standing in a doorway free.</b> Right now entering a room spends an hour of a three-hour day whether or not you do anything there, which turns a careful look round into a punishment. Interacting should cost the hour; walking in should not. His best note of the round.</div>
+          </div>
+          <div class="row">
+            <div class="who">design</div>
+            <div class="what"><b>The exposure reading</b> — one sentence on the ship's plan saying how the ship is looking at you. See above. It has been specced since the summer and every round of feedback makes the case for it again.</div>
+          </div>
+          <div class="row">
+            <div class="who art">art</div>
+            <div class="what"><b>One item still renders as a yellow rectangle</b>, which is the placeholder doing its job rather loudly. One generation fixes it.</div>
+          </div>
+          <div class="row">
+            <div class="who">build</div>
+            <div class="what"><b>Chapters three to six</b>, and an audio pass before any of it goes in front of strangers. A game about tension and confinement currently makes no noise at all, and that is the largest unargued gap in the project.</div>
+          </div>
+        </div>
+  
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Entry three. Still written so it can be read without spoiling anything — where a change turned on a plot point I have described the problem and the principle and left the reveal where it belongs. No pictures this time; the work was underneath.
+    <br>
+    <a class="back" href="/games/">
+      <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Back to Brassneck Studio" width="994" height="463">
+    </a>
+  </footer>
+
+</div>
+</body>
+</html>

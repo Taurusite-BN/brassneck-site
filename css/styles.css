@@ -1,340 +1,1406 @@
-  /* ================================================================
-     Typefaces, served from this domain.
+/* ==================================================================
+   Brassneck Studio — the site stylesheet.
+   Shipped 3 Nov 2026, replacing the October build.
 
-     Anton and Darker Grotesque, per the brand guidelines, converted
-     from the supplied TTFs. Archivo and Spectral are gone: nothing on
-     the studio side of the site uses them any more. The devlog entries
-     carry their own faces in their own <style> blocks and are not
-     affected by this file.
+   The idea, drawn from how studios of this shape actually present
+   themselves: Panic (Mac apps, and publishes Firewatch and Untitled
+   Goose Game) opens with no marketing claim, then two flat declarative
+   sentences — "Panic codes Mac apps for developers" / "Panic publishes
+   amazing video games". Metalab's whole hero is "We make interfaces."
 
-     Darker Grotesque is variable on wght 300-900. Its default is 300,
-     which is too light for body copy, so `body` sets 500 explicitly
-     and no rule may rely on `font-weight: normal`.
-     ================================================================ */
+   So: short headlines, the work shown rather than described, and the
+   two halves of the business given the same grammar.
 
-  @font-face {
-    font-family: Anton;
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url("../assets/fonts/anton-regular-sub.woff2") format("woff2");
+   The look is the brand guidelines taken literally — "the palette as
+   big flat fields". Full-bleed planes of Maroon, Brass, White and
+   Black meeting at hard edges, with Anton used as the poster face it
+   is rather than as a heading font.
+
+   Contrast, from the measured table in brand-identity.md §2:
+     White on Maroon 16.3   Brass on Maroon 6.5   Maroon on Brass 6.5
+     White on Black  17.0   Brass on Black  6.8   Maroon on White high
+   White on Brass is 2.5 and appears nowhere. Brass as TEXT on White is
+   also 2.5, so it becomes --brass-ink (#684D27, 6.8) in that one case.
+   ================================================================== */
+
+@font-face {
+  font-family: Anton;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/anton-regular-sub.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Darker Grotesque";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("../assets/fonts/darkergrotesque-var-sub.woff2") format("woff2-variations");
+}
+
+:root {
+  --brass:  #C48E42;
+  --maroon: #280700;
+  --black:  #0C0C0C;
+  --white:  #F1EFEC;
+
+  --brass-edge:  #8A6630;
+  --brass-glint: #D8B382;
+  --brass-ink:   #684D27;   /* Brass 50% to Black: brass text on White */
+  /* The reel's underline came across from the live stylesheet, which
+     has a --brass-lit token this sheet did not. On a dark plane it
+     resolves to Brass; the one light plane that carries reel type
+     would need --brass-ink instead, and does not use it. */
+  --brass-lit:   #C48E42;
+
+  --wall:    #301009;
+  --wall-lo: #1C0A05;
+  --surface: #361711;
+  --ink:     #280700;       /* the builder animation's own token name */
+  --surface-hi: #3E211A;
+
+  /* Dark-ground defaults. The tone blocks and the dialog redefine
+     these; without a value here the legacy pages lose every border
+     they have, which is how the legal pages ended up with borderless
+     nav pills after the stylesheets were merged. */
+  --rule:      rgba(241,239,236,0.14);
+  --hairline:  rgba(196,142,66,0.26);
+  --brass-dim: rgba(196,142,66,0.55);
+  --lift:      0 26px 60px rgba(12,12,12,0.55);
+  --paper:   #F1EFEC;
+
+  /* text on the dark planes */
+  --dim:   #C5BCB8;
+  --muted: #9D8E89;
+  /* text on the light planes */
+  --dim-l:   #4A2318;
+  --muted-l: #57413B;
+
+  --display: Anton, "Arial Narrow", system-ui, sans-serif;
+  --body: "Darker Grotesque", system-ui, -apple-system, sans-serif;
+
+  /* The modular scale the legacy sections are set on. */
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.9rem, 3.8vw, 2.8rem);
+  --step-4: clamp(2.6rem, 6.2vw, 4.4rem);
+
+  /* The example dialog's ground. Named here rather than left to the
+     fallback it used to carry. */
+  --ink-2: #361711;
+
+  --ease: cubic-bezier(.16,.84,.3,1);
+  --gut: clamp(1.25rem, 5vw, 4.5rem);
+  /* The masthead is sticky and transparent, so content used to scroll
+     up through the mark and read as a rendering fault. Nothing now
+     occupies the mark's column: it has the page's left edge to itself
+     and every plane's content begins to the right of it. */
+  --logo-col: clamp(2.4rem, 3.4vw, 3.6rem);
+  --max: 1280px;      /* legacy .shell */
+  --plane-max: 1600px; /* the full-bleed planes */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--maroon);
+  -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--maroon);
+  color: var(--white);
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-synthesis-weight: none;
+  text-transform: uppercase;
+  letter-spacing: .005em;
+  line-height: .9;
+  margin: 0;
+}
+p { margin: 0; }
+img, svg, canvas, video { display: block; max-width: 100%; }
+a { color: inherit; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: 3px;
+}
+.p-brass a:focus-visible, .p-white a:focus-visible, .end a:focus-visible {
+  outline-color: var(--maroon);
+}
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 90;
+  background: var(--brass); color: var(--maroon);
+  padding: .8rem 1.2rem; font-weight: 700;
+}
+.skip:focus { left: 0; }
+
+/* ==================================================================
+   MASTHEAD — the mark changes colourway to hold against whatever
+   plane is behind it, and splits half and half while a plane edge is
+   passing through it.
+
+   Two colourways are stacked. The lower one is clipped to exactly the
+   part of the mark sitting over the next plane down, so crossing an
+   edge is a wipe rather than a flip. The logo files are swapped by
+   src, never recoloured in CSS, because recolouring would be altering
+   the mark.
+   ================================================================== */
+
+.mast {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .9rem var(--gut);
+  /* Blur, with no tint. Content scrolling underneath becomes a soft
+     wash instead of colliding with the nav, and because nothing is
+     painted over the plane its colour still reads through, so the
+     mark's colourway logic is untouched. The mark itself has the left
+     column to itself; this is the same fix for the right-hand end. */
+  background: transparent;
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+  --mast-ink: var(--white);
+  --mast-btn: var(--brass);
+  --mast-btn-ink: var(--maroon);
+}
+.mast[data-tone="white"], .mast[data-tone="brass"] {
+  --mast-ink: #280700;
+  --mast-btn: #280700;
+  --mast-btn-ink: #C48E42;
+}
+.mast-home { display: block; line-height: 0; }
+.mast-mark { position: relative; display: block; line-height: 0; }
+.mast .lockup { height: 42px; width: auto; display: block; }
+.mast .mark-dn { position: absolute; left: 0; top: 0; clip-path: inset(100% 0 0 0); }
+
+.mast-nav { display: flex; align-items: center; gap: clamp(.8rem, 2.2vw, 2rem); }
+.mast-nav a {
+  font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; color: var(--mast-ink); opacity: .8;
+  transition: opacity .2s var(--ease), color .25s var(--ease);
+}
+.mast-nav a:hover, .mast-nav a:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: .35em; }
+.mast-nav a[aria-current="page"] { opacity: 1; text-decoration: underline; text-underline-offset: .35em; }
+.mast-nav a.mast-cta {
+  opacity: 1; color: var(--mast-btn-ink); background: var(--mast-btn);
+  padding: .52rem .95rem; border: 1px solid var(--mast-btn);
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.mast-nav a.mast-cta:hover, .mast-nav a.mast-cta:focus-visible {
+  text-decoration: none; background: var(--brass-glint); border-color: var(--brass-glint); color: var(--maroon);
+}
+/* Websites and Apps are the same conversation, so Apps hangs off
+   Websites rather than taking a fifth slot in the bar. A disclosure
+   button, not a hover menu: hover menus cannot be reached from a
+   keyboard or a touchscreen. */
+.nav-drop { position: relative; }
+.nav-top {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font: inherit; font-size: .74rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--mast-ink); opacity: .8;
+  background: none; border: 0; padding: 0; cursor: pointer;
+}
+.nav-top:hover, .nav-top:focus-visible, .nav-drop[data-open="true"] .nav-top { opacity: 1; }
+.nav-top svg { width: .6em; height: auto; transition: transform .2s var(--ease); }
+.nav-drop[data-open="true"] .nav-top svg { transform: rotate(180deg); }
+.nav-menu {
+  position: absolute; top: calc(100% + .7rem); left: 50%; transform: translateX(-50%);
+  display: none; min-width: 12rem;
+  background: var(--maroon); border: 1px solid var(--brass);
+  padding: .4rem;
+}
+.nav-drop[data-open="true"] .nav-menu { display: grid; }
+.nav-menu a {
+  display: block; padding: .6rem .8rem; opacity: .85; color: var(--white);
+  letter-spacing: .14em;
+}
+.nav-menu a:hover, .nav-menu a:focus-visible { opacity: 1; background: var(--brass); color: var(--maroon); text-decoration: none; }
+
+@media (max-width: 620px) {
+  .mast-nav a:not(.mast-cta), .nav-drop { display: none; }
+}
+
+/* ==================================================================
+   THE PLANES
+   ================================================================== */
+
+.plane { padding-block: clamp(3.5rem, 9vh, 7rem); }
+.plane-in {
+  width: 100%; max-width: var(--plane-max); margin-inline: auto;
+  padding-left: calc(var(--gut) + var(--logo-col));
+  padding-right: var(--gut);
+}
+
+.p-maroon { background: var(--maroon); color: var(--white); }
+.p-brass  { background: var(--brass);  color: var(--maroon); }
+.p-white  { background: var(--white);  color: var(--maroon); }
+.p-black  { background: var(--black);  color: var(--white); }
+
+/* A plane heading is one declarative sentence, set as a sentence. */
+.plane h2 {
+  font-size: clamp(1.7rem, 4.2vw, 3.4rem);
+  line-height: .9;
+  max-width: 24ch;
+  margin: 0 0 clamp(2rem, 4vh, 3.2rem);
+}
+.plane h2.wide { max-width: 30ch; }
+
+/* A plane whose heading has something to sit beside. Used once, on the
+   price plane, so the builder animation argues next to the figures
+   rather than in the hero where it was only decoration. */
+.plane-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: clamp(1.8rem, 4vw, 4rem);
+  align-items: center;
+  margin-bottom: clamp(2.2rem, 5vh, 3.6rem);
+}
+.plane-split h2 { margin-bottom: 0; }
+.plane-split .split-say { align-self: center; }
+.plane-split .split-say p { margin-top: 1.1rem; max-width: 40ch; font-size: 1.08rem; }
+@media (max-width: 900px) { .plane-split { grid-template-columns: 1fr; } }
+
+.lede { font-size: clamp(1.05rem, 1.4vw, 1.25rem); max-width: 58ch; }
+
+/* The link out of a plane whose detail lives on another page. */
+.plane-go { margin-top: clamp(1.8rem, 4vh, 2.8rem); }
+.plane-go a {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1px;
+}
+.plane-go a:hover, .plane-go a:focus-visible { text-decoration-thickness: 3px; }
+.p-maroon .plane-go a, .p-black .plane-go a { color: var(--brass); }
+.p-brass .plane-go a, .p-white .plane-go a { color: var(--maroon); }
+.p-maroon .lede, .p-black .lede { color: var(--dim); }
+.p-white .lede, .p-brass .lede { color: var(--dim-l); }
+
+/* ==================================================================
+   HERO — six words, one fact, two links, and the mark at size.
+   ================================================================== */
+
+.hero {
+  background: var(--maroon); color: var(--white);
+  min-height: min(92svh, 60rem);
+  display: grid; align-content: center;
+  padding-block: clamp(3rem, 8vh, 6rem);
+  overflow: hidden;
+}
+.hero-in {
+  width: 100%; max-width: var(--plane-max); margin-inline: auto;
+  padding-left: calc(var(--gut) + var(--logo-col)); padding-right: var(--gut);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 9vw, 8.6rem);
+  line-height: .85;
+  letter-spacing: -0.005em;
+}
+/* No colour inside the headline. The three things the studio makes are
+   one list in one sentence, which is what gives them equal billing;
+   tinting one of them would quietly demote the other two. */
+
+/* Inner pages lead with a statement rather than the six-word line, so
+   they get a smaller hero that still reads as the same system. */
+.hero.hero-sub { min-height: 0; padding-block: clamp(3rem, 9vh, 6.5rem); }
+.hero.hero-sub h1 { font-size: clamp(2.4rem, 7.5vw, 6.4rem); }
+
+.hero-fact {
+  margin-top: clamp(1.4rem, 3vh, 2.4rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  max-width: 46ch;
+  color: #D8CFCB;
+}
+.hero-do { margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 1.4rem; align-items: baseline; }
+.hero-do a {
+  font-size: 1.1rem; color: var(--brass);
+  text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1px;
+}
+.hero-do a:hover, .hero-do a:focus-visible { text-decoration-thickness: 3px; }
+
+/* Used whole, at size, in a palette colour. */
+.hero-mark { align-self: end; }
+.hero-mark img { height: clamp(7rem, 20vw, 20rem); width: auto; }
+.hero.hero-sub .hero-mark img { height: clamp(5rem, 12vw, 11rem); }
+
+/* The mark has feet, so it stands on them and shifts its weight.
+
+   This is the designer's own idle from the animated ident, as far as
+   it can be taken without touching the artwork: the rock is a rotation
+   about the feet plus a small bob, both transforms on the whole mark.
+
+   What it does NOT do is the blink, or the legs articulating. Both
+   need the path itself redrawn, which is altering the logo. Those
+   need the real animation exported from James at a usable size — the
+   WhatsApp reference is 115 x 154 pixels, and at hero scale that is a
+   2.25x upscale with visibly soft edges. */
+@media (prefers-reduced-motion: no-preference) {
+  /* The page's one orchestrated entrance: headline, then the line
+     under it, then the links, then the mark landing. */
+  .rise { animation: rise 900ms var(--ease) both; }
+  .rise-2 { animation-delay: 110ms; }
+  .rise-3 { animation-delay: 220ms; }
+  .rise-4 { animation-delay: 330ms; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(1.1rem); }
+    to   { opacity: 1; transform: none; }
   }
 
-  @font-face {
-    font-family: "Darker Grotesque";
-    font-style: normal;
-    font-weight: 300 900;
-    font-display: swap;
-    src: url("../assets/fonts/darkergrotesque-var-sub.woff2") format("woff2-variations");
+  .hero-mark-in { display: block; animation: arrive 900ms var(--ease) 300ms both; }
+  .hero-mark img { transform-origin: 50% 100%; animation: idle 4.2s ease-in-out 1.2s infinite; }
+  @keyframes arrive {
+    from { opacity: 0; transform: translateY(-34%); }
+    60%  { opacity: 1; transform: translateY(0); }
+    78%  { transform: translateY(-7%); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes idle {
+    0%   { transform: rotate(0deg)    translateY(0); }
+    25%  { transform: rotate(-1.7deg) translateY(-1.5%); }
+    50%  { transform: rotate(0deg)    translateY(0); }
+    75%  { transform: rotate(1.7deg)  translateY(-1.5%); }
+    100% { transform: rotate(0deg)    translateY(0); }
+  }
+  /* One deliberate hop when somebody puts a cursor on it. */
+  .hero-mark:hover img, .hero-mark a:focus-visible img { animation: hop 620ms var(--ease); }
+  @keyframes hop {
+    0%   { transform: translateY(0) rotate(0deg); }
+    30%  { transform: translateY(-15%) rotate(-2deg); }
+    60%  { transform: translateY(0) rotate(0deg); }
+    80%  { transform: translateY(-4%) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+  }
+}
+
+/* ==================================================================
+   THE PRICE LIST — rows, not cards. The figure is the biggest thing
+   in the row because the figure is what the row is for.
+   ================================================================== */
+
+.rate { border-top: 2px solid currentColor; }
+.rate-row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) minmax(0, 46ch) minmax(0, 1fr);
+  gap: .4rem clamp(1.4rem, 3vw, 3rem);
+  align-items: baseline;
+  padding: clamp(1.1rem, 2.4vh, 1.7rem) 0;
+  border-bottom: 1px solid rgba(40,7,0,0.35);
+}
+.p-maroon .rate-row, .p-black .rate-row { border-bottom-color: rgba(241,239,236,0.2); }
+.rate-n {
+  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
+  text-transform: uppercase; line-height: 1;
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+}
+.rate-what { font-size: clamp(1.02rem, 1.3vw, 1.2rem); }
+.rate-what b { display: block; font-weight: 700; margin-bottom: .15rem; }
+.rate-when { font-size: 1.02rem; color: var(--dim-l); }
+.p-maroon .rate-when, .p-black .rate-when { color: var(--dim); }
+
+.rate-note { margin-top: clamp(1.6rem, 3vh, 2.4rem); max-width: 62ch; font-size: 1.08rem; }
+.rate-note b { font-weight: 700; }
+
+/* A smaller list, for the care plans and the one-off services. */
+.line-list { border-top: 1px solid rgba(40,7,0,0.35); }
+.p-maroon .line-list, .p-black .line-list { border-top-color: rgba(241,239,236,0.2); }
+.line-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: .2rem clamp(1.4rem, 3vw, 3rem);
+  align-items: baseline;
+  padding: .95rem 0;
+  border-bottom: 1px solid rgba(40,7,0,0.22);
+}
+.p-maroon .line-row, .p-black .line-row { border-bottom-color: rgba(241,239,236,0.14); }
+.line-row b { font-weight: 700; font-size: 1.1rem; }
+.line-row .line-p { grid-column: 1; font-size: 1.02rem; color: var(--dim-l); max-width: 62ch; }
+.p-maroon .line-row .line-p, .p-black .line-row .line-p { color: var(--dim); }
+.line-row .line-n {
+  grid-column: 2; grid-row: 1; text-align: right; white-space: nowrap;
+  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
+  font-size: 1.5rem; line-height: 1;
+}
+
+/* A heading inside a plane, below the plane's own. */
+.sub-h {
+  font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+  margin: clamp(2.6rem, 6vh, 4.2rem) 0 1.2rem;
+}
+.sub-h + .lede { margin-bottom: 1.6rem; }
+.line-row .line-n i { font-style: normal; font-family: var(--body); font-size: .9rem; font-weight: 700; }
+
+/* ==================================================================
+   PAIRS — the same discipline, named once, then what it means on each
+   side of the studio. The column labels are stated once at the top
+   rather than repeated on every row, which is what the live site's
+   three-column table does.
+   ================================================================== */
+
+.pairs { border-top: 2px solid currentColor; }
+.pair-head, .pair {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr) minmax(0, 1fr);
+  gap: .3rem clamp(1.2rem, 3vw, 2.6rem);
+  padding: .95rem 0;
+  border-bottom: 1px solid rgba(241,239,236,0.16);
+}
+.p-white .pair-head, .p-white .pair, .p-brass .pair-head, .p-brass .pair { border-bottom-color: rgba(40,7,0,0.22); }
+.pair-head {
+  font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brass); padding-bottom: .7rem;
+}
+.p-white .pair-head { color: var(--brass-ink); }
+.pair b { font-weight: 700; font-size: 1.1rem; }
+.pair span { font-size: 1.02rem; color: var(--dim); }
+.p-white .pair span, .p-brass .pair span { color: var(--dim-l); }
+@media (max-width: 760px) {
+  .pair-head { display: none; }
+  .pair { grid-template-columns: 1fr; }
+  .pair span::before { font-weight: 700; color: var(--brass); }
+  .pair span:nth-of-type(1)::before { content: "Website: "; }
+  .pair span:nth-of-type(2)::before { content: "Game: "; }
+}
+
+/* ==================================================================
+   REVIEWS — set as quotations rather than boxed on cards, so they
+   read as something somebody said rather than as a component.
+   ================================================================== */
+
+.q-stars { letter-spacing: .3em; color: var(--brass); font-size: 1.05rem; }
+.p-white .q-stars, .p-brass .q-stars { color: var(--brass-ink); }
+.q-body { margin: .7rem 0 0; padding: 0; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.42; }
+.q-body p + p { margin-top: .8rem; }
+.q-who { margin-top: 1rem; font-weight: 700; }
+.q-who span { display: block; font-weight: 500; color: var(--muted); }
+.p-white .q-who span, .p-brass .q-who span { color: var(--muted-l); }
+
+/* ==================================================================
+   THE WORK — shown at size. No frame, no shadow, no hover lift: the
+   picture is the thing, and a border round it is an apology for it.
+   ================================================================== */
+
+.work { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.6rem, 4vw, 3.5rem); }
+.work.one { grid-template-columns: minmax(0, 1fr); }
+.work.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.work a, .work .item { text-decoration: none; display: grid; gap: .9rem; align-content: start; }
+.work img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 0; }
+.work.art img { aspect-ratio: 16 / 9; object-position: 50% 50%; }
+.work-h {
+  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
+  text-transform: uppercase; font-size: clamp(1.4rem, 2.4vw, 2rem); line-height: 1;
+}
+.work-p { font-size: 1.05rem; max-width: 46ch; }
+.work-go { font-size: 1.02rem; text-decoration: underline; text-underline-offset: .22em; }
+.work a:hover .work-go, .work a:focus-visible .work-go { text-decoration-thickness: 2px; }
+.work-tag { font-size: 1rem; }
+
+.p-white .work-p { color: var(--dim-l); }
+.p-white .work-go, .p-white .work-tag { color: var(--brass-ink); }
+.p-brass .work-p { color: var(--dim-l); }
+.p-brass .work-go, .p-brass .work-tag { color: var(--maroon); }
+.p-black .work-p, .p-maroon .work-p { color: var(--dim); }
+.p-black .work-go, .p-black .work-tag,
+.p-maroon .work-go, .p-maroon .work-tag { color: var(--brass); }
+
+/* ==================================================================
+   CLOSER
+   ================================================================== */
+
+.end { background: var(--brass); color: var(--maroon); padding-block: clamp(4rem, 11vh, 8rem); }
+.end h2 { line-height: .86; margin: 0; font-size: clamp(2.4rem, 8.5vw, 7.5rem); max-width: none; }
+.end-mail {
+  display: inline-block; margin-top: clamp(1.4rem, 3vh, 2.2rem);
+  font-size: clamp(1.2rem, 2.4vw, 2rem); color: var(--maroon);
+  text-decoration: underline; text-underline-offset: .22em; text-decoration-thickness: 2px;
+}
+.end-mail:hover, .end-mail:focus-visible { text-decoration-thickness: 4px; }
+.end-fine { margin-top: 1.6rem; font-size: 1.05rem; max-width: 52ch; }
+
+/* ==================================================================
+   FOOTER
+   ================================================================== */
+
+.foot {
+  background: var(--maroon); color: var(--white);
+  padding: clamp(2.5rem, 6vh, 4rem) var(--gut) clamp(2rem, 5vh, 3rem) calc(var(--gut) + var(--logo-col));
+}
+.foot-in {
+  max-width: var(--plane-max); margin-inline: auto;
+  display: flex; flex-wrap: wrap; gap: 1.6rem clamp(2rem, 6vw, 5rem);
+  align-items: flex-end; justify-content: space-between;
+}
+.foot .lockup { height: 52px; width: auto; }
+.foot-links { display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; }
+.foot-links a {
+  font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  text-decoration: none; opacity: .72;
+}
+.foot-links a:hover, .foot-links a:focus-visible { opacity: 1; color: var(--brass); }
+.foot-fine { max-width: var(--plane-max); margin: 1.6rem auto 0; font-size: .95rem; color: var(--muted); }
+
+/* ==================================================================
+   CONTACT FORM
+   ================================================================== */
+
+.form { display: grid; gap: 1.2rem; max-width: 42rem; }
+.field { display: grid; gap: .4rem; }
+.field label { font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
+.field input, .field textarea, .field select {
+  font: inherit; color: var(--white);
+  background: var(--surface);
+  border: 1px solid rgba(241,239,236,0.22);
+  padding: .85rem 1rem;
+  border-radius: 0;
+}
+.field textarea { min-height: 9rem; resize: vertical; }
+.field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible {
+  outline: 3px solid var(--brass); outline-offset: 2px; border-color: var(--brass);
+}
+.field-note { font-size: .98rem; color: var(--muted); }
+.send {
+  justify-self: start;
+  font: inherit; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .82rem;
+  background: var(--brass); color: var(--maroon);
+  border: 1px solid var(--brass); padding: .95rem 1.9rem; cursor: pointer;
+  transition: background .2s var(--ease);
+}
+.send:hover, .send:focus-visible { background: var(--brass-glint); }
+
+/* ==================================================================
+   THE DEVLOG / SPEC LISTS
+   ================================================================== */
+
+.spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr)); gap: 1.4rem clamp(1.4rem, 3vw, 2.6rem); border-top: 1px solid rgba(241,239,236,0.2); padding-top: 1.4rem; }
+.p-white .spec { border-top-color: rgba(40,7,0,0.3); }
+.spec div { display: grid; gap: .25rem; align-content: start; }
+.spec dt, .spec b { font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
+.p-white .spec b { color: var(--brass-ink); }
+.spec dd, .spec span { margin: 0; font-size: 1.02rem; }
+
+/* ==================================================================
+   NARROW
+   ================================================================== */
+
+@media (max-width: 1000px) {
+  .work.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .work, .work.three { grid-template-columns: 1fr; }
+  .hero-in { grid-template-columns: 1fr; align-items: start; }
+  .hero-mark { order: -1; }
+  .hero-mark img { height: clamp(5rem, 16vw, 9rem); }
+}
+@media (max-width: 680px) {
+  .rate-row { grid-template-columns: 1fr auto; }
+  .rate-n { grid-column: 2; grid-row: 1; text-align: right; }
+  .rate-what { grid-column: 1; grid-row: 1; }
+  .rate-when { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ==================================================================
+   THE BUILDER — a page assembling itself: structure, words, colour,
+   motion, live. Lifted from the live homepage unchanged except for
+   dropping the .home scope, because it was already good and rebuilding
+   it would only have made it different.
+
+   Five crossfading layers on one CSS timeline. No JavaScript, nothing
+   that blocks the first paint, and it stops dead under
+   prefers-reduced-motion.
+
+   It now sits beside the price list rather than in the hero, which is
+   where it argues hardest: this is what the figure next to it buys.
+   ================================================================== */
+
+.h-builder { position: relative; }
+.h-bframe {
+  border: 10px solid transparent;
+  background:
+    linear-gradient(var(--wall-lo), var(--wall-lo)) padding-box,
+    linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge)) border-box;
+  box-shadow: 0 40px 90px rgba(12,12,12,0.6);
+}
+.h-bbar {
+  display: flex; align-items: center; gap: .4rem;
+  padding: .5rem .7rem; background: var(--black);
+  border-bottom: 1px solid rgba(196,142,66,0.2);
+}
+.h-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(241,239,236,0.22); }
+
+/* Two states of the same address bar, stacked in one grid cell so the
+   bar cannot change width when it swaps. */
+.h-burl-slot { display: grid; margin-left: .6rem; }
+.h-burl-slot .h-u {
+  grid-area: 1 / 1;
+  display: flex; align-items: center; gap: .4rem;
+  padding: .18rem .7rem; font-size: .72rem; letter-spacing: .06em;
+  background: rgba(241,239,236,0.07); border-radius: 100px;
+  color: rgba(241,239,236,0.6);
+  animation: urlDraft 20s linear infinite;
+}
+.h-burl-slot .h-u-live {
+  color: var(--paper);
+  background: rgba(196,142,66,0.18);
+  animation-name: urlLive;
+}
+.h-burl-slot .h-u-live svg { width: 9px; height: auto; opacity: .85; }
+.h-burl-slot .h-u-live b {
+  font-size: .54rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brass);
+  display: inline-flex; align-items: center; gap: .3rem;
+}
+.h-burl-slot .h-u-live b::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--brass);
+  animation: blip 2s ease-in-out infinite;
+}
+/* The address bar goes live inside the layer crossfade (16.0s–16.6s),
+   not before it: seeing the padlock while the Motion beat is still on
+   screen would say the site was live a beat early. */
+@keyframes urlDraft { 0%, 80% { opacity: 1; } 82%, 100% { opacity: 0; } }
+@keyframes urlLive { 0%, 80% { opacity: 0; } 82%, 100% { opacity: 1; } }
+@keyframes blip { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
+
+.h-canvas { position: relative; aspect-ratio: 16 / 10.5; background: var(--wall-lo); }
+/* The rows are set on the container, not as heights on the children:
+   a percentage height on a grid item resolves against a track that is
+   itself content-sized, which is circular, so the browser falls back
+   to auto and every block collapses to its border. */
+.h-layer {
+  position: absolute; inset: 0;
+  padding: 6% 7%;
+  display: grid;
+  grid-template-rows: 8% 22% 9% 30% 11%;
+  gap: 3.5%;
+  opacity: 0;
+  animation: beat 20s linear infinite;
+}
+.h-layer:nth-child(1) { animation-delay: 0s; }
+.h-layer:nth-child(2) { animation-delay: 4s; }
+.h-layer:nth-child(3) { animation-delay: 8s; }
+.h-layer:nth-child(4) { animation-delay: 12s; }
+.h-layer:nth-child(5) { animation-delay: 16s; }
+
+/* One 20s cycle, five 4s beats. Everything on this hero — the layers,
+   the captions, the cursor, the URL bar — runs on this same 20s clock
+   with a 4s-per-beat delay, so nothing can drift out of step. */
+@keyframes beat {
+  0%    { opacity: 0; }
+  3%    { opacity: 1; }
+  18%   { opacity: 1; }
+  21%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+/* the mock page's parts, restyled per layer */
+.h-m-bar { }
+.h-m-head { width: 74%; }
+.h-m-sub { width: 54%; }
+.h-m-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3%; }
+.h-m-cell { }
+.h-m-btn { width: 26%; }
+
+/* 01 structure — hairline wireframe */
+.h-l1 .h-m-bar, .h-l1 .h-m-head, .h-l1 .h-m-sub, .h-l1 .h-m-cell, .h-l1 .h-m-btn {
+  border: 1px dashed rgba(241,239,236,0.3); background: transparent;
+}
+/* 02 words — blocks fill with type-weight bars */
+.h-l2 .h-m-bar, .h-l2 .h-m-head, .h-l2 .h-m-sub, .h-l2 .h-m-cell, .h-l2 .h-m-btn {
+  border: 1px solid rgba(241,239,236,0.16);
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(241,239,236,0.26) 0 2px,
+    transparent 2px 7px);
+  background-position: 0 4px;
+}
+.h-l2 .h-m-bar { background: rgba(241,239,236,0.1); }
+/* 03 colour — the palette arrives */
+.h-l3 .h-m-bar { background: var(--black); border: 0; }
+.h-l3 .h-m-head { background: var(--brass); border: 0; }
+.h-l3 .h-m-sub { background: rgba(241,239,236,0.3); border: 0; }
+.h-l3 .h-m-cell { background: var(--surface); border: 1px solid rgba(196,142,66,0.26); }
+.h-l3 .h-m-btn { background: var(--brass); border: 0; }
+/* 04 motion and 05 live share the finished page. The difference is
+   that one is being used and the other is simply up. */
+.h-fin { background: var(--ink); }
+.h-fin .h-m-bar { background: var(--black); display: flex; align-items: center; padding: 0 3%; gap: 6%; }
+.h-fin .h-m-bar i {
+  position: relative;
+  font-style: normal; font-size: .52rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(241,239,236,0.55);
+}
+.h-fin .h-m-head {
+  display: grid; align-content: center;
+  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
+  text-transform: uppercase; line-height: .92;
+  font-size: clamp(.9rem, 2.4vw, 1.9rem); color: var(--paper);
+  width: 86%;
+}
+.h-fin .h-m-head b { color: var(--brass); font-weight: 400; }
+.h-fin .h-m-sub { display: grid; align-content: center; font-size: clamp(.5rem, .95vw, .74rem); color: rgba(241,239,236,0.7); width: 62%; }
+.h-fin .h-m-cell { background: var(--surface); border: 1px solid rgba(196,142,66,0.24); }
+.h-fin .h-m-btn {
+  background: var(--brass); display: grid; place-items: center;
+  font-size: .5rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink); width: 30%;
+}
+
+/* ---- 04 motion: the page being used ------------------------------- */
+
+/* The heading and the line under it arrive, a nav item underlines
+   itself, then a pointer crosses the page, lifts a card and presses
+   the button. All five run on the 20s clock at the 12s beat. */
+.h-l4m .h-m-head {
+  animation: riseIn 20s linear infinite;
+  animation-delay: 12s;
+}
+.h-l4m .h-m-sub {
+  animation: riseIn 20s linear infinite;
+  animation-delay: 12.35s;
+}
+@keyframes riseIn {
+  0%   { opacity: 0; transform: translateY(14px); }
+  5%   { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.h-l4m .h-m-bar i:nth-child(2)::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: -4px;
+  height: 1px; background: var(--brass);
+  animation: sweep 20s linear infinite;
+  animation-delay: 12.2s;
+}
+@keyframes sweep {
+  0%   { right: 100%; }
+  4%   { right: 0; }
+  100% { right: 0; }
+}
+
+.h-l4m .h-m-row .h-m-cell:nth-child(2) {
+  animation: cardLift 20s linear infinite;
+  animation-delay: 12s;
+}
+/* Lifts as the pointer lands (7%) and drops as it leaves (11%). */
+@keyframes cardLift {
+  0%, 6.4%  { transform: translateY(0); border-color: rgba(196,142,66,0.24); box-shadow: none; }
+  7.6%      { transform: translateY(-5px); border-color: var(--brass); box-shadow: 0 10px 22px rgba(0,0,0,0.5); }
+  10.8%     { transform: translateY(-5px); border-color: var(--brass); box-shadow: 0 10px 22px rgba(0,0,0,0.5); }
+  12%, 100% { transform: translateY(0); border-color: rgba(196,142,66,0.24); box-shadow: none; }
+}
+
+.h-l4m .h-m-btn {
+  animation: press 20s linear infinite;
+  animation-delay: 12s;
+}
+@keyframes press {
+  0%, 14%   { transform: scale(1); background: var(--brass); }
+  15.5%     { transform: scale(1.05); background: var(--brass-glint); }
+  16.5%     { transform: scale(0.97); background: var(--brass-glint); }
+  18%, 100% { transform: scale(1); background: var(--brass); }
+}
+
+/* The pointer is the full size of the canvas and carries the arrow in
+   its top-left corner, so a translate in % is a translate in % of the
+   page it is crossing — and it stays on the compositor. */
+.h-pointer {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: track 20s linear infinite;
+  animation-delay: 12s;
+}
+.h-pointer svg {
+  position: absolute; top: 0; left: 0;
+  width: 17px; height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+@keyframes track {
+  0%        { opacity: 0; transform: translate(88%, 104%); }
+  2%        { opacity: 1; transform: translate(88%, 104%); }
+  7%        { opacity: 1; transform: translate(50%, 60%); }
+  11%       { opacity: 1; transform: translate(50%, 60%); }
+  15%       { opacity: 1; transform: translate(14%, 83%); }
+  18%       { opacity: 1; transform: translate(14%, 83%); }
+  20%, 100% { opacity: 0; transform: translate(14%, 83%); }
+}
+
+/* ---- 05 live: settled ---------------------------------------------- */
+
+.h-l5 .h-m-btn { box-shadow: 0 0 0 0 rgba(196,142,66,0.5); }
+
+/* stage captions, on the same beat */
+
+/* Motion off: show the finished, live state and nothing moving at all.
+   The base reset in _base.h-css crushes durations to a millisecond,
+   which would leave every layer stacked on top of the next, so the
+   layers are switched off here by hand rather than merely sped up. */
+@media (prefers-reduced-motion: reduce) {
+  .h-layer, .h-pointer, .h-burl-slot .h-u, .h-l4m .h-m-head, .h-l4m .h-m-sub, .h-l4m .h-m-row .h-m-cell:nth-child(2), .h-l4m .h-m-btn {
+    animation: none !important;
+  }
+  .h-layer { opacity: 0; }
+  .h-layer.h-l5 { opacity: 1; }
+  .h-pointer { display: none; }
+  .h-burl-slot .h-u-draft { opacity: 0; }
+  .h-burl-slot .h-u-live { opacity: 1; }
+}
+
+/* On the brass plane the frame cannot be brass, so it is maroon, and
+   the glow behind it would be invisible anyway. */
+.p-brass .h-bframe {
+  background:
+    linear-gradient(var(--wall-lo), var(--wall-lo)) padding-box,
+    linear-gradient(150deg, #4A2318, var(--maroon) 45%, #140300) border-box;
+  box-shadow: 0 24px 56px rgba(40,7,0,0.34);
+}
+
+/* ==================================================================
+   SMEATON'S TOWER — Plymouth, and the other sort of lighthouse.
+   Also lifted unchanged. One custom property set from the section's
+   position in the viewport, which the CSS turns into a scale.
+   ================================================================== */
+
+/* ---- Smeaton's Tower, and the other sort of lighthouse -----------
+     One photograph, twice. The first copy is the whole frame with a
+     scrim over it; the second is the same frame with everything but the
+     tower keyed to transparent, sitting on top of the scrim. So the
+     tower is at full strength and its own surroundings are dimmed, and
+     because both layers are the same crop at the same size they line up
+     by construction rather than by arithmetic.
+
+     The first attempt cropped the tower out of the background to avoid
+     a doubled image and then placed the cut-out further right, which
+     stood it in the sea. Registering it over itself is the whole trick.
+
+     The glazed lantern could not be keyed (what is behind that glass is
+     sky) and is reconstructed. Below the skyline the tower does not
+     separate from the hills either, so the silhouette is carried down
+     on its fitted taper; registration makes a few pixels of slack
+     invisible. */
+
+  /* The plane's own padding has to come off here, because the section
+     sizes itself: it is a photograph with words on it, not a block of
+     text with a picture behind it. Left as a plane it grew to about
+     1300px, the photograph scaled to cover that, and the scrim's
+     gradient (0.20 black at 45% height) left the top-left corner
+     almost undimmed with a second, brighter tower in it. */
+  .plane.h-hoe { padding-block: 0; }
+  .h-hoe {
+    --grow: 0;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    align-items: center;
+    min-height: min(52vw, 40rem);
+  }
+  .h-hoe .plane-in { padding-block: clamp(3rem, 7vh, 5rem); }
+  .h-hoe-bg { position: absolute; inset: 0; }
+  .h-hoe-bg img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 50%;
+    display: block;
+  }
+  .h-hoe-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg,
+        rgba(12,12,12,0.46) 0%,
+        rgba(12,12,12,0.58) 30%,
+        rgba(12,12,12,0.90) 60%,
+        rgba(12,12,12,0.95) 100%),
+      linear-gradient(180deg, rgba(12,12,12,0.45) 0%, rgba(12,12,12,0.20) 45%, rgba(12,12,12,0.55) 100%);
+  }
+  .h-hoe-lit {
+    transform: scale(calc(1 + var(--grow) * 0.28));
+    transform-origin: 24% 100%;
+    will-change: transform;
   }
 
-  :root {
-    /* ================================================================
-       Brassneck Studio, brand guidelines Oct 2026 (James Smith Design).
-       Four colours and no others. Everything below is one of the four,
-       one of them at reduced alpha, or two of them mixed. Two documented
-       departures are marked where they occur.
-       ================================================================ */
-    --brass:  #C48E42;
-    --maroon: #280700;
-    --black:  #0C0C0C;
-    --white:  #F1EFEC;
+  .h-hoe-in { position: relative; }
+  .h-hoe-say { max-width: 36rem; margin-left: auto; }
+  .h-hoe-say .h-hoe-k {
+    font-size: .7rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--brass); margin-bottom: 1rem;
+  }
+  .h-hoe-say h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); }
+  .h-hoe-say .h-hoe-p {
+    margin-top: 1.1rem; max-width: 46ch;
+    font-size: clamp(1.02rem, 1.4vw, 1.18rem); color: var(--paper);
+  }
+  .h-hoe-say .h-hoe-p:first-of-type { margin-top: 1.4rem; }
+  .h-hoe-p b { color: var(--brass); font-weight: 700; }
 
-    /* ---- grounds ------------------------------------------------
-       Dark Maroon is the page. The guidelines call it "softer than
-       true black", and it is: same luminance as the blue-black it
-       replaces, but warm, so the site reads lighter without being
-       lighter. Black is kept for recesses and voids only. */
-    --ink:       #280700;
-    --wall:      #301009;
-    --wall-lo:   #1C0A05;
-    --recess:    #0C0C0C;
-    --surface:   #361711;
-    --surface-hi:#3E211A;
-
-    /* ---- the doors: maroon timber, brass furniture ---- */
-    --timber:    #351A12;
-    --timber-lo: #1C0A05;
-    --timber-hi: #432A20;
-
-    /* ---- brass -------------------------------------------------
-       The old system had three brasses. The new one has one, so the
-       lit/hi aliases resolve to the same value: anything that used
-       them for emphasis now simply gets brass. The two shaded
-       variants exist only to light metal (brass mixed with black and
-       with white) and are not used as flat colour anywhere. */
-    --brass-lit:  #C48E42;
-    --brass-hi:   #C48E42;
-    --brass-dim:  rgba(196,142,66,0.55);
-    --brass-edge: #8A6630;
-    --brass-glint:#D8B382;
-
-    /* Card lift shadow. Redefined per tone, because a black shadow at
-       0.55 that reads as depth on the maroon ground reads as dirt on a
-       white one. */
-    --lift: 0 26px 60px rgba(12,12,12,0.55);
-
-    /* ---- text: white at three strengths, all AA on the ground ----
-       16.3 : 1, 10.1 : 1 and 6.0 : 1 against Dark Maroon. */
-    --paper: #F1EFEC;
-    --dim:   #C5BCB8;
-    --muted: #9D8E89;
-
-    --hairline: rgba(196,142,66,0.26);
-    --rule:     rgba(241,239,236,0.12);
-
-    /* Departure 1 of 2: form validation. The palette has no red, and
-       an error that is not distinguishable from the accent colour is
-       a usability defect. This is the Dark Maroon hue lifted until it
-       reads as red, at 6.5 : 1 on the ground. Used nowhere else. */
-    --warn: #D98166;
-
-    /* ---- type ---------------------------------------------------
-       Anton for display, ALL CAPS, as the guidelines require.
-       Darker Grotesque for everything else at 500/600: its variable
-       default is 300, which is too light to set body copy in, so no
-       rule here may rely on `font-weight: normal`.
-       The scale is a step up from the old one because Darker
-       Grotesque is condensed and sets smaller at a given size. */
-    --display: Anton, "Arial Narrow", system-ui, sans-serif;
-    --body:    "Darker Grotesque", system-ui, -apple-system, sans-serif;
-
-    --step-0: 1rem;
-    --step-1: 1.1875rem;
-    --step-2: 1.5rem;
-    --step-3: clamp(1.9rem, 3.8vw, 2.8rem);
-    --step-4: clamp(2.6rem, 6.2vw, 4.4rem);
-
-    --ease:  cubic-bezier(.62,.02,.2,1);
-    --swing: cubic-bezier(.34,.01,.18,1);
-    --push:  cubic-bezier(.42,0,.72,.34);
-    --pull:  cubic-bezier(.16,.7,.34,1);
+  @media (max-width: 900px) {
+    .h-hoe { display: block; min-height: 0; padding-top: 0; }
+    .h-hoe-bg {
+      position: relative; inset: auto;
+      aspect-ratio: 5 / 4;
+      margin-bottom: clamp(1.6rem, 5vw, 2.4rem);
+    }
+    .h-hoe-bg img { object-position: 30% 50%; }
+    .h-hoe-say { max-width: none; margin-left: 0; }
+    .h-hoe-scrim {
+      background:
+        linear-gradient(180deg, rgba(12,12,12,0.30) 0%, rgba(12,12,12,0.12) 45%, rgba(12,12,12,0.86) 100%),
+        rgba(12,12,12,0.18);
+    }
   }
 
-  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) { .h-hoe { --grow: 1 !important; } }
 
-  [hidden] { display: none !important; }
 
-  html {
-    scrollbar-gutter: stable;
-    /* The contact shadow under each door is inset -22%, which on a narrow
-       screen pokes past the viewport and let the page scroll sideways by
-       about 19px. `clip` rather than `hidden`: hidden would make <html> a
-       scroll container, clip just cuts. It sits far above the door's own
-       perspective context, so it flattens nothing — checked against the
-       dive rather than assumed, given this file's history. */
-    overflow-x: clip;
-    background: var(--ink);
+/* ==================================================================
+   THE BUILDER'S PROGRESS RAIL
+
+   Dropped in the first pass as a "secondary label row", which was the
+   wrong read: it is the caption the animation needs. Without it the
+   five stages are five crossfades of an abstract wireframe, and the
+   point — that you are told which step you are on, every time — is
+   only made in the copy beside it. With it, the animation says it.
+   ================================================================== */
+
+.h-stages {
+  display: flex; gap: 0; margin-top: 1rem;
+  border-top: 1px solid rgba(196,142,66,0.26);
+}
+.h-stages li {
+  list-style: none; flex: 1 1 0; padding: .7rem .4rem 0;
+  font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(241,239,236,0.6);
+  border-top: 2px solid transparent; margin-top: -1px;
+  animation: lit 20s linear infinite;
+}
+.h-stages li:nth-child(1) { animation-delay: 0s; }
+.h-stages li:nth-child(2) { animation-delay: 4s; }
+.h-stages li:nth-child(3) { animation-delay: 8s; }
+.h-stages li:nth-child(4) { animation-delay: 12s; }
+.h-stages li:nth-child(5) { animation-delay: 16s; }
+@keyframes lit {
+  0%   { color: rgba(241,239,236,0.6); border-top-color: transparent; }
+  3%   { color: var(--brass); border-top-color: var(--brass); }
+  18%  { color: var(--brass); border-top-color: var(--brass); }
+  21%  { color: rgba(241,239,236,0.6); border-top-color: transparent; }
+  100% { color: rgba(241,239,236,0.6); border-top-color: transparent; }
+}
+.h-stages { margin-bottom: 0; padding: 0; }
+
+
+/* On the brass plane the unlit state has to be dark, not pale. */
+.p-brass .h-stages { border-top-color: rgba(40,7,0,0.3); }
+.p-brass .h-stages li { color: rgba(40,7,0,0.8); }
+.p-brass .h-stages li { animation-name: lit-dark; }
+@keyframes lit-dark {
+  0%   { color: rgba(40,7,0,0.8); border-top-color: transparent; }
+  3%   { color: var(--maroon); border-top-color: var(--maroon); }
+  18%  { color: var(--maroon); border-top-color: var(--maroon); }
+  21%  { color: rgba(40,7,0,0.8); border-top-color: transparent; }
+  100% { color: rgba(40,7,0,0.8); border-top-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .h-stages li { animation: none !important; }
+  .h-stages li:nth-child(5) { color: var(--brass); border-top-color: var(--brass); }
+  .p-brass .h-stages li:nth-child(5) { color: var(--maroon); border-top-color: var(--maroon); }
+}
+
+/* ==================================================================
+   THE SERVICE REEL — "We do [SEO / web design / hosting ...]"
+   Recovered from the live Websites page. It sits under the headline
+   as a second line of display type rather than as a caption.
+   ================================================================== */
+
+  .reel-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .1rem .7rem;
+    margin: 1.4rem 0 1.6rem;
+    font-family: var(--body);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 4.8vw, 3.4rem);
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+  }
+  .reel-lead {
+    color: var(--muted);
+    font-size: .58em;
+    letter-spacing: -0.02em;
+    align-self: baseline;
+  }
+
+  .reel-slot {
+    position: relative;
+    display: inline-block;
+    min-width: 1ch;
+    padding-bottom: .22em;
+  }
+  .reel-word {
+    display: inline-block;
+    color: var(--brass-lit);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    will-change: transform, clip-path;
   }
   
+  
 
-  body {
-    margin: 0;
-    background: var(--ink);
+  @keyframes reel-out {
+    from { clip-path: inset(-20% 0 0 0);   transform: translateY(0); }
+    to   { clip-path: inset(-20% 0 100% 0); transform: translateY(-0.3em); }
+  }
+  @keyframes reel-in {
+    from { clip-path: inset(100% 0 -20% 0); transform: translateY(0.3em); }
+    to   { clip-path: inset(-20% 0 -20% 0);  transform: none; }
+  }
+
+  /* Restored 29 Oct 2026. These were removed by the dead-rule prune:
+     every one is a class JavaScript adds at runtime, so the selector
+     test that drove the prune never found them on a page. The
+     @keyframes survived (the prune did not walk at-rules other than
+     @media), so the animation came back intact. */
+  .reel-word.is-out { animation: reel-out 260ms var(--ease) forwards; }
+  .reel-word.is-in  { animation: reel-in 340ms var(--ease) both; }
+
+  .reel-rule {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--brass), var(--brass-lit));
+    transition: width 340ms var(--ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reel-word.is-out, .reel-word.is-in { animation: none; }
+    .reel-rule { transition: none; }
+  }
+
+.reel-line { color: var(--white); }
+.reel-lead { color: var(--dim); }
+.reel-word { color: var(--brass); }
+
+/* ==================================================================
+   SERVICES — back to cards that open an example.
+
+   The accordion condensed the page but took the examples away with it,
+   and a row of text is a poor advertisement for a design studio. These
+   are the original cards and the original dialog, lifted from the live
+   site: hover lifts and scales the card, clicking it grows the dialog
+   out of the card you pressed, and inside is the price list and the
+   work in a laptop frame.
+
+   The seventh service runs full width under the other six (.svc-wide),
+   because three across is two full rows and an orphan otherwise.
+   ================================================================== */
+
+
+  /* six services, so three across reads as two full rows rather than
+     four-and-two with a hole in it */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .svc {
+    background: var(--surface);
+    padding: 1.5rem 1.5rem 1.7rem;
+    transition: background 240ms var(--ease);
+  }
+  .svc:hover { background: var(--surface-hi); }
+  
+
+  /* ---- services as buttons + the example modal ------------------ */
+
+  .svc {
+    position: relative;
+    z-index: 0;
+    display: grid;
+    align-content: start;
+    gap: .45rem;
+    background: var(--surface);
+    border: 0;
+    padding: 1.5rem 1.5rem 1.7rem;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition:
+      background 300ms var(--ease),
+      transform 340ms cubic-bezier(.16,.84,.3,1),
+      box-shadow 340ms var(--ease);
+  }
+  .svc:hover, .svc:focus-visible {
+    background: var(--surface-hi);
+    transform: scale(1.035);
+    z-index: 2;
+    box-shadow:
+      0 0 0 1px var(--hairline),
+      var(--lift);
+  }
+  .svc:active { transform: scale(1.005); transition-duration: 90ms; }
+  .svc-h, .svc-p, .svc-more { transition: transform 340ms cubic-bezier(.16,.84,.3,1); }
+  .svc:hover .svc-h, .svc:focus-visible .svc-h { transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc, .svc-h, .svc-p, .svc-more { transition: background 200ms linear; }
+    .svc:hover, .svc:focus-visible { transform: none; }
+  }
+  .svc-h {
+    font-family: var(--body);
+    font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em;
     color: var(--paper);
+  }
+  .svc-p { color: var(--muted); font-size: var(--step-0); }
+  .svc-more {
     font-family: var(--body);
-    font-weight: 500;
-    font-size: var(--step-1);
-    line-height: 1.5;
-    letter-spacing: 0.004em;
-    -webkit-font-smoothing: antialiased;
-    /* No overflow-x here. `hidden` makes <body> a scroll container, and
-       a position: sticky masthead then sticks to <body>'s scrollport,
-       which never scrolls: the bar simply scrolled away with the page.
-       <html> already carries overflow-x: clip, which cuts the overhang
-       without creating a scroll container. */
+    font-size: .64rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--brass-lit);
+    margin-top: .35rem;
+    transition: color 240ms var(--ease);
   }
+  .svc:hover .svc-more, .svc:focus-visible .svc-more { color: var(--brass-lit); }
 
-  ::selection { background: var(--brass-dim); color: var(--paper); }
-  :focus-visible { outline: 2px solid var(--brass-lit); outline-offset: 4px; }
-
-  
-
-  .shell { width: min(1140px, 92vw); margin-inline: auto; }
-
-  /* ================================================================
-     Views. Home lives inside #camera and is never unmounted, the
-     dive is a camera move over the real scene, so there is nothing
-     to cross-fade and nothing to mis-register.
-     ================================================================ */
-
-  
-
-  
-  
-
-
-  /* ================================================================
-     Masthead
-     ================================================================ */
-
-  
-
-  
-  /* The masthead and the document back links now carry the supplied
-     Landscape lockup as a single file. The studio name used to be set
-     here in type beside the mark, which under the new guidelines is
-     recreating the wordmark — not permitted. The lockup is sized by
-     height so the SVG's own proportions decide the width. */
-  /* The Icon alone, which the guidelines permit ("only the icon can be
-     used on its own"). It is portrait, so it is sized by height and runs
-     a little taller than the landscape lockup did to keep the same
-     optical weight in the masthead. */
-  .lockup { height: 46px; width: auto; display: block; }
-  .doc-back .lockup { height: 32px; }
-
-  @media (max-width: 560px) {
-    .lockup { height: 38px; }
-    .doc-back .lockup { height: 28px; }
+  /* A modal <dialog> is anchored to the viewport by the UA stylesheet,
+     so it is fixed rather than relative or it sits at the top of the
+     document and drifts off-screen by the scroll offset. dvh rather
+     than vh so a phone's address bar cannot push the bottom of it
+     under the fold. */
+  .svc-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(640px, 92vw);
+    max-height: calc(100dvh - 3rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: clamp(1.6rem, 3.5vw, 2.4rem);
+    background: var(--ink-2, #361711);
+    border: 1px solid var(--hairline);
+    color: var(--dim);
   }
-
-  
-  .nav button, .backlink {
-    background: none; border: 0; padding: 0 0 .2rem; cursor: pointer;
+  .svc-modal { transform-origin: 50% 50%; will-change: transform, opacity; }
+  .svc-modal::backdrop {
+    background: rgba(5,6,10,0.82);
+    backdrop-filter: blur(2px);
+    animation: fade-backdrop 400ms var(--ease) both;
+  }
+  @keyframes fade-backdrop { from { opacity: 0; } to { opacity: 1; } }
+  .svc-modal-close-form { position: absolute; top: .5rem; right: .6rem; margin: 0; }
+  .svc-close {
+    background: none; border: 0; cursor: pointer;
+    color: var(--muted); font-size: 1.6rem; line-height: 1; padding: .2rem .5rem;
+  }
+  .svc-close:hover { color: var(--brass-lit); }
+  .svc-modal-eyebrow {
+    margin: 0 0 .3rem;
     font-family: var(--body);
-    font-size: .72rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--muted); border-bottom: 1px solid transparent;
-    transition: color 200ms, border-color 200ms;
+    font-size: .58rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--brass-lit);
   }
-  .nav button:hover, .nav button:focus-visible,
-  .backlink:hover, .backlink:focus-visible { color: var(--brass-lit); border-bottom-color: var(--brass-dim); }
-
-  /* ================================================================
-     Hero
-     ================================================================ */
-
-  
-  /* The lettering is BRASS over NECK, so roughly 1.6:1 rather than the
-     old single-line wordmark. Shorter than when this held the portrait
-     B, taller than when it held one line of caps. */
-  
-
-  
-  
-  
-
-  /* ================================================================
-     The threshold, a wall with two doors in it
-     ================================================================ */
-
-  
-
-  .eyebrow {
+  .svc-modal-title {
+    margin: 0 0 1.1rem;
     font-family: var(--body);
-    font-size: .68rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
-    color: var(--brass-lit); margin: 0 0 clamp(1.1rem, 3vh, 2rem);
+    font-weight: 800; font-size: clamp(1.4rem, 3.4vw, 1.9rem); letter-spacing: -0.025em;
+    color: var(--paper);
   }
   
+  
+  .svc-shot-ph {
+    font-family: var(--body);
+    font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--brass-dim);
+    text-align: center; padding: 0 1.4rem; line-height: 1.7;
+  }
+  .study-shot-ph { text-align: center; padding: 0 1.2rem; line-height: 1.7; }
+  .svc-prices {
+    margin: 0 0 1.5rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+    border: 1px solid var(--hairline);
+    background: rgba(196,142,66,0.10);
+  }
+  .svc-prices-h {
+    margin: 0 0 .8rem;
+    font-family: var(--body);
+    font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--brass-lit);
+  }
+  .svc-prices-lead {
+    margin: 0 0 .9rem; color: var(--dim);
+    font-size: var(--step-0); line-height: 1.55;
+  }
+  .svc-prices-lead b { color: var(--brass-lit); font-weight: 600; }
+  .svc-prices ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+  .svc-prices li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .1rem .9rem;
+    padding: .62rem 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .svc-prices li:first-child { border-top: 0; padding-top: 0; }
+  .p-what {
+    font-family: var(--body);
+    font-weight: 600; font-size: .95rem; color: var(--paper);
+  }
+  .p-amt {
+    font-family: var(--body);
+    font-weight: 800; font-size: 1rem; color: var(--brass-lit);
+    white-space: nowrap; text-align: right;
+  }
+  .p-note {
+    grid-column: 1 / -1;
+    color: var(--muted); font-size: .84rem; line-height: 1.5;
+  }
+  .svc-prices-foot {
+    margin: .9rem 0 0; padding-top: .8rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted); font-size: .84rem; line-height: 1.5;
+  }
 
-  /* the wall plane and the floor it stands on */
+  .svc-modal-body p { margin: 0 0 .9rem; }
   
+  
+  .svc-modal-body p:last-child { margin-bottom: 1.4rem; }
 
-  
+  /* ================================================================
+     The laptop frame inside the example dialog, so a screenshot reads
+     as a screen rather than as a picture pasted into a box.
+     ================================================================ */
 
-  
+  .lap { margin: 0 0 1.2rem; }
+  .lap-screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--black);
+    border: 9px solid transparent;
+    border-radius: 9px 9px 0 0;
+    background-image:
+      linear-gradient(var(--black), var(--black)),
+      linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  .lap-screen img,
+  .lap-screen video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 0;
+    display: block;
+  }
+  .lap-screen img[hidden], .lap-screen video[hidden] { display: none; }
+  .lap-base {
+    height: 11px;
+    margin: 0 -3.5%;
+    border-radius: 0 0 10px 10px;
+    background: linear-gradient(180deg, var(--brass) 0%, var(--brass-edge) 70%, #5E441F 100%);
+    box-shadow: 0 10px 22px rgba(12,12,12,0.45);
+  }
+  .lap-base::after {
+    content: ""; display: block; width: 16%; height: 3px; margin: 2px auto 0;
+    border-radius: 0 0 3px 3px; background: rgba(12,12,12,0.35);
+  }
+  .lap-cap {
+    display: flex; flex-wrap: wrap; gap: .4rem 1.2rem;
+    align-items: baseline; justify-content: space-between;
+    margin-top: .9rem;
+    font-size: .88rem; color: var(--muted);
+  }
+  .lap-open {
+    font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--brass-lit); text-decoration: none;
+    border-bottom: 1px solid var(--brass-dim);
+    white-space: nowrap;
+  }
+  .lap-open:hover, .lap-open:focus-visible { border-bottom-color: var(--brass-lit); }
 
-  /* ---- one door ------------------------------------------------- */
+  /* The seventh service is newer and broader than the other six, so it
+     runs the full width under them rather than making the grid a row
+     of three, a row of three and an orphan. */
+  .svc-wide { grid-column: 1 / -1; }
 
-  
 
-  
-  
-  
+/* --- the parts the live sheet gets from tokens this one lacks ------- */
+.services { max-width: none; }
+.svc { background: var(--surface); }
+.p-white .services { background: rgba(40,7,0,0.2); border-color: rgba(40,7,0,0.2); }
+.p-white .svc { background: #E7E2DA; }
+.p-white .svc:hover, .p-white .svc:focus-visible { background: #DED7CB; box-shadow: 0 0 0 1px rgba(40,7,0,0.3), 0 26px 60px rgba(40,7,0,0.18); }
+.p-white .svc-h { color: var(--maroon); }
+.p-white .svc-p { color: var(--muted-l); }
+.p-white .svc-more { color: var(--brass-ink); }
 
-  /* the door meets something: contact shadow plus the warm spill
-     from the light under it */
-  
-  
+/* The dialog is a top-layer element, so it sits outside every plane and
+   states its own colours rather than inheriting a plane's. */
+.svc-modal { --paper: #F1EFEC; --dim: #C5BCB8; --muted: #9D8E89;
+             --rule: rgba(241,239,236,0.14); --hairline: rgba(196,142,66,0.26);
+             --brass-lit: #C48E42; --brass-dim: rgba(196,142,66,0.55);
+             --surface: #361711; --surface-hi: #3E211A; }
+.svc-modal .cta {
+  display: inline-flex; align-items: center;
+  font: inherit; font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  background: var(--brass); color: var(--maroon);
+  border: 1px solid var(--brass); padding: .85rem 1.7rem; cursor: pointer;
+}
+.svc-modal .cta:hover, .svc-modal .cta:focus-visible { background: var(--brass-glint); border-color: var(--brass-glint); }
 
-  /* casing around the opening, deliberately outside the aperture,
-     so the aperture rect is the pure hole the camera flies through */
-  
-  /* the 1px brass reveal that lines the opening */
-  
 
-  
+/* The container the legacy pages run in. It lives up here rather than
+   inside a section because /games/, the case study, both legal pages
+   and 404 all hang off it, and losing it drops their side gutter
+   entirely — which is exactly what happened the first time this
+   stylesheet was merged. */
+/* The mark is portrait (332.92 x 461.02), so it is sized by height or
+   the feet clip. Without this it renders at its intrinsic size, which
+   is how the case study and the legal pages ended up with a 470px logo
+   where a 32px badge belongs. */
+.lockup { height: 46px; width: auto; display: block; }
+.doc-back .lockup { height: 32px; }
+@media (max-width: 700px) {
+  .lockup { height: 38px; }
+  .doc-back .lockup { height: 28px; }
+}
 
-  /* what you see through the opening */
-  
-  
+.shell, body.doc {
+  width: min(1140px, 92vw); margin-inline: auto;
+  /* The legacy pages are set on --step-1 (19px). The planes above run
+     at 17px, which is right for the new type scale but silently shrank
+     every untouched page when the two stylesheets were merged. */
+  font-size: var(--step-1);
+  letter-spacing: 0.004em;
+}
+body.doc { width: auto; }
 
-  /* light escaping under a shut door */
-  
-  
-  
+/* ==================================================================
+   LEGACY SECTIONS
 
-  /* ---- the leaf, as a solid object ------------------------------- */
+   Kept verbatim for the pages that did not change in the November
+   rebuild: /games/, /work/ember8/, both legal pages, the devlog
+   entries and 404. They use the `.band` + `.tone-*` system rather than
+   the planes above, and `.shell` rather than `.plane-in`.
 
-  
-  
-  /* used to snap the leaf shut while it is out of shot, rather than asking a
-     compositor animation to survive the camera layer being torn down */
-  
-  
-  /* the far side and the thickness only exist once the box is 3D -
-     at rest they would paint out of order in a flat context */
-  
-  
-  
-
-  /* The tease. This is a real rotation on the hinge, but the leaf stays a
-     FLAT element under .door's perspective, no 3D rendering context, so
-     nothing here depends on an engine painting a static preserve-3d subtree.
-     preserve-3d is switched on only for the full swing, and switched off
-     again the moment the door is shut. */
-  
-  
-  
-
-  /* light escaping down the leading edge as it comes off the latch */
-  
-  
-  
-
-  
-  
-
-  
-  
-  
-  /* once the camera is through the doorway, the door is behind you */
-  
-
-  
-
-  
-  
-
-  /* the thickness of the door, visible the moment it swings */
-  
-  
-
-  /* light falls off as the leaf turns away */
-  
-  
-
-  
-  
-  
-
-  /* the lock rail between the panels */
-  
-
-  
-
-  /* brass lever on a backplate */
-  
-  
-  
-  
-  
-
-  /* ---- the caption under each door ------------------------------- */
-
-  
-  
-  
-  
+   Do not reach for these when building anything new. Everything above
+   this line is the current system; everything below it is here so the
+   unchanged pages keep working.
+   ================================================================== */
 
   /* ================================================================
      Section pages
@@ -467,392 +1533,6 @@
     .log-meta { order: 3; }
   }
 
-
-  /* ================================================================
-     Websites, the service reel
-     ================================================================ */
-
-  .reel-line {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: .1rem .7rem;
-    margin: 1.4rem 0 1.6rem;
-    font-family: var(--body);
-    font-weight: 800;
-    font-size: clamp(1.7rem, 4.8vw, 3.4rem);
-    letter-spacing: -0.03em;
-    line-height: 1.02;
-  }
-  .reel-lead {
-    color: var(--muted);
-    font-size: .58em;
-    letter-spacing: -0.02em;
-    align-self: baseline;
-  }
-
-  .reel-slot {
-    position: relative;
-    display: inline-block;
-    min-width: 1ch;
-    padding-bottom: .22em;
-  }
-  .reel-word {
-    display: inline-block;
-    color: var(--brass-lit);
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: -0.005em;
-    will-change: transform, clip-path;
-  }
-  
-  
-
-  @keyframes reel-out {
-    from { clip-path: inset(-20% 0 0 0);   transform: translateY(0); }
-    to   { clip-path: inset(-20% 0 100% 0); transform: translateY(-0.3em); }
-  }
-  @keyframes reel-in {
-    from { clip-path: inset(100% 0 -20% 0); transform: translateY(0.3em); }
-    to   { clip-path: inset(-20% 0 -20% 0);  transform: none; }
-  }
-
-  /* Restored 29 Oct 2026. These were removed by the dead-rule prune:
-     every one is a class JavaScript adds at runtime, so the selector
-     test that drove the prune never found them on a page. The
-     @keyframes survived (the prune did not walk at-rules other than
-     @media), so the animation came back intact. */
-  .reel-word.is-out { animation: reel-out 260ms var(--ease) forwards; }
-  .reel-word.is-in  { animation: reel-in 340ms var(--ease) both; }
-
-  .reel-rule {
-    position: absolute;
-    left: 0; bottom: 0;
-    height: 3px;
-    width: 0;
-    background: linear-gradient(90deg, var(--brass), var(--brass-lit));
-    transition: width 340ms var(--ease);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .reel-word.is-out, .reel-word.is-in { animation: none; }
-    .reel-rule { transition: none; }
-  }
-
-  .cta-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: .8rem 1.2rem;
-    margin: 1.6rem 0 0;
-  }
-
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: .55rem;
-    padding: .78rem 1.4rem;
-    background: var(--brass);
-    border: 1px solid var(--brass);
-    color: #1C0A05;
-    font-family: var(--body);
-    font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-    cursor: pointer;
-    transition: background 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
-  }
-  .cta:hover, .cta:focus-visible {
-    background: var(--brass-lit);
-    border-color: var(--brass-lit);
-    transform: translateY(-1px);
-  }
-  .cta-lg { padding: .95rem 1.9rem; font-size: .78rem; }
-  .cta-note { color: var(--muted); font-size: var(--step-0); }
-
-  /* ---- services ------------------------------------------------- */
-
-  .price-vat { margin: -0.7rem 0 1.5rem; max-width: 70ch; }
-  .price-vat b { color: var(--brass-lit); font-weight: 600; }
-
-  /* six services, so three across reads as two full rows rather than
-     four-and-two with a hole in it */
-  .services {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-  .svc {
-    background: var(--surface);
-    padding: 1.5rem 1.5rem 1.7rem;
-    transition: background 240ms var(--ease);
-  }
-  .svc:hover { background: var(--surface-hi); }
-  
-  
-
-  /* ---- pricing ---------------------------------------------------- */
-
-  .price-intro { margin: 0 0 1.6rem; }
-  .price-intro b { color: var(--brass-lit); font-weight: 600; }
-
-  .tiers {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-  .tier {
-    background: var(--surface);
-    padding: 1.7rem 1.6rem 1.8rem;
-    display: grid;
-    align-content: start;
-    gap: .55rem;
-    position: relative;
-    transition: background 240ms var(--ease);
-  }
-  .tier:hover { background: var(--surface-hi); }
-  .tier.is-pick {
-    background: var(--surface-hi);
-    padding-top: 2.5rem;
-  }
-  .tier.is-pick:hover { background: #46291F; }
-  .tier-flag {
-    position: absolute; top: 0; left: 0; right: 0;
-    padding: .5rem 1.6rem .45rem;
-    font-family: var(--body);
-    font-size: .58rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--ink);
-    background: var(--brass);
-  }
-  .tier-name {
-    font-family: var(--body);
-    font-size: .64rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .tier-price {
-    font-family: var(--body);
-    font-weight: 900; font-size: clamp(2rem, 3.4vw, 2.7rem); letter-spacing: -0.03em;
-    line-height: 1; color: var(--paper);
-  }
-  .tier-line { color: var(--dim); font-size: var(--step-0); line-height: 1.55; }
-  .tier-list {
-    list-style: none; margin: .5rem 0 0; padding: 0;
-    display: grid; gap: .42rem;
-  }
-  .tier-list li {
-    position: relative; padding-left: 1.1rem;
-    color: var(--muted); font-size: var(--step-0); line-height: 1.45;
-  }
-  .tier-list li::before {
-    content: ""; position: absolute; left: 0; top: .55em;
-    width: 5px; height: 5px; background: var(--brass-dim);
-  }
-  .tier-turn {
-    margin-top: .7rem; padding-top: .7rem;
-    border-top: 1px solid var(--rule);
-    font-family: var(--body);
-    font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  h3.sub-title {
-    font-family: var(--body);
-    font-weight: 800; font-size: var(--step-2); letter-spacing: -0.01em;
-    margin: 2.8rem 0 1rem; color: var(--paper);
-  }
-
-  .plans {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  .plan {
-    padding: 1.4rem 1.5rem 1.5rem;
-    border: 1px solid var(--hairline);
-    background: rgba(196,142,66,0.09);
-    display: grid; align-content: start; gap: .45rem;
-  }
-  .plan-name {
-    font-family: var(--body);
-    font-size: .62rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .plan-price {
-    font-family: var(--body);
-    font-weight: 900; font-size: 1.9rem; letter-spacing: -0.03em; line-height: 1;
-    color: var(--paper);
-  }
-  .plan-price i {
-    font-style: normal; font-weight: 600; font-size: .8rem;
-    letter-spacing: 0; color: var(--muted);
-  }
-  .plan-line { color: var(--muted); font-size: var(--step-0); line-height: 1.55; }
-
-  .price-foot { margin-top: 1.6rem; color: var(--muted); font-size: var(--step-0); }
-
-  /* Sits under the three build tiers. It has to be noticed without
-     competing with them, so: a brass rule rather than a brass fill. */
-  .price-aside {
-    margin: 1.5rem 0 0;
-    padding-left: 1rem;
-    border-left: 2px solid var(--brass);
-    color: var(--dim);
-  }
-  .price-aside b { color: var(--brass-lit); font-weight: 600; }
-
-  @media (max-width: 900px) {
-    .tiers, .plans { grid-template-columns: 1fr; }
-    .tier.is-pick { padding-top: 2.5rem; }
-  }
-
-  /* ---- testimonials --------------------------------------------- */
-
-  /* ---- the reviews, as a deck ---------------------------------------
-     Three reviews of wildly different lengths side by side left one
-     column nearly empty and made the short ones look like filler. One
-     at a time, with arrows.
-
-     The track is a scroll-snap container, so it works with a swipe, a
-     trackpad, the keyboard and a screen reader before any JavaScript
-     runs. The arrows are hidden until the script turns them on, because
-     an arrow that does nothing is worse than no arrow. */
-
-  .quote-deck {
-    position: relative;
-    margin-top: .4rem;
-    padding-inline: clamp(2.7rem, 6vw, 4.4rem);
-  }
-  .quote-track {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 100%;
-    gap: 1rem;
-    align-items: start;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    transition: height 420ms var(--ease);
-  }
-  .quote-track::-webkit-scrollbar { display: none; }
-  .quote-track > .quote { scroll-snap-align: center; }
-  /* full-width slides give 110-character lines, which nobody reads */
-  .quote-track blockquote, .quote-track figcaption { max-width: 74ch; }
-  .quote-track:focus-visible { outline: 2px solid var(--brass-lit); outline-offset: 4px; }
-
-  .q-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: none;
-    place-items: center;
-    width: clamp(2.2rem, 5vw, 2.9rem);
-    aspect-ratio: 1;
-    background: transparent;
-    border: 1px solid var(--hairline);
-    color: var(--paper);
-    font-size: 1.05rem; line-height: 1;
-    cursor: pointer;
-    z-index: 2;
-    transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
-  }
-  .quote-deck.is-ready .q-arrow { display: grid; }
-  .q-prev { left: 0; }
-  .q-next { right: 0; }
-  .q-arrow:hover, .q-arrow:focus-visible {
-    background: var(--brass); border-color: var(--brass); color: var(--ink);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .quote-track { scroll-behavior: auto; }
-    .quote-track { transition: none; }
-  }
-
-
-  .quote {
-    margin: 0;
-    padding: 1.7rem 1.8rem;
-    background: rgba(196,142,66,0.10);
-    border: 1px solid var(--hairline);
-    position: relative;
-  }
-  .quote::before {
-    content: "\201C";
-    position: absolute;
-    top: .3rem; left: 1rem;
-    font-family: var(--body);
-    font-size: 3.4rem;
-    line-height: 1;
-    color: var(--brass-dim);
-  }
-  .quote blockquote {
-    margin: 0 0 1.1rem;
-    padding-left: 1.5rem;
-    font-size: 1.12rem;
-    line-height: 1.55;
-    color: var(--dim);
-  }
-  .quote figcaption { padding-left: 1.5rem; display: grid; gap: .15rem; }
-  .quote .who {
-    font-family: var(--body);
-    font-weight: 700; font-size: .92rem; color: var(--paper);
-  }
-  .quote .what {
-    font-family: var(--body);
-    font-size: .62rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
-    color: var(--muted);
-  }
-  
-
-  /* a long, real testimonial: printed whole rather than filleted */
-  .quote-long { padding-top: 1.5rem; }
-  .quote-long blockquote { padding-left: 1.5rem; font-size: 1.06rem; }
-  .quote-long blockquote p { margin: 0 0 .85rem; }
-  .quote-long blockquote p:last-child { margin-bottom: 0; color: var(--paper); }
-  .quote-long figcaption { margin-top: 1.3rem; }
-  .quote-stars {
-    margin: 0 0 .9rem; padding-left: 1.5rem;
-    color: var(--brass-lit); font-size: 1rem; letter-spacing: .28em; line-height: 1;
-  }
-
-  /* ---- closing CTA ---------------------------------------------- */
-
-  /* The closing call to action is a solid brass block. The guidelines
-     use the palette as big flat fields and this is the one place on a
-     page where that fits: it ends every section on the brand colour
-     rather than on more ground, and it is most of what makes the site
-     read brighter than it did.
-
-     Everything inside flips to Dark Maroon, because white on brass is
-     2.5 : 1 and fails. Maroon on brass is 6.5 : 1. */
-  .closer {
-    display: grid;
-    justify-items: start;
-    gap: .9rem;
-    padding: clamp(2rem, 4.4vw, 3.2rem);
-    border: 0;
-    background: var(--brass);
-    color: var(--maroon);
-  }
-  .closer h2 {
-    margin: 0; color: var(--maroon); text-wrap: balance;
-    font-size: var(--step-3);
-  }
-  .closer p { margin: 0; max-width: 54ch; color: rgba(40,7,0,0.84); font-weight: 600; }
-  .closer .cta {
-    margin-top: .5rem;
-    background: var(--maroon);
-    color: var(--brass);
-    border-color: var(--maroon);
-  }
-  .closer .cta:hover, .closer .cta:focus-visible {
-    background: var(--black); color: var(--brass); border-color: var(--black);
-  }
-  .closer .cta-note { color: rgba(40,7,0,0.86); font-weight: 600; }
-  .closer .cta-note { font-size: .85rem; }
 
 
   /* ================================================================
@@ -1054,25 +1734,6 @@
   a.cta { text-decoration: none; }
   a.backlink { text-decoration: none; }
 
-  /* ================================================================
-     Character select, compact, centred, so the trailer leads
-     ================================================================ */
-
-  /* ---- the plaque on the wall between the doors ------------------ */
-
-  
-  
-
-  /* hairlines running off toward each door, so it reads as fixed to the wall */
-  
-  
-  
-
-  /* below this the doors are too close together to hang anything between */
-  @media (max-width: 900px) {
-    
-    
-  }
 
   /* ================================================================
      Games, character select
@@ -1141,10 +1802,12 @@
     background: #1A0603;
   }
   
+  /* Only ever visible if the key art fails to load, which is exactly
+     when it needs to be readable. It was 7px at brass-dim, 2.8 : 1. */
   .slot-ph {
     font-family: var(--body);
-    font-size: .44rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--brass-dim);
+    font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--brass);
     text-align: center;
   }
 
@@ -1508,295 +2171,6 @@
   }
 
 
-  /* ================================================================
-     Studio: the team, and the case for doing both
-     ================================================================ */
-
-  /* Sized by content rather than a fixed count: the studio has been four
-     people and is now two, and a hard-coded repeat(4) leaves dead columns. */
-  .crew {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-    gap: 1px;
-    max-width: 860px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-  .crew-member {
-    background: var(--surface);
-    padding: 1.6rem 1.4rem 1.8rem;
-    display: grid;
-    align-content: start;
-    gap: .4rem;
-    transition: background 280ms var(--ease);
-  }
-  .crew-member:hover { background: var(--surface-hi); }
-
-  .crew-face {
-    position: relative;
-    width: 74px; height: 74px;
-    display: grid; place-items: center;
-    margin-bottom: .8rem;
-    overflow: hidden;
-    border: 1px solid var(--brass-dim);
-    background:
-      radial-gradient(80% 80% at 40% 25%, rgba(196,142,66,0.16), transparent 70%),
-      #1A0603;
-  }
-  
-  .crew-initial {
-    font-family: var(--body);
-    font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em;
-    color: var(--brass);
-  }
-
-  .crew-name {
-    margin: 0;
-    font-family: var(--body);
-    font-weight: 800; font-size: 1.16rem; letter-spacing: -0.02em;
-    color: var(--paper);
-  }
-  .crew-name a {
-    color: inherit; text-decoration: none;
-    border-bottom: 1px solid var(--brass-dim);
-    transition: color .2s, border-color .2s;
-  }
-  .crew-name a:hover, .crew-name a:focus-visible { color: var(--brass-lit); border-bottom-color: var(--brass-lit); }
-
-  .crew-role {
-    margin: 0 0 .5rem;
-    font-family: var(--body);
-    font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .crew-line { margin: 0; color: var(--muted); font-size: var(--step-0); }
-
-  /* ---- the transfer table --------------------------------------- */
-
-  .xfers { margin-top: 1.6rem; border-top: 1px solid var(--rule); }
-
-  .xfer {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 8.5rem minmax(0, 1fr);
-    align-items: center;
-    gap: 1rem 1.6rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .xfer-web { text-align: right; color: var(--dim); font-size: var(--step-0); }
-  .xfer-game { text-align: left; color: var(--dim); font-size: var(--step-0); }
-  .xfer-mid {
-    justify-self: center;
-    padding: .32rem .7rem;
-    border: 1px solid var(--brass-dim);
-    background: rgba(196,142,66,0.14);
-    font-family: var(--body);
-    font-size: .58rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--brass-lit);
-    white-space: nowrap;
-  }
-
-  .xfer-head {
-    border-bottom-color: var(--hairline);
-    padding-bottom: .7rem;
-  }
-  .xfer-head .xfer-web,
-  .xfer-head .xfer-game {
-    font-family: var(--body);
-    font-size: .58rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--muted);
-  }
-  .xfer-head .xfer-mid { border-color: transparent; background: none; color: var(--muted); }
-
-  /* ---- the punchline --------------------------------------------- */
-
-  .audacity {
-    display: grid;
-    justify-items: start;
-    gap: .2rem;
-    padding: clamp(2rem, 5vw, 3.2rem);
-    border: 1px solid var(--hairline);
-    background:
-      radial-gradient(90% 140% at 0% 0%, rgba(196,142,66,0.11), transparent 62%),
-      rgba(196,142,66,0.035);
-  }
-  .aud-line {
-    margin: 0;
-    font-family: var(--body);
-    font-weight: 800;
-    font-size: clamp(1.5rem, 4vw, 2.6rem);
-    letter-spacing: -0.032em;
-    line-height: 1.08;
-    color: var(--dim);
-    text-wrap: balance;
-  }
-  .aud-punch { color: var(--brass-lit); }
-  .aud-note {
-    margin: 1.5rem 0 0;
-    max-width: 56ch;
-    color: var(--muted);
-    font-size: var(--step-0);
-  }
-  .aud-note strong {
-    font-family: var(--body);
-    font-weight: 700;
-    color: var(--paper);
-  }
-  .aud-note span { font-style: italic; color: var(--brass-dim); margin-left: .2rem; }
-
-  @media (max-width: 980px) {
-    .crew { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (max-width: 760px) {
-    .xfer { grid-template-columns: 1fr; gap: .35rem; padding: 1.1rem 0; }
-    .xfer-web, .xfer-game { text-align: left; }
-    .xfer-mid { justify-self: start; margin: .2rem 0; }
-    .xfer-head { display: none; }
-  }
-  @media (max-width: 520px) {
-    .crew { grid-template-columns: 1fr; }
-  }
-
-  /* ================================================================
-     Contact
-     ================================================================ */
-
-  .contact-band {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-    gap: clamp(1.8rem, 4vw, 3.5rem);
-    align-items: start;
-  }
-
-  .enquiry { display: grid; gap: 1.1rem; }
-  .f-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 1.1rem; }
-
-  .field { display: grid; gap: .4rem; }
-  .f-label {
-    font-family: var(--body);
-    font-size: .62rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .f-opt { color: var(--muted); letter-spacing: .1em; text-transform: none; font-style: italic; }
-
-  .field input,
-  .field select,
-  .field textarea {
-    width: 100%;
-    padding: .72rem .85rem;
-    background: rgba(241,239,236,0.08);
-    border: 1px solid var(--rule);
-    color: var(--paper);
-    font-family: var(--body);
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-  .field textarea { resize: vertical; min-height: 8rem; }
-  .field select {
-    font-family: var(--body);
-    font-size: .92rem;
-    appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, var(--brass) 50%), linear-gradient(135deg, var(--brass) 50%, transparent 50%);
-    background-position: calc(100% - 19px) calc(50% + 2px), calc(100% - 13px) calc(50% + 2px);
-    background-size: 6px 6px, 6px 6px;
-    background-repeat: no-repeat;
-    padding-right: 2.6rem;
-  }
-  .field input::placeholder,
-  .field textarea::placeholder { color: var(--muted); opacity: .75; font-style: italic; }
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus {
-    outline: none;
-    border-color: var(--brass-lit);
-    background: rgba(241,239,236,0.055);
-  }
-  .field.is-bad input,
-  .field.is-bad textarea { border-color: #D98166; }
-
-  .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-
-  .f-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1.2rem; margin-top: .3rem; }
-  .f-status { margin: 0; font-size: var(--step-0); color: var(--muted); min-height: 1.4em; }
-  .enquiry.is-sending { opacity: .6; pointer-events: none; }
-  .f-status.is-good { color: var(--brass-lit); }
-  .f-status.is-bad { color: #D98166; }
-  
-
-  
-
-  .sent {
-    display: grid;
-    gap: .7rem;
-    justify-items: start;
-    padding: clamp(1.8rem, 4vw, 2.6rem);
-    border: 1px solid var(--hairline);
-    background: rgba(196,142,66,0.10);
-  }
-  .sent h2 {
-    font-family: var(--body);
-    font-weight: 800; font-size: var(--step-3); letter-spacing: -0.02em;
-    margin: 0; color: var(--paper);
-  }
-  .sent p { margin: 0; color: var(--dim); max-width: 48ch; }
-
-  .contact-aside { display: grid; gap: 1.4rem; align-content: start; }
-  .aside-block { border-top: 1px solid var(--rule); padding-top: .9rem; }
-  .aside-block h3,
-  .aside-block .aside-h {
-    font-family: var(--body);
-    font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 .45rem;
-  }
-  .aside-block p { margin: 0; color: var(--dim); font-size: var(--step-0); }
-  .aside-block a { color: var(--brass-lit); text-decoration: none; border-bottom: 1px solid var(--brass-dim); }
-  .aside-block a:hover { border-bottom-color: var(--brass-lit); }
-  .aside-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
-  .aside-list li {
-    position: relative;
-    padding-left: 1rem;
-    color: var(--dim);
-    font-size: var(--step-0);
-  }
-  .aside-list li::before {
-    content: "";
-    position: absolute;
-    left: 0; top: .62em;
-    width: 4px; height: 4px;
-    background: var(--brass-dim);
-    transform: rotate(45deg);
-  }
-
-  @media (max-width: 900px) {
-    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (max-width: 860px) {
-    .contact-band { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 560px) {
-    .services { grid-template-columns: 1fr; }
-
-  }
-
-  /* ================================================================
-     Tuner
-     ================================================================ */
-
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   /* ================================================================
      Small screens
@@ -1820,6 +2194,7 @@
   @media (prefers-reduced-motion: reduce) {
     
   }
+
 
 
   /* ================================================================
@@ -1911,6 +2286,7 @@
      hairline that separates untoned bands is pointless against one. */
   section.band[class*="tone-"] + section.band { border-top: 0; }
 
+
   /* ================================================================
      Display type
 
@@ -1965,657 +2341,100 @@
   strong, b { font-weight: 700; }
   .prose, .lede, .statement, p { font-weight: 500; }
 
-  /* ================================================================
-     Site chrome, from the move to real pages (Oct 2026)
 
-     The site used to be one document with four views, a camera and a
-     router. Every URL now serves its own page, so the masthead is
-     anchors rather than buttons, there is nothing to cross-fade, and
-     the back-out-through-the-door control has nowhere to go back to.
-     ================================================================ */
 
-  .skip {
-    position: absolute; left: -9999px; top: 0; z-index: 100;
-    background: var(--brass); color: var(--ink);
-    padding: .8rem 1.2rem;
-    font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .76rem;
-  }
-  .skip:focus { left: 0; }
+/* ------------------------------------------------------------------
+   The last legacy pieces: the eyebrow, the section call to action, the
+   review block on the case study, and the key-art frame on /games/.
+   ------------------------------------------------------------------ */
 
-  /* The masthead has no ground of its own: it sits straight on whatever
-     band is passing under it, and the mark and the links change colour
-     to suit. Each of the four grounds gets a different one of the four
-     brand colours, and every pair is above 6.5 : 1:
-
-       Dark Maroon ground -> White mark      16.3 : 1
-       Black band         -> Brass mark       6.8 : 1
-       White band         -> Dark Maroon      16.3 : 1
-       Brass band         -> Black mark       6.8 : 1
-
-     The mark is swapped by `src` between the four supplied colourways,
-     never recoloured in CSS: the fills are baked into each file and
-     editing one would be altering the logo. */
-  .mast {
-    position: sticky; top: 0; z-index: 40;
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    padding: .9rem clamp(1.25rem, 4vw, 2.6rem);
-    background: transparent;
-    --mast-ink: var(--paper);
-    --mast-btn: var(--brass);
-    --mast-btn-ink: var(--ink);
-  }
-  .mast[data-tone="white"], .mast[data-tone="brass"] {
-    --mast-ink: #280700;
-    --mast-btn: #280700;
-    --mast-btn-ink: #C48E42;
-  }
-  .mast-home { display: block; line-height: 0; }
-  /* Two colourways stacked. The lower one is clipped to whatever part of
-     the mark is sitting over the next band down, so while a band edge is
-     passing through the mark it really is half one colour and half the
-     other, rather than flipping the instant the edge crosses a line. */
-  .mast-mark { position: relative; display: block; line-height: 0; }
-  .mast .lockup { height: 42px; width: auto; display: block; }
-  .mast .mark-dn {
-    position: absolute; left: 0; top: 0;
-    clip-path: inset(100% 0 0 0);
-  }
-  .mast-nav { display: flex; align-items: center; gap: clamp(.8rem, 2.2vw, 2rem); }
-  .mast-nav a {
+  .eyebrow {
     font-family: var(--body);
-    font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-    text-decoration: none; color: var(--mast-ink); opacity: .78;
-    transition: opacity .2s var(--ease), color .25s var(--ease);
+    font-size: .68rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--brass-lit); margin: 0 0 clamp(1.1rem, 3vh, 2rem);
   }
-  .mast-nav a:hover, .mast-nav a:focus-visible { opacity: 1; color: var(--mast-ink); text-decoration: underline; text-underline-offset: .35em; }
-  .mast-nav a[aria-current="page"] { opacity: 1; color: var(--mast-ink); }
-  .mast-nav a.mast-cta {
-    opacity: 1; color: var(--mast-btn-ink); background: var(--mast-btn);
-    padding: .52rem .95rem; border: 1px solid var(--mast-btn);
-    transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
-  }
-  .mast-nav a.mast-cta:hover, .mast-nav a.mast-cta:focus-visible {
-    color: var(--ink); background: var(--brass-glint); border-color: var(--brass-glint);
-  }
-  .mast[data-tone="white"] .mast-nav a.mast-cta:hover,
-  .mast[data-tone="brass"] .mast-nav a.mast-cta:hover,
-  .mast[data-tone="white"] .mast-nav a.mast-cta:focus-visible,
-  .mast[data-tone="brass"] .mast-nav a.mast-cta:focus-visible {
-    color: #C48E42; background: var(--black); border-color: var(--black);
-  }
-  @media (max-width: 640px) {
-    .mast .lockup { height: 32px; }
-    .mast-nav { gap: .72rem; }
-    .mast-nav a { font-size: .62rem; letter-spacing: .1em; }
-    .mast-nav a.mast-cta { padding: .45rem .7rem; }
-    .mast-nav a.nav-tight { display: none; }
+  
+
+  /* the wall plane and the floor it stands on */
+  
+
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .8rem 1.2rem;
+    margin: 1.6rem 0 0;
   }
 
-  /* The call to action is an anchor on every page now. It was a
-     <button> driving the router, and every .cta rule was written for
-     one, so the anchor has to be told to behave like a button rather
-     than like text. */
-  a.cta { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
-
-  .foot {
-    border-top: 1px solid var(--hairline);
-    margin-top: clamp(3rem, 8vh, 5rem);
-    padding: clamp(2.4rem, 6vh, 3.4rem) clamp(1.25rem, 4vw, 2.6rem) clamp(2.4rem, 6vh, 3.4rem);
-    background: var(--ink);
-  }
-  .foot-in {
-    width: min(1140px, 92vw); margin-inline: auto;
-    display: flex; flex-wrap: wrap; gap: 1.4rem 3rem;
-    align-items: flex-start; justify-content: space-between;
-  }
-  .foot .lockup { height: 54px; width: auto; display: block; }
-  .foot-cols { display: flex; flex-wrap: wrap; gap: .5rem 1.7rem; align-items: center; }
-  .foot-cols a {
-    display: inline-block;
-    padding: .55rem 0;            /* a 24px tap target, per WCAG 2.5.8 */
-    font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
-    text-decoration: none; color: var(--paper); opacity: .72;
-  }
-  .foot-cols a:hover, .foot-cols a:focus-visible { opacity: 1; color: var(--brass-lit); }
-  .foot-mail {
-    width: min(1140px, 92vw); margin: 1.6rem auto 0;
-    font-size: var(--step-0); color: var(--brass-lit);
-  }
-  .foot-mail a { color: inherit; }
-  .foot-reg {
-    width: min(1140px, 92vw); margin: .6rem auto 0;
-    font-size: .92rem; color: var(--muted); max-width: 70ch;
-  }
-
-
-  /* ================================================================
-     The homepage
-
-     Direction C, picked 27 Oct 2026. The old homepage was a 3D
-     threshold with two doors and a camera dive; it is now the
-     clickable example inside the Web design card, which is a better
-     job for it than being the thing standing between a visitor and
-     the price list.
-
-     Everything here is scoped to `.home` on purpose. The concept was
-     drawn with generic names (.h-band, .h-tier, .h-closer, .h-stars) that the
-     section pages already use for different components, and scoping
-     is cheaper and safer than renaming either set.
-     ================================================================ */
-
-  body.home { --gut: clamp(1.25rem, 5vw, 4.5rem); --max: 1280px; }
-
-/* ==================================================================
-   DIRECTION C — "The Build"
-   The hero is a site assembling itself: structure, then words, then
-   colour, then live. It demonstrates the craft instead of claiming it,
-   and it sets up the process section before the visitor reaches it.
-
-   Pure CSS, four crossfading layers on one timeline. No JavaScript,
-   nothing decoded, nothing that blocks the first paint, and the whole
-   thing stops dead under prefers-reduced-motion.
-   ================================================================== */
-
-/* ---- hero -------------------------------------------------------- */
-
-.home .h-hero { position: relative; overflow: hidden; padding: clamp(2.5rem, 6vh, 5rem) 0 clamp(3rem, 7vh, 5.5rem); }
-.home .h-hero::before {
-  content: "";
-  position: absolute; inset: -20% -10% auto -30%; height: 150%;
-  background: radial-gradient(55% 50% at 70% 35%, rgba(196,142,66,0.2), transparent 72%);
-  pointer-events: none;
-}
-.home .h-hero-in {
-  position: relative;
-  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(2rem, 4vw, 4.5rem); align-items: center;
-}
-.home .h-eyebrow {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--brass); margin-bottom: 1.2rem;
-}
-.home .h-eyebrow::before { content: ""; width: 30px; height: 1px; background: var(--brass); }
-.home .h-hero h1 { font-size: clamp(2.6rem, 4.9vw, 4.3rem); margin-bottom: 1.2rem; text-wrap: balance; }
-.home .h-hero h1 em { font-style: normal; color: var(--brass); }
-.home .h-hero-sub { font-size: clamp(1.08rem, 1.4vw, 1.3rem); max-width: 42ch; color: rgba(241,239,236,0.84); margin-bottom: 1.8rem; }
-.home .h-hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
-.home .h-hero-note { margin-top: 1rem; font-size: .95rem; opacity: .6; }
-
-/* ---- the assembling browser --------------------------------------- */
-
-.home .h-builder { position: relative; }
-.home .h-bframe {
-  border: 10px solid transparent;
-  background:
-    linear-gradient(var(--wall-lo), var(--wall-lo)) padding-box,
-    linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge)) border-box;
-  box-shadow: 0 40px 90px rgba(12,12,12,0.6);
-}
-.home .h-bbar {
-  display: flex; align-items: center; gap: .4rem;
-  padding: .5rem .7rem; background: var(--black);
-  border-bottom: 1px solid rgba(196,142,66,0.2);
-}
-.home .h-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(241,239,236,0.22); }
-
-/* Two states of the same address bar, stacked in one grid cell so the
-   bar cannot change width when it swaps. */
-.home .h-burl-slot { display: grid; margin-left: .6rem; }
-.home .h-burl-slot .h-u {
-  grid-area: 1 / 1;
-  display: flex; align-items: center; gap: .4rem;
-  padding: .18rem .7rem; font-size: .72rem; letter-spacing: .06em;
-  background: rgba(241,239,236,0.07); border-radius: 100px;
-  color: rgba(241,239,236,0.6);
-  animation: urlDraft 20s linear infinite;
-}
-.home .h-burl-slot .h-u-live {
-  color: var(--paper);
-  background: rgba(196,142,66,0.18);
-  animation-name: urlLive;
-}
-.home .h-burl-slot .h-u-live svg { width: 9px; height: auto; opacity: .85; }
-.home .h-burl-slot .h-u-live b {
-  font-size: .54rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--brass);
-  display: inline-flex; align-items: center; gap: .3rem;
-}
-.home .h-burl-slot .h-u-live b::before {
-  content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--brass);
-  animation: blip 2s ease-in-out infinite;
-}
-/* The address bar goes live inside the layer crossfade (16.0s–16.6s),
-   not before it: seeing the padlock while the Motion beat is still on
-   screen would say the site was live a beat early. */
-@keyframes urlDraft { 0%, 80% { opacity: 1; } 82%, 100% { opacity: 0; } }
-@keyframes urlLive { 0%, 80% { opacity: 0; } 82%, 100% { opacity: 1; } }
-@keyframes blip { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
-
-.home .h-canvas { position: relative; aspect-ratio: 16 / 10.5; background: var(--wall-lo); }
-/* The rows are set on the container, not as heights on the children:
-   a percentage height on a grid item resolves against a track that is
-   itself content-sized, which is circular, so the browser falls back
-   to auto and every block collapses to its border. */
-.home .h-layer {
-  position: absolute; inset: 0;
-  padding: 6% 7%;
-  display: grid;
-  grid-template-rows: 8% 22% 9% 30% 11%;
-  gap: 3.5%;
-  opacity: 0;
-  animation: beat 20s linear infinite;
-}
-.home .h-layer:nth-child(1) { animation-delay: 0s; }
-.home .h-layer:nth-child(2) { animation-delay: 4s; }
-.home .h-layer:nth-child(3) { animation-delay: 8s; }
-.home .h-layer:nth-child(4) { animation-delay: 12s; }
-.home .h-layer:nth-child(5) { animation-delay: 16s; }
-
-/* One 20s cycle, five 4s beats. Everything on this hero — the layers,
-   the captions, the cursor, the URL bar — runs on this same 20s clock
-   with a 4s-per-beat delay, so nothing can drift out of step. */
-@keyframes beat {
-  0%    { opacity: 0; }
-  3%    { opacity: 1; }
-  18%   { opacity: 1; }
-  21%   { opacity: 0; }
-  100%  { opacity: 0; }
-}
-
-/* the mock page's parts, restyled per layer */
-.home .h-m-bar { }
-.home .h-m-head { width: 74%; }
-.home .h-m-sub { width: 54%; }
-.home .h-m-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3%; }
-.home .h-m-cell { }
-.home .h-m-btn { width: 26%; }
-
-/* 01 structure — hairline wireframe */
-.home .h-l1 .h-m-bar, .home .h-l1 .h-m-head, .home .h-l1 .h-m-sub, .home .h-l1 .h-m-cell, .home .h-l1 .h-m-btn {
-  border: 1px dashed rgba(241,239,236,0.3); background: transparent;
-}
-/* 02 words — blocks fill with type-weight bars */
-.home .h-l2 .h-m-bar, .home .h-l2 .h-m-head, .home .h-l2 .h-m-sub, .home .h-l2 .h-m-cell, .home .h-l2 .h-m-btn {
-  border: 1px solid rgba(241,239,236,0.16);
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(241,239,236,0.26) 0 2px,
-    transparent 2px 7px);
-  background-position: 0 4px;
-}
-.home .h-l2 .h-m-bar { background: rgba(241,239,236,0.1); }
-/* 03 colour — the palette arrives */
-.home .h-l3 .h-m-bar { background: var(--black); border: 0; }
-.home .h-l3 .h-m-head { background: var(--brass); border: 0; }
-.home .h-l3 .h-m-sub { background: rgba(241,239,236,0.3); border: 0; }
-.home .h-l3 .h-m-cell { background: var(--surface); border: 1px solid rgba(196,142,66,0.26); }
-.home .h-l3 .h-m-btn { background: var(--brass); border: 0; }
-/* 04 motion and 05 live share the finished page. The difference is
-   that one is being used and the other is simply up. */
-.home .h-fin { background: var(--ink); }
-.home .h-fin .h-m-bar { background: var(--black); display: flex; align-items: center; padding: 0 3%; gap: 6%; }
-.home .h-fin .h-m-bar i {
-  position: relative;
-  font-style: normal; font-size: .52rem; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(241,239,236,0.55);
-}
-.home .h-fin .h-m-head {
-  display: grid; align-content: center;
-  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
-  text-transform: uppercase; line-height: .92;
-  font-size: clamp(.9rem, 2.4vw, 1.9rem); color: var(--paper);
-  width: 86%;
-}
-.home .h-fin .h-m-head b { color: var(--brass); font-weight: 400; }
-.home .h-fin .h-m-sub { display: grid; align-content: center; font-size: clamp(.5rem, .95vw, .74rem); color: rgba(241,239,236,0.7); width: 62%; }
-.home .h-fin .h-m-cell { background: var(--surface); border: 1px solid rgba(196,142,66,0.24); }
-.home .h-fin .h-m-btn {
-  background: var(--brass); display: grid; place-items: center;
-  font-size: .5rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink); width: 30%;
-}
-
-/* ---- 04 motion: the page being used ------------------------------- */
-
-/* The heading and the line under it arrive, a nav item underlines
-   itself, then a pointer crosses the page, lifts a card and presses
-   the button. All five run on the 20s clock at the 12s beat. */
-.home .h-l4m .h-m-head {
-  animation: riseIn 20s linear infinite;
-  animation-delay: 12s;
-}
-.home .h-l4m .h-m-sub {
-  animation: riseIn 20s linear infinite;
-  animation-delay: 12.35s;
-}
-@keyframes riseIn {
-  0%   { opacity: 0; transform: translateY(14px); }
-  5%   { opacity: 1; transform: translateY(0); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.home .h-l4m .h-m-bar i:nth-child(2)::after {
-  content: ""; position: absolute; left: 0; right: 100%; bottom: -4px;
-  height: 1px; background: var(--brass);
-  animation: sweep 20s linear infinite;
-  animation-delay: 12.2s;
-}
-@keyframes sweep {
-  0%   { right: 100%; }
-  4%   { right: 0; }
-  100% { right: 0; }
-}
-
-.home .h-l4m .h-m-row .h-m-cell:nth-child(2) {
-  animation: cardLift 20s linear infinite;
-  animation-delay: 12s;
-}
-/* Lifts as the pointer lands (7%) and drops as it leaves (11%). */
-@keyframes cardLift {
-  0%, 6.4%  { transform: translateY(0); border-color: rgba(196,142,66,0.24); box-shadow: none; }
-  7.6%      { transform: translateY(-5px); border-color: var(--brass); box-shadow: 0 10px 22px rgba(0,0,0,0.5); }
-  10.8%     { transform: translateY(-5px); border-color: var(--brass); box-shadow: 0 10px 22px rgba(0,0,0,0.5); }
-  12%, 100% { transform: translateY(0); border-color: rgba(196,142,66,0.24); box-shadow: none; }
-}
-
-.home .h-l4m .h-m-btn {
-  animation: press 20s linear infinite;
-  animation-delay: 12s;
-}
-@keyframes press {
-  0%, 14%   { transform: scale(1); background: var(--brass); }
-  15.5%     { transform: scale(1.05); background: var(--brass-glint); }
-  16.5%     { transform: scale(0.97); background: var(--brass-glint); }
-  18%, 100% { transform: scale(1); background: var(--brass); }
-}
-
-/* The pointer is the full size of the canvas and carries the arrow in
-   its top-left corner, so a translate in % is a translate in % of the
-   page it is crossing — and it stays on the compositor. */
-.home .h-pointer {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  animation: track 20s linear infinite;
-  animation-delay: 12s;
-}
-.home .h-pointer svg {
-  position: absolute; top: 0; left: 0;
-  width: 17px; height: auto;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-}
-@keyframes track {
-  0%        { opacity: 0; transform: translate(88%, 104%); }
-  2%        { opacity: 1; transform: translate(88%, 104%); }
-  7%        { opacity: 1; transform: translate(50%, 60%); }
-  11%       { opacity: 1; transform: translate(50%, 60%); }
-  15%       { opacity: 1; transform: translate(14%, 83%); }
-  18%       { opacity: 1; transform: translate(14%, 83%); }
-  20%, 100% { opacity: 0; transform: translate(14%, 83%); }
-}
-
-/* ---- 05 live: settled ---------------------------------------------- */
-
-.home .h-l5 .h-m-btn { box-shadow: 0 0 0 0 rgba(196,142,66,0.5); }
-
-/* stage captions, on the same beat */
-.home .h-stages {
-  display: flex; gap: 0; margin-top: 1rem;
-  border-top: 1px solid rgba(196,142,66,0.26);
-}
-.home .h-stages li {
-  list-style: none; flex: 1 1 0; padding: .7rem .4rem 0;
-  font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(241,239,236,0.32);
-  border-top: 2px solid transparent; margin-top: -1px;
-  animation: lit 20s linear infinite;
-}
-.home .h-stages li:nth-child(1) { animation-delay: 0s; }
-.home .h-stages li:nth-child(2) { animation-delay: 4s; }
-.home .h-stages li:nth-child(3) { animation-delay: 8s; }
-.home .h-stages li:nth-child(4) { animation-delay: 12s; }
-.home .h-stages li:nth-child(5) { animation-delay: 16s; }
-@keyframes lit {
-  0%   { color: rgba(241,239,236,0.32); border-top-color: transparent; }
-  3%   { color: var(--brass); border-top-color: var(--brass); }
-  18%  { color: var(--brass); border-top-color: var(--brass); }
-  21%  { color: rgba(241,239,236,0.32); border-top-color: transparent; }
-  100% { color: rgba(241,239,236,0.32); border-top-color: transparent; }
-}
-.home .h-stages { margin-bottom: 0; padding: 0; }
-
-/* Motion off: show the finished, live state and nothing moving at all.
-   The base reset in _base.h-css crushes durations to a millisecond,
-   which would leave every layer stacked on top of the next, so the
-   layers are switched off here by hand rather than merely sped up. */
-@media (prefers-reduced-motion: reduce) {
-  .home .h-layer, .home .h-stages li, .home .h-pointer, .home .h-burl-slot .h-u, .home .h-l4m .h-m-head, .home .h-l4m .h-m-sub, .home .h-l4m .h-m-row .h-m-cell:nth-child(2), .home .h-l4m .h-m-btn {
-    animation: none !important;
-  }
-  .home .h-layer { opacity: 0; }
-  .home .h-layer.h-l5 { opacity: 1; }
-  .home .h-pointer { display: none; }
-  .home .h-burl-slot .h-u-draft { opacity: 0; }
-  .home .h-burl-slot .h-u-live { opacity: 1; }
-  .home .h-stages li:nth-child(5) { color: var(--brass); border-top-color: var(--brass); }
-}
-
-/* ---- generic rhythm ------------------------------------------------ */
-
-.home .h-band { padding: clamp(3.5rem, 8vh, 6.5rem) 0; }
-/* The light bands redefine the tokens the same way the section pages'
-   tone system does. Without this, --brass-lit stays at full Brass and
-   anything brass on a white band (the step numbers, the card links)
-   lands at 2.5 : 1. */
-.home .h-band.h-white {
-  background: #F1EFEC; color: var(--ink); font-weight: 600;
-  --paper: #F1EFEC; --dim: #3B2219; --muted: #57413B;
-  --rule: rgba(40,7,0,0.20); --hairline: rgba(40,7,0,0.34);
-  --brass-lit: #684D27; --brass-dim: rgba(40,7,0,0.46);
-}
-.home .h-band.h-black { background: var(--black); }
-.home .h-band.h-brass {
-  background: var(--brass); color: var(--ink); font-weight: 600;
-  --dim: #280700; --muted: #35150A;
-  --rule: rgba(40,7,0,0.30); --hairline: rgba(40,7,0,0.42);
-  --brass-lit: #280700; --brass-dim: rgba(40,7,0,0.55);
-}
-.home .h-band h2 { font-size: clamp(2rem, 4.6vw, 3.5rem); margin-bottom: .9rem; }
-.home .h-band .h-lede { max-width: 58ch; font-size: 1.1rem; opacity: .78; margin-bottom: 2.6rem; }
-.home .h-band.h-white .h-lede, .home .h-band.h-brass .h-lede { opacity: .9; }
-
-/* ---- what we build -------------------------------------------------- */
-
-.home .h-builds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-.home .h-bcard {
-  border: 1px solid rgba(196,142,66,0.26); background: var(--surface);
-  padding: 1.8rem 1.6rem 2rem; display: grid; align-content: start; gap: .6rem;
-  transition: border-color .25s, transform .25s var(--ease);
-}
-.home .h-bcard:hover { border-color: var(--brass); transform: translateY(-3px); }
-.home .h-bcard h3 { font-size: 1.6rem; }
-.home .h-bcard p { opacity: .78; font-size: 1.02rem; }
-.home .h-bcard .h-from { font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); margin-top: .4rem; }
-
-/* ---- process -------------------------------------------------------- */
-
-.home .h-flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1.2rem; }
-.home .h-fstep { position: relative; }
-.home .h-fstep .h-n {
-  display: block; font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
-  font-size: 2.4rem; line-height: 1; color: var(--brass-lit); margin-bottom: .5rem;
-}
-.home .h-fstep h3 { font-size: 1.1rem; margin-bottom: .35rem; }
-.home .h-fstep p { font-size: .98rem; color: #3B2219; }
-.home .h-fstep::after {
-  content: ""; position: absolute; top: 1.1rem; right: -.75rem; width: .5rem; height: 1px;
-  background: rgba(40,7,0,0.3);
-}
-.home .h-fstep:last-child::after { display: none; }
-
-/* ---- pricing --------------------------------------------------------- */
-
-.home .h-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(40,7,0,0.3); border: 1px solid rgba(40,7,0,0.3); }
-.home .h-tier { background: var(--brass); padding: 1.8rem 1.6rem 2rem; display: grid; align-content: start; gap: .5rem; }
-.home .h-tier.h-pick { background: var(--ink); color: var(--paper); font-weight: 500; }
-.home .h-tier .h-nm { font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; opacity: .86; }
-.home .h-tier.h-pick .h-nm { color: var(--brass); opacity: 1; }
-.home .h-tier .h-pr { font-family: var(--display); font-weight: 400; font-synthesis-weight: none; font-size: 2.8rem; line-height: 1; text-transform: uppercase; }
-.home .h-tier p { font-size: 1rem; opacity: .85; }
-.home .h-price-note { margin-top: 1.6rem; font-size: 1.02rem; }
-
-/* ---- proof ----------------------------------------------------------- */
-
-.home .h-proof-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; }
-.home .h-shot { border: 8px solid transparent;
-  background:
-    linear-gradient(var(--black), var(--black)) padding-box,
-    linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge)) border-box;
-  box-shadow: 0 30px 70px rgba(12,12,12,0.55); }
-.home .h-shot img { width: 100%; height: auto; }
-.home .h-stars { font-size: 1.05rem; letter-spacing: .3em; color: var(--brass); margin-bottom: .9rem; }
-.home .h-qbody { font-size: clamp(1.1rem, 1.7vw, 1.4rem); line-height: 1.42; }
-.home .h-qbody p + p { margin-top: .9rem; }
-.home .h-qattr { margin-top: 1.3rem; font-size: .76rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-.home .h-qattr span { display: block; font-weight: 600; letter-spacing: .1em; opacity: .6; margin-top: .3rem; }
-
-/* ---- rooms ------------------------------------------------------------ */
-
-.home .h-rooms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.home .h-room { border: 1px solid rgba(40,7,0,0.22); background: var(--paper); padding: 2.2rem 2rem 2.4rem; text-decoration: none; color: inherit; transition: background .3s var(--ease), transform .3s var(--ease); }
-.home .h-room:hover { background: #E8DCCA; transform: translateY(-3px); }
-.home .h-room h3 { font-size: 1.9rem; margin-bottom: .6rem; }
-.home .h-room p { color: #3B2219; }
-.home .h-room .h-go { display: inline-block; margin-top: 1rem; font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--brass-lit); }
-
-/* ---- closer ------------------------------------------------------------ */
-
-.home .h-closer { text-align: center; }
-.home .h-closer h2 { font-size: clamp(2.2rem, 6vw, 4.4rem); }
-.home .h-closer p { max-width: 50ch; margin: 1rem auto 2rem; font-size: 1.12rem; }
-
-@media (max-width: 1000px) {
-  .home .h-hero-in, .home .h-proof-grid { grid-template-columns: 1fr; }
-  .home .h-flow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .home .h-fstep::after { display: none; }
-}
-@media (max-width: 760px) {
-  .home .h-builds, .home .h-tiers, .home .h-rooms { grid-template-columns: 1fr; }
-  .home .h-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home .h-stages li { font-size: .55rem; letter-spacing: .08em; }
-}
-
-
-  /* ---- homepage foundation ---------------------------------------
-     The concept was drawn against its own small base sheet. These are
-     the parts of it the site did not already have, scoped the same way
-     as everything else above. Without them the headings fall back to
-     the body face, the buttons render as bare links and the content
-     runs to the window edge. */
-
-  .home main h1, .home main h2, .home main h3, .home main h4 {
-    font-family: var(--display);
-    font-weight: 400;
-    font-synthesis-weight: none;
-    text-transform: uppercase;
-    letter-spacing: 0.012em;
-    line-height: 0.92;
-    margin: 0;
-  }
-  .home main p { margin: 0; }
-  .home main img, .home main svg { display: block; max-width: 100%; }
-  .home main a { color: inherit; }
-
-  .home .h-wrap {
-    width: 100%;
-    max-width: var(--max);
-    margin-inline: auto;
-    padding-inline: var(--gut);
-  }
-
-  .home .h-btn {
-    display: inline-flex; align-items: center; gap: .6rem;
-    font-family: var(--body);
-    font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
-    padding: .95rem 1.6rem;
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .78rem 1.4rem;
+    background: var(--brass);
     border: 1px solid var(--brass);
-    background: var(--brass); color: var(--ink);
-    text-decoration: none; cursor: pointer; border-radius: 2px;
-    transition: background .22s var(--ease), transform .22s var(--ease), color .22s;
+    color: #1C0A05;
+    font-family: var(--body);
+    font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
   }
-  .home .h-btn:hover, .home .h-btn:focus-visible {
-    background: var(--brass-glint); border-color: var(--brass-glint); transform: translateY(-2px);
+  .cta:hover, .cta:focus-visible {
+    background: var(--brass-lit);
+    border-color: var(--brass-lit);
+    transform: translateY(-1px);
   }
-  .home .h-btn.h-ghost { background: transparent; color: var(--brass); }
-  .home .h-btn.h-ghost:hover, .home .h-btn.h-ghost:focus-visible { background: var(--brass); color: var(--ink); }
-  
-  
+  .cta-lg { padding: .95rem 1.9rem; font-size: .78rem; }
+  .cta-note { color: var(--muted); font-size: var(--step-0); }
 
-  @media (prefers-reduced-motion: reduce) {
-    .home .h-btn:hover, .home .h-btn:focus-visible { transform: none; }
-  }
 
-  /* ================================================================
-     The laptop, inside the service examples
 
-     Every card now opens on something real: a live demo site, a live
-     web app, a report, or a recording of the thing itself. The frame
-     is there so a screenshot reads as a screen rather than as a
-     picture pasted into a dialog.
-     ================================================================ */
-
-  .lap { margin: 0 0 1.2rem; }
-  .lap-screen {
+  .quote {
+    margin: 0;
+    padding: 1.7rem 1.8rem;
+    background: rgba(196,142,66,0.10);
+    border: 1px solid var(--hairline);
     position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: var(--black);
-    border: 9px solid transparent;
-    border-radius: 9px 9px 0 0;
-    background-image:
-      linear-gradient(var(--black), var(--black)),
-      linear-gradient(150deg, var(--brass-glint), var(--brass) 45%, var(--brass-edge));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
   }
-  .lap-screen img,
-  .lap-screen video {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: 50% 0;
-    display: block;
+  .quote::before {
+    content: "\201C";
+    position: absolute;
+    top: .3rem; left: 1rem;
+    font-family: var(--body);
+    font-size: 3.4rem;
+    line-height: 1;
+    color: var(--brass-dim);
   }
-  .lap-screen img[hidden], .lap-screen video[hidden] { display: none; }
-  .lap-base {
-    height: 11px;
-    margin: 0 -3.5%;
-    border-radius: 0 0 10px 10px;
-    background: linear-gradient(180deg, var(--brass) 0%, var(--brass-edge) 70%, #5E441F 100%);
-    box-shadow: 0 10px 22px rgba(12,12,12,0.45);
+  .quote blockquote {
+    margin: 0 0 1.1rem;
+    padding-left: 1.5rem;
+    font-size: 1.12rem;
+    line-height: 1.55;
+    color: var(--dim);
   }
-  .lap-base::after {
-    content: ""; display: block; width: 16%; height: 3px; margin: 2px auto 0;
-    border-radius: 0 0 3px 3px; background: rgba(12,12,12,0.35);
+  .quote figcaption { padding-left: 1.5rem; display: grid; gap: .15rem; }
+  .quote .who {
+    font-family: var(--body);
+    font-weight: 700; font-size: .92rem; color: var(--paper);
   }
-  .lap-cap {
-    display: flex; flex-wrap: wrap; gap: .4rem 1.2rem;
-    align-items: baseline; justify-content: space-between;
-    margin-top: .9rem;
-    font-size: .88rem; color: var(--muted);
+  .quote .what {
+    font-family: var(--body);
+    font-size: .62rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--muted);
   }
-  .lap-open {
-    font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--brass-lit); text-decoration: none;
-    border-bottom: 1px solid var(--brass-dim);
-    white-space: nowrap;
-  }
-  .lap-open:hover, .lap-open:focus-visible { border-bottom-color: var(--brass-lit); }
+  
 
-  /* The seventh service is newer and broader than the other six, so it
-     runs the full width under them rather than making the grid a row
-     of three, a row of three and an orphan. */
-  .svc-wide { grid-column: 1 / -1; }
+  /* a long, real testimonial: printed whole rather than filleted */
+  .quote-long { padding-top: 1.5rem; }
+  .quote-long blockquote { padding-left: 1.5rem; font-size: 1.06rem; }
+  .quote-long blockquote p { margin: 0 0 .85rem; }
+  .quote-long blockquote p:last-child { margin-bottom: 0; color: var(--paper); }
+  .quote-long figcaption { margin-top: 1.3rem; }
+  .quote-stars {
+    margin: 0 0 .9rem; padding-left: 1.5rem;
+    color: var(--brass-lit); font-size: 1rem; letter-spacing: .28em; line-height: 1;
+  }
 
   /* ---- key art in the trailer frame --------------------------------
      The frame was a dark placeholder panel with an apology in it. It
@@ -2655,174 +2474,93 @@
     margin-right: .7rem;
   }
 
-  /* ---- the demo builds, on the Websites page -----------------------
-     This took the slot the six-step process had. The process is on the
-     homepage, where it reads better and where somebody meets it before
-     they have decided anything; repeating it here was the same argument
-     twice. What belongs here instead is the proof, in one click rather
-     than three levels down inside a service card. */
 
-  .tryouts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-    gap: 1px;
-    margin-top: 2rem;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-  .tryout {
-    display: grid;
-    align-content: start;
-    gap: .45rem;
-    padding: 1.5rem 1.4rem 1.6rem;
-    background: var(--surface);
-    text-decoration: none;
-    color: inherit;
-    transition: background 240ms var(--ease), transform 240ms var(--ease);
-  }
-  .tryout:hover, .tryout:focus-visible { background: var(--surface-hi); transform: translateY(-2px); }
-  .tryout-k {
-    font-size: .66rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .tryout-h {
-    font-family: var(--body);
-    font-weight: 800; font-size: 1.22rem; letter-spacing: -0.02em;
-    color: var(--paper);
-  }
-  .tryout-p { color: var(--dim); font-size: var(--step-0); }
-  .tryout-go {
-    margin-top: .5rem;
-    font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .tryout:hover, .tryout:focus-visible { transform: none; }
-  }
 
-  /* ---- Smeaton's Tower, and the other sort of lighthouse -----------
-     One photograph, twice. The first copy is the whole frame with a
-     scrim over it; the second is the same frame with everything but the
-     tower keyed to transparent, sitting on top of the scrim. So the
-     tower is at full strength and its own surroundings are dimmed, and
-     because both layers are the same crop at the same size they line up
-     by construction rather than by arithmetic.
+/* ------------------------------------------------------------------
+   Review stars. Neither Anton nor Darker Grotesque contains U+2605, so
+   a typed star has always fallen back to whatever the device had. It
+   is drawn instead, which also means it inherits currentColor and sits
+   on the baseline the same way on every platform.
+   ------------------------------------------------------------------ */
 
-     The first attempt cropped the tower out of the background to avoid
-     a doubled image and then placed the cut-out further right, which
-     stood it in the sea. Registering it over itself is the whole trick.
+.star { width: .95em; height: auto; display: inline-block; vertical-align: -0.08em; fill: currentColor; }
+.q-stars, .quote-stars { display: flex; gap: .22em; align-items: center; }
+.quote-stars { letter-spacing: 0; }
 
-     The glazed lantern could not be keyed (what is behind that glass is
-     sky) and is reconstructed. Below the skyline the tower does not
-     separate from the hills either, so the silhouette is carried down
-     on its fitted taper; registration makes a few pixels of slack
-     invisible. */
 
-  .h-hoe {
-    --grow: 0;
-    position: relative;
-    overflow: hidden;
-    display: grid;
-    align-items: center;
-    min-height: min(50vw, 40rem);
-  }
-  .h-hoe-bg { position: absolute; inset: 0; }
-  .h-hoe-bg img {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: 50% 50%;
-    display: block;
-  }
-  .h-hoe-scrim {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg,
-        rgba(12,12,12,0.46) 0%,
-        rgba(12,12,12,0.58) 30%,
-        rgba(12,12,12,0.90) 60%,
-        rgba(12,12,12,0.95) 100%),
-      linear-gradient(180deg, rgba(12,12,12,0.45) 0%, rgba(12,12,12,0.20) 45%, rgba(12,12,12,0.55) 100%);
-  }
-  .h-hoe-lit {
-    transform: scale(calc(1 + var(--grow) * 0.28));
-    transform-origin: 24% 100%;
-    will-change: transform;
-  }
+/* ------------------------------------------------------------------
+   Enquiry form states, driven by initEnquiry(). The red is the one
+   documented departure from the four colours: an error that is
+   indistinguishable from the accent colour is a usability defect, so
+   this is Dark Maroon lifted until it reads as red, at 6.5 : 1 on the
+   ground.
+   ------------------------------------------------------------------ */
 
-  .h-hoe-in { position: relative; }
-  .h-hoe-say { max-width: 36rem; margin-left: auto; }
-  .home .h-hoe-say .h-hoe-k {
-    font-size: .7rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--brass); margin-bottom: 1rem;
-  }
-  .h-hoe-say h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); }
-  .home .h-hoe-say .h-hoe-p {
-    margin-top: 1.1rem; max-width: 46ch;
-    font-size: clamp(1.02rem, 1.4vw, 1.18rem); color: var(--paper);
-  }
-  .home .h-hoe-say .h-hoe-p:first-of-type { margin-top: 1.4rem; }
-  .h-hoe-p b { color: var(--brass); font-weight: 700; }
+.gotcha { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.field.is-bad input, .field.is-bad textarea, .field.is-bad select { border-color: #D98166; }
+.field.is-bad label { color: #D98166; }
+.f-status { min-height: 1.4em; font-size: 1.02rem; color: var(--dim); }
+.f-status.is-bad { color: #D98166; }
+.form.is-sending { opacity: .6; pointer-events: none; }
+.sent { max-width: 46rem; display: grid; gap: .9rem; }
+.sent h2 { font-size: clamp(1.7rem, 3.4vw, 2.6rem); }
+.sent p { color: var(--dim); font-size: 1.08rem; max-width: 56ch; }
+@media (prefers-reduced-motion: reduce) { .form.is-sending { transition: none; } }
 
-  @media (max-width: 900px) {
-    .h-hoe { display: block; min-height: 0; padding-top: 0; }
-    .h-hoe-bg {
-      position: relative; inset: auto;
-      aspect-ratio: 5 / 4;
-      margin-bottom: clamp(1.6rem, 5vw, 2.4rem);
-    }
-    .h-hoe-bg img { object-position: 30% 50%; }
-    .h-hoe-say { max-width: none; margin-left: 0; }
-    .h-hoe-scrim {
-      background:
-        linear-gradient(180deg, rgba(12,12,12,0.30) 0%, rgba(12,12,12,0.12) 45%, rgba(12,12,12,0.86) 100%),
-        rgba(12,12,12,0.18);
-    }
-  }
 
-  @media (prefers-reduced-motion: reduce) { .h-hoe { --grow: 1 !important; } }
+/* ------------------------------------------------------------------
+   Collapsible price rows. /websites/ uses the cards and the example
+   dialog; /apps/ has four rows and no examples to put in a laptop, so
+   it uses these: name, price, a plus, and everything else behind it.
+   No JavaScript, and it works from a keyboard.
+   ------------------------------------------------------------------ */
 
-  /* ---- the demo builds, on the Websites page -----------------------
-     This took the slot the six-step process had. The process is on the
-     homepage, where it reads better and where somebody meets it before
-     they have decided anything; repeating it here was the same argument
-     twice. What belongs here instead is the proof, in one click rather
-     than three levels down inside a service card. */
+.svcs { border-top: 2px solid currentColor; }
+.svc-item { border-bottom: 1px solid rgba(40,7,0,0.3); }
+.p-maroon .svc-item, .p-black .svc-item { border-bottom-color: rgba(241,239,236,0.2); }
+.svc-item > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 2.2rem;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: baseline;
+  padding: 1.05rem .2rem;
+  cursor: pointer;
+  list-style: none;
+  transition: background .18s var(--ease);
+}
+.svc-item > summary::-webkit-details-marker { display: none; }
+.svc-item > summary:hover { background: rgba(40,7,0,0.07); }
+.p-maroon .svc-item > summary:hover, .p-black .svc-item > summary:hover { background: rgba(241,239,236,0.06); }
+.svc-item > summary:focus-visible { outline: 3px solid var(--brass); outline-offset: -3px; }
+.p-white .svc-item > summary:focus-visible, .p-brass .svc-item > summary:focus-visible { outline-color: var(--maroon); }
 
-  .tryouts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-    gap: 1px;
-    margin-top: 2rem;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-  .tryout {
-    display: grid;
-    align-content: start;
-    gap: .45rem;
-    padding: 1.5rem 1.4rem 1.6rem;
-    background: var(--surface);
-    text-decoration: none;
-    color: inherit;
-    transition: background 240ms var(--ease), transform 240ms var(--ease);
-  }
-  .tryout:hover, .tryout:focus-visible { background: var(--surface-hi); transform: translateY(-2px); }
-  .tryout-k {
-    font-size: .66rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  .tryout-h {
-    font-family: var(--body);
-    font-weight: 800; font-size: 1.22rem; letter-spacing: -0.02em;
-    color: var(--paper);
-  }
-  .tryout-p { color: var(--dim); font-size: var(--step-0); }
-  .tryout-go {
-    margin-top: .5rem;
-    font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--brass-lit);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .tryout:hover, .tryout:focus-visible { transform: none; }
-  }
+.svc-name { font-size: clamp(1.1rem, 1.6vw, 1.35rem); font-weight: 700; }
+.svc-cost {
+  font-family: var(--display); font-weight: 400; font-synthesis-weight: none;
+  font-size: clamp(1.3rem, 2vw, 1.75rem); line-height: 1; white-space: nowrap;
+}
+.p-white .svc-cost { color: var(--brass-ink); }
+.p-maroon .svc-cost, .p-black .svc-cost { color: var(--brass); }
 
+/* The plus is the whole affordance, so it is drawn: two bars, one of
+   which rotates away when the row opens. */
+.svc-plus { position: relative; width: 1.1rem; height: 1.1rem; justify-self: end; align-self: center; }
+.svc-plus::before, .svc-plus::after {
+  content: ""; position: absolute; inset: 50% 0 auto 0; height: 2px;
+  background: currentColor; transform: translateY(-50%);
+  transition: transform .22s var(--ease), opacity .22s var(--ease);
+}
+.svc-plus::after { transform: translateY(-50%) rotate(90deg); }
+.svc-item[open] .svc-plus::after { transform: translateY(-50%) rotate(0deg); opacity: 0; }
+
+.svc-body { padding: 0 .2rem 1.4rem; max-width: 70ch; display: grid; gap: .7rem; }
+.svc-body p { font-size: 1.04rem; }
+.p-white .svc-body p, .p-brass .svc-body p { color: var(--dim-l); }
+.p-maroon .svc-body p, .p-black .svc-body p { color: var(--dim); }
+.svc-body ul { display: grid; gap: .3rem; }
+.svc-body li { font-size: 1.02rem; padding-left: 1.1rem; position: relative; }
+.svc-body li::before { content: ""; position: absolute; left: 0; top: .62em; width: .5rem; height: 1px; background: var(--brass); }
+.p-white .svc-body li::before, .p-brass .svc-body li::before { background: var(--maroon); }
+@media (prefers-reduced-motion: reduce) {
+  .svc-plus::before, .svc-plus::after, .svc-item > summary { transition: none; }
+}

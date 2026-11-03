@@ -31,15 +31,7 @@
     } catch (e) { /* analytics must never break the site */ }
   }
 
-  const REEL = [
-    "SEO",
-    "web design",
-    "hosting and support",
-    "traffic reports",
-    "branding",
-    "graphic design",
-    "a lot more than will fit here!"
-  ];
+  const REEL = ["web design", "SEO", "hosting", "web apps", "traffic reports", "branding", "graphic design"];
 
   function startReel() {
     const word = document.getElementById("reel-word");
@@ -567,8 +559,10 @@
     if (document.readyState === "complete") setTimeout(warm, 1200);
     else window.addEventListener("load", () => setTimeout(warm, 1200), { once: true });
 
-    const TONED = ".closer, .tone-white, .tone-black, .tone-brass," +
-                  " .h-white, .h-black, .h-brass";
+    // The November planes, and the band system the unchanged pages
+    // still use (/games/, the case study, the legal pages, 404).
+    const TONED = ".p-white, .p-black, .p-brass, .end," +
+                  " .closer, .tone-white, .tone-black, .tone-brass";
 
     // What is behind one point, and which element decides it.
     const probe = y => {
@@ -578,8 +572,9 @@
       const hit = under && under.closest(TONED);
       if (!hit) return { tone: "ground", el: null };
       const c = hit.classList;
-      const tone = (c.contains("closer") || c.contains("tone-brass") || c.contains("h-brass")) ? "brass"
-                 : (c.contains("tone-white") || c.contains("h-white")) ? "white"
+      const tone = (c.contains("p-brass") || c.contains("end") ||
+                    c.contains("closer") || c.contains("tone-brass")) ? "brass"
+                 : (c.contains("p-white") || c.contains("tone-white")) ? "white"
                  : "black";
       return { tone: tone, el: hit };
     };
@@ -694,70 +689,34 @@
    * paragraph one.
    * ================================================================ */
 
-  function initQuoteDeck() {
-    const deck = document.querySelector("[data-deck]");
-    if (!deck) return;
-    const track = deck.querySelector(".quote-track");
-    const slides = track ? [...track.querySelectorAll(".quote")] : [];
-    const prev = deck.querySelector('[data-q="prev"]');
-    const next = deck.querySelector('[data-q="next"]');
-    if (!track || !prev || !next || slides.length < 2) return;
+  /* Websites and Apps are one conversation, so Apps hangs off Websites.
+     A disclosure button rather than a hover menu, because a hover menu
+     cannot be opened from a keyboard or a touchscreen. */
+  function initNavDrop() {
+    const drop = document.querySelector(".nav-drop");
+    const btn = drop && drop.querySelector(".nav-top");
+    if (!drop || !btn) return;
 
-    // The arrows only exist once this runs; an arrow that does nothing
-    // is worse than no arrow.
-    deck.classList.add("is-ready");
-
-    const index = () => {
-      const mid = track.scrollLeft + track.clientWidth / 2;
-      let best = 0, bd = Infinity;
-      slides.forEach((s, i) => {
-        const d = Math.abs((s.offsetLeft + s.offsetWidth / 2) - mid);
-        if (d < bd) { bd = d; best = i; }
-      });
-      return best;
+    const set = open => {
+      drop.dataset.open = open ? "true" : "false";
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
     };
+    set(false);
 
-    // Match the deck to the review being read, so a two-line one does
-    // not sit in a box sized for six paragraphs.
-    const fit = i => {
-      const h = slides[i].getBoundingClientRect().height;
-      if (h > 10) track.style.height = Math.ceil(h) + "px";
-    };
-
-    let queued = false;
-    const sync = () => { queued = false; fit(index()); };
-    track.addEventListener("scroll", () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(sync);
-    }, { passive: true });
-
-    // Wraps rather than stopping: with no counter on screen there is
-    // nothing to tell you why an arrow has gone dead, so none does.
-    const go = step => {
-      const n = slides.length;
-      const i = ((index() + step) % n + n) % n;
-      track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft,
-                       behavior: reduce ? "auto" : "smooth" });
-    };
-    prev.addEventListener("click", () => go(-1));
-    next.addEventListener("click", () => go(1));
-    track.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft")  { e.preventDefault(); go(-1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    btn.addEventListener("click", e => { e.stopPropagation(); set(drop.dataset.open !== "true"); });
+    document.addEventListener("click", e => { if (!drop.contains(e.target)) set(false); });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && drop.dataset.open === "true") { set(false); btn.focus(); }
     });
-
-    window.addEventListener("resize", () => { track.style.height = ""; sync(); });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
-    sync();
+    drop.addEventListener("focusout", e => { if (!drop.contains(e.relatedTarget)) set(false); });
   }
 
   /* ---- wiring ----------------------------------------------------- */
 
   function boot() {
     initMastTone();
+    initNavDrop();
     initHoe();
-    initQuoteDeck();
     startReel();
     initEnquiry();
     initRoster();

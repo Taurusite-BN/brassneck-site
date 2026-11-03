@@ -1,11 +1,34 @@
 # Brassneck Studio — the site
 
-Hand-written static HTML on GitHub Pages at `brassneck.studio`. Five pages that sell the
-web work, a case study, two games with their devlogs, the legal pages, and a set of
-demonstration builds that the service examples open onto.
+Hand-written static HTML on GitHub Pages at `brassneck.studio`. Six pages that sell the
+web and app work, a case study, two games with their devlogs, the legal pages, and a set
+of demonstration builds that the service examples open onto.
 
 **Restructured 27 Oct 2026.** It used to be one document with four views, a camera and a
 client-side router; every URL now serves its own page. See "The move to real pages" below.
+
+**Redesigned 3 Nov 2026.** The six brand pages were rebuilt on the colour-plane system.
+See "The plane system" below, and `claude/site-design-rules.md` in the project, which is
+the canonical design record.
+
+## READ THIS FIRST: the six brand pages are generated
+
+`/`, `/websites/`, `/apps/`, `/games/`, `/studio/` and `/contact/` are **written by
+`.build/build.py`**. Editing those `index.html` files by hand works until the next build,
+which silently overwrites them. The chrome (head, masthead, footer, script tag) lives in
+`build.py`; each page's body lives in `.build/<name>.part.html`.
+
+```
+python3 .build/build.py            # the six pages + redirect stubs + sitemap
+python3 .build/build.py sections   # the six pages only
+```
+
+Re-runnable and deterministic — running it on a clean checkout reproduces the committed
+HTML byte for byte, which is the check that it has not drifted.
+
+**Not generated, edit directly:** `/work/ember8/`, `/legal/privacy/`, `/legal/terms/`,
+the three `/devlog/` entries, `404.html` and everything under `demo/`. Those still carry
+their own copy of the masthead, so a change to the chrome has to be made in both places.
 
 ## Run it
 
@@ -32,6 +55,7 @@ If you don't have it: VS Code → Extensions → search "Live Server" (Ritwick D
 |---|---|
 | `/` | `index.html` |
 | `/websites/` | `websites/index.html` |
+| `/apps/` | `apps/index.html` (added 3 Nov 2026; hangs off Websites in the nav) |
 | `/games/` | `games/index.html` |
 | `/studio/` | `studio/index.html` |
 | `/contact/` | `contact/index.html` |
@@ -58,16 +82,18 @@ diffing them pixel by pixel, which came back identical.
 ## Files
 
 ```
-index.html              the homepage
-websites/ games/        one directory per page, each an index.html
-studio/ contact/
-work/ember8/            the case study
-legal/privacy|terms/    the legal pages
-devlog/<slug>/          one directory per entry, each a standalone page
+.build/build.py         generates the six brand pages, the stubs and the sitemap
+.build/*.part.html      the body of each generated page — EDIT THESE, not the index.html
+index.html              the homepage                      } generated
+websites/ apps/ games/  one directory per page             } generated
+studio/ contact/                                           } generated
+work/ember8/            the case study                     — hand-maintained
+legal/privacy|terms/    the legal pages                    — hand-maintained
+devlog/<slug>/          one directory per entry            — hand-maintained
 demo/northwell/         a demonstration client site, its web app and its traffic report
-css/styles.css          tokens, then components in page order, then the homepage block
-js/site.js              the reel, the enquiry form, the roster, the service examples
-assets/                 logo colourways, fonts, example images, the door recording
+css/styles.css          tokens, the plane system, components, then the legacy band system
+js/site.js              masthead tone, nav drop, the reel, the form, roster, examples
+assets/                 logo colourways, subset fonts, example images, the door recording
 *.html (old paths)      redirect stubs, kept so existing links survive
 ```
 
@@ -90,36 +116,52 @@ who opened dev tools.
 
 ## The devlog
 
-Entries live in `devlog/`, one standalone HTML file each, named `YYYY-MM-DD-*.html`. They
-are **not** part of the single-page app — each is a real page with a real URL, because a
-devlog entry is the one thing on this site somebody might link to directly.
+Entries live in `devlog/<YYYY-MM-DD-slug>/index.html`, one standalone page each. They are
+hand-maintained — **`build.py` does not generate them** — because each carries its own
+game's palette rather than the studio chrome.
 
-Each entry keeps *The Articles*' own palette (bone, sea slate, bilge dark, wet oak, lamp
-brass) rather than the studio's. That is deliberate: stepping into an entry should feel
-like stepping into the game's world, not reading a studio blog post about it.
+**Naming.** `YYYY-MM-DD-<game>-<n>` since the second game arrived, e.g.
+`2026-09-20-scuttlers-one`. The Articles entries predate that convention and keep their
+original names (`2026-08-28-entry-one`, `2026-09-04-entry-two`, `2026-11-02-entry-three`)
+because they are live URLs in the sitemap. Do not rename them; name everything new the
+new way.
 
-**Naming.** `YYYY-MM-DD-<game>-<n>.html` since the second game arrived, e.g.
-`2026-09-20-scuttlers-one.html`. The two Articles entries predate that convention and keep their
-original names (`2026-08-28-entry-one.html`, `2026-09-04-entry-two.html`) because both are live
-URLs and are in the sitemap. Do not rename them; name everything new the new way.
+**To add an entry** (the order that avoids the mistakes made on entry three):
 
-**To add an entry:** drop the new file in `devlog/`, copy the `.back` link from the existing
-entry, then add one `<li>` to `.logs` **in that game's own panel** in `index.html`. Newest first,
-and update the build or milestone in the same panel's `.meta` list while you are there. Add a
-`<url>` to `sitemap.xml` too.
+1. **Copy the nearest existing entry of the same game** and replace its body. That gets
+   you the self-hosted `@font-face` block, the root-absolute paths, the favicon links and
+   the `<main id="main">` landmark for free. Do not start from a file written elsewhere:
+   the three things it will get wrong every time are Google Fonts in the head (a
+   third-party request on a page somebody reads), `../assets/…` relative paths, and
+   `assets/brassneck-mark.png`, which has not existed since the October rebrand.
+2. **Set the canonical, the `og:title` and the title** to the new entry.
+3. **Add one `<li>` to `.logs`** in that game's panel in `.build/games.part.html` —
+   newest first — and update the same panel's `.meta` status line while you are there.
+4. **Add a `<url>` to `SITEMAP` in `.build/build.py`**, then run the build.
+5. **Audit it at 390px.** Anything `white-space: pre` inside the entry column needs
+   `min-width: 0` on `.body`, or the whole page scrolls sideways on a phone.
+
+No redirect stub is needed for a new entry. Stubs exist only to keep an *old* URL alive.
+
+**The back link** is `<a class="back" href="/games/">` with
+`/assets/logo/landscape-white.svg` inside it (`landscape-maroon.svg` on the light
+Scuttlers ground).
+
+**Contrast.** The Articles palette's `--faint` was `#5d6b76`, which is 3.3 : 1 on the
+ground and 2.9 : 1 on the readout panel — it carries the kickers, the rail meta and the
+whole footer, so this was most of the small text on the page. It is `#7c8b98` as of
+3 Nov 2026: same hue, same saturation, lifted until 10px text clears 4.5 : 1 on both.
+All three Articles entries now audit clean at three widths. **Scuttlers has not been
+done** — it is a separate two-theme palette and still reports 2.9–3.3 : 1.
 
 **Each game's devlog carries its own visual world**, not the studio's. The Articles is dark
 (bone, sea slate, bilge dark, wet oak, lamp brass). Scuttlers is a photocopied school newsletter:
 yellowed paper, mint corridor paint, biro blue, with a dark mode. Stepping into an entry should
 feel like stepping into that game.
 
-**Scuttlers entries use the light-ground mark** (`brassneck-mark-light.png`) in the back link,
-swapped for the standard one under `prefers-color-scheme: dark`. The standard mark is keyed out of
-dark artwork, so its counters knock through and the face reads as a blob on pale ground. It is also
-set at 28px rather than 20px there, because the mark does not survive much below 30 (see
-`brand-identity.md`).
-
-Every entry needs **the `.back` link** pointing at `../index.html#games`, see routing below.
+**Scuttlers entries use the maroon lockup** (`/assets/logo/landscape-maroon.svg`) in the back
+link, swapped for the white one under `prefers-color-scheme: dark`. The white lockup is drawn
+for dark artwork, so its counters knock through and the face reads as a blob on pale ground.
 
 **Pictures live in `devlog/img/`**, referenced as `img/name.jpg` from the entry, one flat
 folder shared by every entry so names have to say which entry they belong to
@@ -136,7 +178,12 @@ rect. Both are disabled under `prefers-reduced-motion`.
 
 Everything a card says — title, prices, body, the laptop's image or video, its caption and
 where it opens to — lives in the `EXAMPLES` object in `js/site.js`. Nothing is in the
-markup. The table of what each card shows is further down under "Service examples".
+markup. The table of what each card shows is further down under "Service examples, what
+each one shows".
+
+**Restored 3 Nov 2026.** The redesign briefly replaced these cards with an accordion. They
+came back because the cards read as clickable and the accordion did not, and because seven
+cards take a third of the vertical space seven open panels do.
 
 Opening one sends `/websites/example/<name>` to Umami, so you can see which service people
 are actually curious about — useful for deciding what to write next.
@@ -172,9 +219,9 @@ to be able to fetch a page in order to read the `noindex` on it.
 The report is self-contained rather than pulling `/css/styles.css`, because the real thing
 lands in somebody's inbox and should still render correctly in five years.
 
-## Service examples
+## Service examples, what each one shows
 
-Seven cards, each opening a dialog with prices, an explanation, and a laptop showing
+Seven cards on `/websites/`, each opening a dialog with prices, an explanation, and a laptop showing
 something real. `EXAMPLES` in `js/site.js` is the only place any of it is written down.
 
 | Card | What the laptop shows | Opens |
@@ -198,16 +245,21 @@ orphan at the end of a three-column grid.
 
 ## Performance
 
-**100 for performance and 100 for accessibility on every page**, measured with Lighthouse
-13 against a local server, mobile emulation. Best practices reports 96 only because the
-Umami script cannot be reached from the machine the test runs on; that is an artefact of
-the test environment, not of the site.
+**100 / 100 / 96 / 100 on all six brand pages** (performance, accessibility, best
+practices, SEO) — Lighthouse 13, mobile emulation, three runs each, re-measured after the
+3 Nov redesign. Best practices reports 96 only because the Umami script cannot be reached
+from the machine the test runs on; that is an artefact of the test environment, not of the
+site.
+
+The local server used for this (`gzserve.py <dir> 8100`) **gzips its responses**, which is
+what GitHub Pages does; a plain static server does not, and gives a misleadingly low
+number. Lighthouse needs `CHROME_PATH` pointed at a real Chromium first.
 
 Worth knowing before anyone claims a number publicly: **run it against the live URL first.**
-These figures come from a local static server with no compression, which is harsher than
-GitHub Pages in some ways and kinder in others.
+`/websites/` now prints the figure as a claim, so it has to be reproducible by anyone who
+runs the same tool against `brassneck.studio`.
 
-What the work actually was:
+What the original performance work was:
 
 - **145 dead CSS rules removed**, 18 KB. Verified by pixel-diffing ten pages at two widths.
 - **The images re-encoded** at the size they are displayed rather than 1600px.
@@ -225,29 +277,36 @@ What the work actually was:
 Over the wire, with the compression GitHub Pages applies: stylesheet 19 KB, script 8 KB,
 a page 4–5 KB, the full landscape lockup 33 KB.
 
-**Available but not taken:** Anton is 55 KB for what is only ever uppercase display text,
-and would subset to roughly a fifth of that. Left alone because the score is already 100
-and a subset that silently drops a glyph is a nasty failure mode.
+**The fonts are now subset.** `anton-regular-sub.woff2` and
+`darkergrotesque-var-sub.woff2` are what every page preloads; the full files are gone. The
+failure mode that made this worth avoiding — a subset silently dropping a glyph — did
+happen: neither family carries U+2605, so the review stars are **inline SVG** (`.star`,
+`fill: currentColor`) rather than a character. If you add copy with an unusual glyph in
+it, check it renders before trusting it.
 
 ## Pricing
 
-Published on the Websites page ("What it costs"), straight out of
-`claude/website-service-marketing-plan.md` §3. Build tiers `£800 / £1,500 / Ask`, care
-plans `£20 / £60 / £100` a month, and **hosting included for the first twelve months on
-every build** (which is the free year of Lights On, and the mechanism that gets every
-client onto a plan).
+Published on the Websites page, straight out of `claude/service-pricing.md`. Build tiers
+**`£950 / £1,650 / Ask`** (raised from £800 / £1,500 on 2 Nov 2026), care plans
+`£20 / £60 / £100` a month, and **hosting included for the first twelve months on every
+build** (which is the free year of Lights On, and the mechanism that gets every client
+onto a plan). Education and charity work is quoted below these.
 
-Two things to hold to when editing these numbers:
+Three things to hold to when editing these numbers:
 
-- **£1,500 is deliberately below the UK band** (£2,000-£5,000 for a brochure site) because
-  there are two case studies and no testimonial yet, so price is doing the work proof
-  cannot. **Review after the third paid build. £1,950 is the next stop.**
+- **£1,650 is deliberately below the UK band** (£2,000-£5,000 for a brochure site) because
+  there is one case study and one testimonial, so price is still doing work that proof
+  cannot. **Review after the third paid build.**
 - **Care and Partner are sold from day one**, not from month thirteen. The included year
   covers the Lights On layer only. If the free year quietly grows to include content edits
   there is no upgrade left to sell.
+- **A price appears in more than one place.** The Websites page, the Apps page, the
+  homepage closer, the service modals, the meta descriptions in `build.py`, and
+  `claude/service-pricing.md`. Grep the whole repo for the old figure before declaring a
+  change done.
 
-Markup is `.tiers` / `.tier` (the middle one carries `.is-pick` and the brass flag) and
-`.plans` / `.plan`, both in `#page-websites`. Both collapse to one column under 900px.
+Markup is `.rate-row` on `/websites/` (the three tiers as rows, not columns) and the
+pricing block inside each service modal. `/apps/` carries its own `.svcs` grid.
 
 ## The brand system
 
@@ -344,15 +403,36 @@ off-screen but laid out (`getBBox()` returns zeroes on a node that was never lai
 each path measured, and any path whose right edge fell left of `0.40 × viewBox width`
 discarded. Index-based selection would have broken silently on a re-export.
 
-### Section tones
+### The plane system (the six brand pages)
 
-The ground is Dark Maroon throughout, which on a long page reads as one flat note. Sections now
+**3 Nov 2026.** The six generated pages are built from **full-bleed colour planes**, one
+per idea, stacked down the page: `section.plane.p-maroon`, `.p-white`, `.p-black`,
+`.p-brass`. A plane runs edge to edge; its content sits in a `.plane-in` capped at
+`--plane-max` (1600px) and left-padded by `--logo-col` so **nothing ever shares the
+x-axis with the masthead mark** — that was Oliver's note on the first preview, and the
+padding is the fix, so keep it on anything new.
+
+| Page | Planes, top to bottom |
+|---|---|
+| `/` | maroon · white · black · brass |
+| `/websites/` | maroon · white · black (the Hoe/Lighthouse block) · maroon |
+| `/apps/` | maroon · white · brass |
+| `/studio/` | maroon · white · brass |
+| `/contact/` | maroon · white |
+
+The masthead is transparent and blurred, and its mark changes colourway as a plane edge
+wipes through it — `initMastTone()` in `js/site.js` probes with `elementsFromPoint` and
+clips one of two stacked `<img>`s. **Colourways are swapped by `src`, never recoloured in
+CSS**, which is the brand rule.
+
+`/games/` kept the **legacy band system** below the divider in `styles.css`, because
+Oliver asked for the old Games page back and it was fine as it was.
+
+### Section tones (legacy — `/games/`, the case study, the legal pages)
+
+The ground is Dark Maroon throughout, which on a long page reads as one flat note. Sections
 alternate: `section.band.tone-white`, `.tone-black` and `.tone-brass` paint inset blocks in the
-palette, the same move as the brass closer band on the Websites page.
-
-The homepage does the same thing under its own `.h-band.h-white` / `.h-brass` classes.
-It has to: a light band that does not redefine `--brass-lit` leaves brass text at 2.5 : 1,
-which is exactly the bug the accessibility pass found on the step numbers.
+palette.
 
 **A tone does not restyle components. It redefines tokens.** Each tone class sets `--paper`,
 `--dim`, `--muted`, `--rule`, `--hairline`, `--brass-lit`, `--brass-dim`, `--surface` and
@@ -369,10 +449,15 @@ Two tokens are deliberately **not** redefined:
   `--brass-lit`; the handful of brass-text-on-dark-button rules are pinned back to `--brass`, as is
   `.crew-initial`, which sits on a dark tile inside a white band.
 
-Current placement: 5 white and 3 black bands on the homepage, 2 white and 1 black on the Ember8 case
-study. **The Contact page has no toned band** — a light ground there would mean inverting every form
-control, and the dark form is the better-looking option. Devlogs keep their own game palettes
+Current placement: 4 toned bands on `/games/`, 2 white and 1 black on the Ember8 case study.
+**The Contact page has no light ground behind the form** — inverting every form control
+costs more than it gains, so the form stays on maroon. Devlogs keep their own game palettes
 entirely; only the studio back-link logo changed.
+
+**The tokens the tones redefine are also declared on `:root`.** They were not, at first,
+and the legal pages — which are outside every tone block — lost every border on the day
+the stylesheet was rebuilt. If you add a token that a tone redefines, give it a
+dark-ground default at the top of the file as well.
 
 A contrast audit over every page (`contrast.mjs` in the scratchpad) comes back clean. The only
 reported failure is `.nameplate`, a false positive: dark text on a brass *gradient* the audit cannot
@@ -557,33 +642,50 @@ so a locked slot with real art in it would still read as locked.
 **Colours and type scale** — the `:root` block at the top of `styles.css`. Everything
 else reads from those tokens, so changing `--brass` there changes it everywhere.
 
-**The homepage is namespaced.** Every class in the `.home` block carries an `h-` prefix
-(`.h-band`, `.h-tier`, `.h-closer`, `.h-stars`) and every rule is scoped under `.home`.
-The concept was drawn with generic names that the section pages already use for different
-components — `.closer` in particular is a brass block on `/websites/` and a plain maroon
-one on the homepage. Scoping alone was not enough: a `.home .closer` rule wins on
-specificity but still inherits every property the scoped rule does not set, so the
-homepage closer came out brass. The prefix removes the whole class of bug rather than
-chasing leaks one at a time. **If you add anything to the homepage, prefix it.**
+**Page copy** — `.build/<page>.part.html`, never the `index.html`. See the warning at
+the top of this file.
 
-**The homepage animation** — one 20-second clock, five four-second beats, in the
-`.home` block at the end of `styles.css`. Every part of it (the layers, the captions, the
-pointer, both states of the address bar) runs on that same clock with a four-second offset
-per beat, so nothing can drift out of step. Reduced motion is switched off by hand there
-rather than inherited, because the global reset crushes durations to a millisecond, which
-would leave all five layers stacked on top of each other.
+**The `h-` prefix is still load-bearing.** Classes carrying it (`.h-builder`, `.h-hoe`,
+`.h-u-draft`) came from the old homepage, which used generic names the section pages
+already use for different components. Two survivors are live: the **builder animation**
+on the homepage and the **Lighthouse / Smeaton's Tower** block on `/websites/`. Do not
+rename them, and prefix anything you add alongside them.
+
+**The builder animation** — one 20-second clock, five four-second beats, at the end of
+`styles.css`. Every part of it (the layers, the captions, the pointer, both states of the
+address bar) runs on that same clock with a four-second offset per beat, so nothing can
+drift out of step. Reduced motion is switched off by hand there rather than inherited,
+because the global reset crushes durations to a millisecond, which would leave all five
+layers stacked on top of each other.
+
+**The mark's idle motion** — `@keyframes idle` and `hop`, under
+`prefers-reduced-motion: no-preference`. It is a rotate-and-lift on the `<img>`, transforms
+only: the artwork is never altered, which is what keeps it inside the brand rules. The
+proper animated ident from James is a separate, still-outstanding job.
+
+**Dead CSS** — there is some, roughly 6.6 KB uncompressed. **Do not run a scripted
+prune.** Three separate attempts in this repo have deleted live rules: the last would have
+taken `.h-u-draft`, which is on screen in the builder's address bar. If it ever matters,
+use a real CSS parser and pixel-diff every page at three widths.
 
 **Where the old door machinery went** — deleted. The recording of it is
 `assets/video/door.webm`, played inside the Web design example. If it is ever wanted back,
 it is in the git history up to the commit before 27 Oct 2026.
 
-## Known gaps, deliberately
+## Known gaps
 
-- Views swap in place rather than being real pages. For the Astro build these become
-  `/work` and `/games` with the View Transitions API running the same phases, so the dive
-  survives a direct link and the back button.
-- The Games page footage slot is empty. Twenty seconds of *Articles* is the one thing
-  that page needs.
-- Ember8's outcome line is blocked on Umami numbers; Aura's is blocked on agreeing with
-  the client what gets measured.
-- The dive is untested on touch devices.
+- **The animated ident.** James's reference clip is 115 × 154 native, too small to upscale
+  and use. The sway on the mark is done in CSS instead; the blink is not done at all. Needs
+  a usable export.
+- **The Studio page has no team photographs.** The initials fallback stands on its own.
+- **No game cover art.** `assets/articles-cover.png` is still absent, so the `<img>`
+  deletes itself via `onerror` and logs a 404 — deliberately, as the cheapest reminder.
+- **The Scuttlers devlog entry and `demo/northwell/` carry contrast failures** (2.9–3.3 : 1
+  and 4.45 : 1). They run their own palettes, outside the brand tokens, so the brand
+  pages' clean audit does not cover them. The three Articles entries were fixed on
+  3 Nov — see "The devlog" below.
+- **The Lighthouse claim on `/websites/` is from the local gzipped server**, not the live
+  URL. Re-measure against `brassneck.studio` once deployed.
+- Ember8's outcome line is blocked on Umami numbers.
+- **The `/apps/` prices (£1,200 / £900) have never been sold at.** £1,200 is a floor
+  derived from the £60/hr house rate, not from a real job. Revisit after the first one.

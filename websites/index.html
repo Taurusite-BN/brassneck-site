@@ -39,260 +39,238 @@
       </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
-      <a href="/websites/" class="nav-tight" aria-current="page">Websites</a>
-      <a href="/games/" class="nav-tight">Games</a>
-      <a href="/studio/" class="nav-tight">Studio</a>
-      <a href="/contact/" class="mast-cta">Get a price</a>
+      <div class="nav-drop" data-open="false">
+        <button class="nav-top" type="button" aria-expanded="false" aria-controls="nav-sites" aria-current="true">Websites
+          <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+        </button>
+        <div class="nav-menu" id="nav-sites">
+          <a href="/websites/">Websites</a>
+          <a href="/apps/">Apps</a>
+        </div>
+      </div>
+      <a href="/games/">Games</a>
+      <a href="/studio/">Studio</a>
+      <a class="mast-cta" href="/contact/">Get in contact</a>
     </nav>
   </header>
 
-<main id="main" class="shell">
-      <div class="page-head">
-        <p class="eyebrow">Websites</p>
-        <h1>Websites that earn their keep.</h1>
+<main id="main">
+  <section class="hero hero-sub">
+    <div class="hero-in">
+      <div>
+        <h1 class="rise">Websites that earn their keep.</h1>
 
-        <p class="reel-line" aria-label="We do SEO, web design, hosting and support, traffic reports, branding, graphic design and rather more than fits here.">
+        <!-- The service reel, back under the headline. It is set as a
+             second line of display type rather than as a caption, and
+             the rule underneath measures itself to each word. -->
+        <p class="reel-line rise rise-2" aria-label="We do web design, SEO, hosting, web apps, traffic reports, branding and graphic design.">
           <span class="reel-lead">We do</span>
           <span class="reel-slot" aria-hidden="true">
-            <span class="reel-word" id="reel-word">SEO</span>
+            <span class="reel-word" id="reel-word">web design</span>
             <span class="reel-rule" id="reel-rule"></span>
           </span>
         </p>
 
-        <p class="lede">Design, build, and the parts nobody warns you about afterwards: being found, staying up, and knowing whether any of it worked.</p>
-        <p class="cta-row">
-          <a class="cta" href="/contact/">Tell us what you need</a>
-          <span class="cta-note">Replies usually within a day</span>
+        <p class="hero-fact rise rise-3">Design, build, and the parts nobody warns you about afterwards: being found, staying up, and knowing whether any of it worked.</p>
+        <p class="hero-do rise rise-4">
+          <a href="#costs">What it costs</a>
+          <a href="/contact/">Tell us what you need</a>
         </p>
       </div>
+      <div class="hero-mark">
+        <span class="hero-mark-in">
+          <img src="/assets/logo/icon-brass.svg" alt="" aria-hidden="true" width="333" height="461">
+        </span>
+      </div>
+    </div>
+  </section>
 
-      <section class="band tone-white">
-        <h2 class="band-title">What we do</h2>
-        <p class="prose price-vat">Open any card for what it costs, or read the build prices in full below. <b>We are not VAT registered, so there is no VAT to add to anything on this page.</b></p>
-        <div class="services">
-          <button class="svc" type="button" data-svc="web-design">
-            <span class="svc-h">Web design</span>
-            <span class="svc-p">Layout, type and structure that make a small business look like it means it, on a phone, in a hurry, in bad light.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-          <button class="svc" type="button" data-svc="seo">
-            <span class="svc-h">SEO</span>
-            <span class="svc-p">Found for the things people actually type, not the ones that flatter you. Structure and copy first, tricks never.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-          <button class="svc" type="button" data-svc="hosting">
-            <span class="svc-h">Hosting &amp; support</span>
-            <span class="svc-p">Somewhere fast for it to live, and a person to ring when it breaks. No dashboard you have to be taught.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-          <button class="svc" type="button" data-svc="reports">
-            <span class="svc-h">Traffic reports</span>
-            <span class="svc-p">A plain monthly note: who came, what they did, and the one thing we would change next. No forty-page PDF.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-          <button class="svc" type="button" data-svc="branding">
-            <span class="svc-h">Branding</span>
-            <span class="svc-p">Need a logo as well as a site? We have a designer for that, and we draw it alongside the build so the two arrive speaking the same language. From &pound;600.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-          <button class="svc" type="button" data-svc="graphic">
-            <span class="svc-h">Graphic design</span>
-            <span class="svc-p">Everything around the site (decks, signage, socials, the odd menu) speaking in the same voice.</span>
-            <span class="svc-more">Prices and an example <span aria-hidden="true">→</span></span>
-          </button>
-                  <button class="svc svc-wide" type="button" data-svc="web-apps">
-            <span class="svc-h">Web apps &amp; installable apps</span>
-            <span class="svc-p">Booking systems, client portals, dashboards, calculators, internal tools. Built for the browser, then made installable to a phone home screen so it opens from an icon, works offline and never queues for an app store review. There is a working one behind this card.</span>
-            <span class="svc-more">Prices and a live example <span aria-hidden="true">&rarr;</span></span>
-          </button>
+  <!-- ============ WHAT IT COSTS ============
+       Thirteen one-line rows instead of a wall. Everything is closed
+       to start with; the plus says it opens. Collapsed, the whole
+       price list is about the height of a screen. -->
+  <section class="plane p-white" id="costs">
+    <div class="plane-in">
+      <h2>What we do.</h2>
+      <p class="lede">Open any card for what it costs and a piece of the real thing. We are not VAT registered, so there is nothing to add to anything here.</p>
+
+      <div class="services">
+        <button class="svc" type="button" data-svc="web-design">
+          <span class="svc-h">Web design</span>
+          <span class="svc-p">Layout, type and structure that make a small business look like it means it, on a phone, in a hurry, in bad light.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc" type="button" data-svc="seo">
+          <span class="svc-h">SEO</span>
+          <span class="svc-p">Found for the things people actually type, not the ones that flatter you. Structure and copy first, tricks never.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc" type="button" data-svc="hosting">
+          <span class="svc-h">Hosting &amp; support</span>
+          <span class="svc-p">Somewhere fast for it to live, and a person to ring when it breaks. No dashboard you have to be taught.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc" type="button" data-svc="reports">
+          <span class="svc-h">Traffic reports</span>
+          <span class="svc-p">A plain monthly note: who came, what they did, and the one thing we would change next. No forty-page PDF.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc" type="button" data-svc="branding">
+          <span class="svc-h">Branding</span>
+          <span class="svc-p">Need a logo as well as a site? We have a designer for that, and we draw it alongside the build so the two arrive speaking the same language.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc" type="button" data-svc="graphic">
+          <span class="svc-h">Graphic design</span>
+          <span class="svc-p">Everything around the site (decks, signage, socials, the odd menu) speaking in the same voice.</span>
+          <span class="svc-more">Prices and an example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+        <button class="svc svc-wide" type="button" data-svc="web-apps">
+          <span class="svc-h">Web apps &amp; installable apps</span>
+          <span class="svc-p">Booking systems, client portals, dashboards, calculators, internal tools. Built for the browser, then made installable to a phone home screen so it opens from an icon, works offline and never queues for an app store review. There is a working one behind this card.</span>
+          <span class="svc-more">Prices and a live example <span aria-hidden="true">&rarr;</span></span>
+        </button>
+      </div>
+
+      <h3 class="sub-h">The build prices in full</h3>
+      <div class="rate">
+        <div class="rate-row">
+          <span class="rate-n">£950</span>
+          <span class="rate-what"><b>Basic</b>One page, done properly. The whole story on one screen, which is harder than four pages and reads better.</span>
+          <span class="rate-when">About two weeks</span>
         </div>
-      </section>
-
-      <section class="band">
-        <h2 class="band-title" id="costs">What it costs</h2>
-        <p class="prose price-intro">Prices are on the page because you were going to ask anyway, and because the half hour it takes to write a quote is a half hour neither of us gets back. <b>Hosting, domain, SSL, backups and monitoring are included for the first twelve months on every build.</b></p>
-
-        <div class="tiers">
-          <div class="tier">
-            <span class="tier-name">Basic</span>
-            <span class="tier-price">&pound;950</span>
-            <span class="tier-line">One page, done properly. The whole story on one screen, which is harder than four pages and reads better.</span>
-            <ul class="tier-list">
-              <li>Built mobile first</li>
-              <li>Enquiry form that arrives in your inbox</li>
-              <li>Analytics from day one</li>
-              <li>First year&rsquo;s hosting included</li>
-            </ul>
-            <span class="tier-turn">About two weeks</span>
-          </div>
-
-          <div class="tier is-pick">
-            <span class="tier-flag">Most people want this one</span>
-            <span class="tier-name">Standard</span>
-            <span class="tier-price">&pound;1,650</span>
-            <span class="tier-line">Five to seven pages, with the words shaped alongside you rather than left as a homework assignment.</span>
-            <ul class="tier-list">
-              <li>Copy written with you, not handed to you</li>
-              <li>Search basics done in the structure, not bolted on</li>
-              <li>Form routing, analytics, the lot</li>
-              <li>First year&rsquo;s hosting included</li>
-            </ul>
-            <span class="tier-turn">Four to six weeks</span>
-          </div>
-
-          <div class="tier">
-            <span class="tier-name">Larger</span>
-            <span class="tier-price">Ask</span>
-            <span class="tier-line">Multiple languages, booking flows, something that moves in a way nothing else does. The Ember8 shape.</span>
-            <ul class="tier-list">
-              <li>Quoted per project, in writing, before anything starts</li>
-              <li>No hourly surprises at the end</li>
-              <li>If it is not worth building we will say so</li>
-              <li>First year&rsquo;s hosting included</li>
-            </ul>
-            <span class="tier-turn">Eight weeks and up</span>
-          </div>
+        <div class="rate-row">
+          <span class="rate-n">£1,650</span>
+          <span class="rate-what"><b>Standard</b>Five to seven pages, with the words shaped alongside you rather than left as a homework assignment.</span>
+          <span class="rate-when">Four to six weeks</span>
         </div>
-
-        <p class="prose price-aside"><b>Schools, charities and community groups pay less than this.</b> Say so when you get in touch and the price comes back adjusted. We would rather the thing got built.</p>
-
-        <h3 class="sub-title">Keeping it alive</h3>
-        <p class="prose price-intro">Our sites are hand written and static. There is no WordPress, so there are no plugins, no security treadmill, and nothing that falls over at 3am because something updated itself while you slept. These plans keep the site current, not upright.</p>
-
-        <div class="plans">
-          <div class="plan">
-            <span class="plan-name">Lights On</span>
-            <span class="plan-price">&pound;20<i>/mo</i></span>
-            <span class="plan-line">Hosting, domain renewal, SSL, uptime monitoring, off-site backups, and a yearly check that every link and form still does what it says. Free for your first twelve months.</span>
-          </div>
-          <div class="plan">
-            <span class="plan-name">Care</span>
-            <span class="plan-price">&pound;60<i>/mo</i></span>
-            <span class="plan-line">Everything above, plus 45 minutes of content changes a month (unused time rolls over once), a monthly note on your traffic, and a reply inside two working days.</span>
-          </div>
-          <div class="plan">
-            <span class="plan-name">Partner</span>
-            <span class="plan-price">&pound;100<i>/mo</i></span>
-            <span class="plan-line">Everything above, plus an hour and a half of changes a month, a review call every quarter, and first claim on the diary when you want something new.</span>
-          </div>
+        <div class="rate-row">
+          <span class="rate-n">Ask</span>
+          <span class="rate-what"><b>Larger</b>Multiple languages, booking flows, web apps. Quoted per project, in writing, before anything starts.</span>
+          <span class="rate-when">Eight weeks and up</span>
         </div>
+      </div>
+      <p class="rate-note">Hosting, domain, SSL, backups and monitoring are included for the first twelve months on every build. <b>Schools, charities and community groups pay less than this.</b></p>
+    </div>
+  </section>
 
-        <p class="prose price-foot">What is not in the price: photography, licensed fonts, paid software, and anything with the word &ldquo;portal&rdquo; in it. Those get named and costed before they happen, never afterwards.</p>
-      </section>
+  <!-- ============ SMEATON'S TOWER ============ -->
+  <section class="plane p-black h-hoe" id="hoe">
+    <div class="h-hoe-bg">
+      <img class="h-hoe-photo" src="/assets/hoe/hoe-1200.webp" srcset="/assets/hoe/hoe-800.webp 800w, /assets/hoe/hoe-1200.webp 1200w, /assets/hoe/hoe-1800.webp 1800w"
+           sizes="100vw" alt="" aria-hidden="true"
+           width="1800" height="1012" loading="lazy" decoding="async">
+      <span class="h-hoe-scrim" aria-hidden="true"></span>
+      <img class="h-hoe-lit" src="/assets/hoe/tower-1200.webp" srcset="/assets/hoe/tower-800.webp 800w, /assets/hoe/tower-1200.webp 1200w, /assets/hoe/tower-1800.webp 1800w"
+           sizes="100vw"
+           alt="Smeaton&rsquo;s Tower on Plymouth Hoe, picked out in colour against the rest of the photograph."
+           width="1800" height="1012" loading="lazy" decoding="async">
+    </div>
+    <div class="plane-in h-hoe-in">
+      <div class="h-hoe-say">
+        <h2>Built in Plymouth.<br>Measured on Lighthouse.</h2>
+        <p class="h-hoe-p">Every build is measured on <b>Google&rsquo;s Lighthouse</b>, the tool Google itself scores a page with. Every page on this site comes back at <b>100 for performance</b>.</p>
+        <p class="h-hoe-p">Nobody waits for a slow site. They go back and click the next one, and the customer you lost is the one you never hear from.</p>
+      </div>
+    </div>
+  </section>
 
-      <section class="band tone-brass">
-        <h2 class="band-title">See one working</h2>
-        <p class="prose">Rather than describe it: here is a whole build, open to anybody. A site, a working web app, and a month of traffic reported the way we report it. <b>Northwell Plumbing &amp; Heating is not a real business</b>, every page says so across the top, and the figures in the report are invented. Everything else is exactly what you would get.</p>
-
-        <div class="tryouts">
-          <a class="tryout" href="/demo/northwell/">
-            <span class="tryout-k">The site</span>
-            <span class="tryout-h">One page, done properly</span>
-            <span class="tryout-p">The &pound;950 build, made real. No framework, no CMS, no script at all, and the whole thing is a single file of about twelve kilobytes.</span>
-            <span class="tryout-go">Open the site <span aria-hidden="true">&rarr;</span></span>
-          </a>
-          <a class="tryout" href="/demo/northwell/quote/">
-            <span class="tryout-k">The web app</span>
-            <span class="tryout-h">A working quote calculator</span>
-            <span class="tryout-p">Three questions and a real number, with the arithmetic shown underneath. No account, no server, and installable to a phone home screen.</span>
-            <span class="tryout-go">Use the app <span aria-hidden="true">&rarr;</span></span>
-          </a>
-          <a class="tryout" href="/demo/northwell/report/">
-            <span class="tryout-k">The report</span>
-            <span class="tryout-h">A month, on one page</span>
-            <span class="tryout-p">Who came, what they did, and the one thing we would change next. What arrives every month on the Care and Partner plans.</span>
-            <span class="tryout-go">Read the report <span aria-hidden="true">&rarr;</span></span>
-          </a>
-        </div>
-      </section>
-
-      <section class="band tone-black">
-        <h2 class="band-title">A recent one, in full</h2>
-        <a class="study" href="/work/ember8/">
-          <span class="study-shot">
-            <img src="/assets/ember8-preview-1400.webp" srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w" sizes="(min-width: 1180px) 1080px, 92vw" alt="The Ember8 home page: a bare concrete room with BREAK THE LOOP stencilled on the wall, and the headline &ldquo;What are you still carrying&hellip;&rdquo;" loading="lazy" width="1400" height="791" onerror="this.remove()">
-            <span class="study-shot-ph">ember8.nl</span>
-          </span>
-          <span class="study-body">
-            <span class="study-eyebrow">Live &middot; Design, build, analytics</span>
-            <span class="study-name">Ember8</span>
-            <span class="study-line">Trauma release therapy and breathwork coaching in the Netherlands. Two languages in full, a booking route that had to feel calm rather than clinical, and a health practice's legal pages written so they don't read like a warning.</span>
-            <span class="study-facts">
-              <span class="fact"><b>Two languages</b>Dutch and English</span>
-              <span class="fact"><b>No CMS</b>Nothing to be taught</span>
-              <span class="fact"><b>Measured</b>Analytics from day one</span>
-            </span>
-            <span class="study-go">Read the case study <span aria-hidden="true">→</span></span>
-          </span>
+  <!-- ============ SEE ONE WORKING ============ -->
+  <section class="plane p-maroon">
+    <div class="plane-in">
+      <h2 class="wide">A whole build, open to anybody.</h2>
+      <p class="lede" style="margin-bottom: clamp(2rem, 4vh, 3rem)"><b>Northwell Plumbing &amp; Heating is not a real business.</b> Every page says so across the top and the figures in the report are invented. Everything else is exactly what you would get.</p>
+      <div class="work three">
+        <a href="/demo/northwell/">
+          <img src="/assets/northwell-preview-1400.webp" srcset="/assets/northwell-preview-700.webp 700w, /assets/northwell-preview-1000.webp 1000w, /assets/northwell-preview-1400.webp 1400w" sizes="(min-width: 1000px) 31vw, 92vw" alt="The Northwell Plumbing demonstration site." width="1400" height="875" loading="lazy">
+          <span class="work-h">The site</span>
+          <span class="work-p">The £950 build, made real. No framework, no CMS, no script at all, and the whole thing is one file of about twelve kilobytes.</span>
+          <span class="work-go">Open the site</span>
         </a>
-      </section>
+        <a href="/demo/northwell/quote/">
+          <img src="/assets/example-webapp.jpg" alt="A working quote calculator." width="1400" height="875" loading="lazy">
+          <span class="work-h">The web app</span>
+          <span class="work-p">Three questions and a real number, with the arithmetic shown underneath. No account, no server, installable to a phone.</span>
+          <span class="work-go">Use the app</span>
+        </a>
+        <a href="/demo/northwell/report/">
+          <img src="/assets/example-reports.jpg" alt="A one-page monthly traffic report." width="1400" height="875" loading="lazy">
+          <span class="work-h">The report</span>
+          <span class="work-p">Who came, what they did, and the one thing we would change next. What arrives every month on Care and Partner.</span>
+          <span class="work-go">Read the report</span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-      <section class="band tone-white">
-        <h2 class="band-title">Testimonials</h2>
-        <div class="quote-deck" data-deck>
-          <button class="q-arrow q-prev" type="button" data-q="prev" aria-controls="quote-track" aria-label="Previous review">
-            <span aria-hidden="true">&larr;</span>
-          </button>
-          <div class="quote-track" id="quote-track" tabindex="0" role="group" aria-label="Reviews, scrollable">
-          <figure class="quote quote-long">
-            <p class="quote-stars" role="img" aria-label="Five out of five">
-              <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            </p>
-            <blockquote>
-              <p>Super happy with Brassneck Studio Ltd.</p>
-              <p>I didn&rsquo;t want a standard website that looks like a hundred others. Ember8 has its own story and its own style, and the website really needed to reflect that.</p>
-              <p>Brassneck Studio Ltd created exactly the look and feel we wanted for Ember8: clean, powerful, professional, and a perfect match for who we are.</p>
-              <p>The hosting and service are excellent as well. The service doesn&rsquo;t stop once the website goes live. Everything runs fast and smoothly, issues are resolved quickly, and any changes are handled without hassle. Great communication, very customer friendly, and they genuinely think along with you.</p>
-              <p>When I look at ember8.nl, I think: yes, this is us. And that might be the biggest compliment you can give a web designer.</p>
-              <p>Professional, reliable, and highly recommended. 5 out of 5.</p>
-            </blockquote>
-            <figcaption>
-              <span class="who">Fatima Aboulouafa</span>
-              <span class="what">Ember8 &middot; Trauma release therapy &amp; breathwork &middot; Netherlands</span>
-            </figcaption>
-          </figure>
+  <!-- ============ CASE STUDY AND REVIEWS ============ -->
+  <section class="plane p-maroon">
+    <div class="plane-in">
+      <h2>A recent one, in full.</h2>
+      <div class="work">
+        <a href="/work/ember8/">
+          <img src="/assets/ember8-preview-1400.webp" srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w" sizes="(min-width: 900px) 46vw, 92vw" alt="The Ember8 homepage: a bare concrete room with BREAK THE LOOP stencilled on the wall." width="1400" height="791" loading="lazy">
+          <span class="work-tag">Client · live</span>
+          <span class="work-h">Ember8</span>
+          <span class="work-p">Trauma release therapy and breathwork coaching in the Netherlands. Two languages in full, a booking route that had to feel calm rather than clinical, and a health practice&rsquo;s legal pages written so they don&rsquo;t read like a warning.</span>
+          <span class="work-go">Read the case study</span>
+        </a>
+        <div class="item">
+          <p class="q-stars" role="img" aria-label="Five out of five"><span aria-hidden="true"><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg></span></p>
+          <blockquote class="q-body">
+            <p>&ldquo;I didn&rsquo;t want a standard website that looks like a hundred others. When I look at ember8.nl, I think: yes, this is us. And that might be the biggest compliment you can give a web designer.&rdquo;</p>
+          </blockquote>
+          <p class="q-who">Fatima Aboulouafa<span>Ember8 · Netherlands</span></p>
 
-          <figure class="quote">
-            <p class="quote-stars" role="img" aria-label="Five out of five">
-              <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            </p>
-            <blockquote>
-              <p>Amazing experience from start to finish! He was incredibly nice, helpful, and genuinely passionate about what he does. He really takes the time to understand your needs and makes sure everything is done perfectly. You can tell he puts a lot of effort and care into his work. Super professional, friendly, and easy to communicate with. I&rsquo;m also really excited to see the game he&rsquo;s currently working on! You can tell he has a true passion for creating things. Would definitely recommend his services to anyone looking for a great website!</p>
-            </blockquote>
-            <figcaption>
-              <span class="who">Jesse Van Dosselaar</span>
-              <span class="what">Google review</span>
-            </figcaption>
-          </figure>
+          <p class="q-stars" style="margin-top:1.8rem" role="img" aria-label="Five out of five"><span aria-hidden="true"><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg></span></p>
+          <blockquote class="q-body">
+            <p>&ldquo;Amazing experience from start to finish. He really takes the time to understand your needs and makes sure everything is done perfectly. Super professional, friendly, and easy to communicate with.&rdquo;</p>
+          </blockquote>
+          <p class="q-who">Jesse Van Dosselaar<span>Google review</span></p>
 
-          <figure class="quote">
-            <p class="quote-stars" role="img" aria-label="Five out of five">
-              <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            </p>
-            <blockquote>
-              <p>Made me a good unique website, would recommend to anyone &#128077;</p>
-            </blockquote>
-            <figcaption>
-              <span class="who">Tommy Clark</span>
-              <span class="what">Google review</span>
-            </figcaption>
-          </figure>
-          </div>
-          <button class="q-arrow q-next" type="button" data-q="next" aria-controls="quote-track" aria-label="Next review">
-            <span aria-hidden="true">&rarr;</span>
-          </button>
+          <p class="q-stars" style="margin-top:1.8rem" role="img" aria-label="Five out of five"><span aria-hidden="true"><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg><svg class="star" viewBox="0 0 20 19" aria-hidden="true" focusable="false"><path d="M10 0l2.47 6.38 6.84.33-5.35 4.27 1.83 6.6L10 13.9l-5.79 3.68 1.83-6.6L.69 6.71l6.84-.33z"/></svg></span></p>
+          <blockquote class="q-body">
+            <p>&ldquo;Made me a good unique website, would recommend to anyone.&rdquo;</p>
+          </blockquote>
+          <p class="q-who">Tommy Clark<span>Google review</span></p>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="band">
-        <div class="closer">
-          <h2>Got something that needs building?</h2>
-          <p>Tell us what it is and what it has to do. If we're not the right people for it we'll say so, and usually say who is.</p>
-          <a class="cta cta-lg" href="/contact/">Get in touch</a>
-          <span class="cta-note">Replies usually within a day</span>
-        </div>
-      </section>
-    
+  <section class="end" id="end">
+    <div class="plane-in">
+      <h2>Tell us<br>what you need.</h2>
+      <a class="end-mail" href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a>
+      <p class="end-fine">What it is and what it has to do. If we are not the right people for it we will say so, and usually say who is. Replies usually within a day.</p>
+    </div>
+  </section>
+
+<dialog class="svc-modal" id="svc-modal">
+    <form method="dialog" class="svc-modal-close-form">
+      <button class="svc-close" value="close" aria-label="Close">&times;</button>
+    </form>
+    <p class="svc-modal-eyebrow" id="svc-modal-eyebrow">Prices and an example</p>
+    <h2 class="svc-modal-title" id="svc-modal-title"></h2>
+    <div id="svc-modal-prices"></div>
+    <figure class="lap" id="svc-modal-lap">
+      <div class="lap-screen">
+        <img alt="" id="svc-modal-img">
+        <video id="svc-modal-vid" muted loop playsinline preload="none" hidden></video>
+        <span class="svc-shot-ph" id="svc-modal-ph"></span>
+      </div>
+      <div class="lap-base" aria-hidden="true"></div>
+      <figcaption class="lap-cap">
+        <span id="svc-modal-cap"></span>
+        <a class="lap-open" id="svc-modal-open" target="_blank" rel="noopener" hidden>Open it full size <span aria-hidden="true">&rarr;</span></a>
+      </figcaption>
+    </figure>
+    <div class="svc-modal-body" id="svc-modal-body"></div>
+    <form method="dialog">
+      <button class="cta" value="close">Close</button>
+    </form>
+  </dialog>
+
 </main>
 
   <footer class="foot">
@@ -300,18 +278,12 @@
       <a href="/" aria-label="Brassneck Studio, home">
         <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
       </a>
-      <div class="foot-cols">
-        <a href="/websites/">Websites</a>
-        <a href="/games/">Games</a>
-        <a href="/studio/">Studio</a>
-        <a href="/contact/">Contact</a>
-        <a href="/legal/privacy/">Privacy</a>
-        <a href="/legal/privacy/#cookies">Cookies</a>
-        <a href="/legal/terms/">Terms</a>
+      <div class="foot-links">
+        <a href="/websites/">Websites</a><a href="/apps/">Apps</a><a href="/games/">Games</a><a href="/studio/">Studio</a><a href="/contact/">Contact</a><a href="/legal/privacy/">Privacy</a><a href="/legal/privacy/#cookies">Cookies</a><a href="/legal/terms/">Terms</a>
       </div>
     </div>
-    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
-    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+    <p class="foot-fine"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-fine">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
   </footer>
 
 <dialog class="svc-modal" id="svc-modal">
@@ -338,6 +310,7 @@
       <button class="cta" value="close">Close</button>
     </form>
   </dialog>
+
 
   <script src="/js/site.js" defer></script>
 </body>

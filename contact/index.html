@@ -39,84 +39,97 @@
       </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
-      <a href="/websites/" class="nav-tight">Websites</a>
-      <a href="/games/" class="nav-tight">Games</a>
-      <a href="/studio/" class="nav-tight">Studio</a>
-      <a href="/contact/" class="mast-cta" aria-current="page">Get a price</a>
+      <div class="nav-drop" data-open="false">
+        <button class="nav-top" type="button" aria-expanded="false" aria-controls="nav-sites">Websites
+          <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+        </button>
+        <div class="nav-menu" id="nav-sites">
+          <a href="/websites/">Websites</a>
+          <a href="/apps/">Apps</a>
+        </div>
+      </div>
+      <a href="/games/">Games</a>
+      <a href="/studio/">Studio</a>
+      <a class="mast-cta" href="/contact/" aria-current="page">Get in contact</a>
     </nav>
   </header>
 
-<main id="main" class="shell">
-      <div class="page-head">
-        <p class="eyebrow">Contact</p>
-        <h1>Tell us what you need.</h1>
-        <p class="lede">The more you can say about what it has to <em>do</em>, the faster and the more honestly we can price it. If we're not the right people for the job we'll say so, and usually say who is.</p>
+<main id="main">
+  <section class="hero hero-sub">
+    <div class="hero-in">
+      <div>
+        <h1 class="rise">Tell us what you need.</h1>
+        <p class="hero-fact rise rise-2">What it is for, who it is for, and what you want them to do when they get there. If it is not worth building, we will say so.</p>
+        <p class="hero-do rise rise-3">
+          <a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a>
+        </p>
       </div>
+      <div class="hero-mark">
+        <span class="hero-mark-in">
+          <img src="/assets/logo/icon-brass.svg" alt="" aria-hidden="true" width="333" height="461">
+        </span>
+      </div>
+    </div>
+  </section>
 
-      <section class="band contact-band">
-        <form class="enquiry" id="enquiry" novalidate>
-          <div class="f-row">
-            <label class="field">
-              <span class="f-label">Your name</span>
-              <input type="text" name="name" autocomplete="name" required>
-            </label>
-            <label class="field">
-              <span class="f-label">Email</span>
-              <input type="email" name="email" autocomplete="email" required>
-            </label>
-          </div>
+  <!-- The form stays on the dark ground. A light plane would mean
+       inverting every control for no gain, and this is the one screen
+       where somebody is typing rather than reading. -->
+  <section class="plane p-maroon">
+    <div class="plane-in">
+      <form class="form" id="enquiry" action="https://formspree.io/f/maeybwaz" method="post" novalidate>
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-mail">Email</label>
+          <input id="f-mail" name="email" type="email" autocomplete="email" required>
+          <span class="field-note">So we can reply. Nothing else happens to it.</span>
+        </div>
+        <div class="field">
+          <label for="f-kind">What is it</label>
+          <select id="f-kind" name="subject">
+            <option>A new website</option>
+            <option>A redesign of one I already have</option>
+            <option>A web app or installable app</option>
+            <option>Hosting or support for an existing site</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-when">When you need it</label>
+          <select id="f-when" name="timescale">
+            <option>No particular rush</option>
+            <option>In the next month or two</option>
+            <option>As soon as you can</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-what">What it has to do</label>
+          <textarea id="f-what" name="message" required></textarea>
+          <span class="field-note">Rough is fine. A sentence is fine.</span>
+        </div>
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="gotcha">
+        <button class="send" type="submit">Send it</button>
+        <p class="f-status" id="enquiry-status" role="status" aria-live="polite"></p>
+        <p class="field-note">Replies usually within a day. We will not add you to anything.</p>
+      </form>
+    </div>
+  </section>
 
-          <label class="field">
-            <span class="f-label">What's it for</span>
-            <select name="subject">
-              <option>A new website</option>
-              <option>A redesign of one I already have</option>
-              <option>Hosting and support</option>
-              <option>SEO or traffic reports</option>
-              <option>Branding or graphic design</option>
-              <option>Something else entirely</option>
-            </select>
-          </label>
+  <section class="plane p-white">
+    <div class="plane-in">
+      <h2>Or do it the old way.</h2>
+      <div class="spec">
+        <div><b>Email</b><span><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a></span></div>
+        <div><b>Where</b><span>Plymouth, UK. Working internationally.</span></div>
+        <div><b>Hours</b><span>Weekdays, and most evenings if it is urgent.</span></div>
+        <div><b>VAT</b><span>Not registered, so there is none to add.</span></div>
+      </div>
+    </div>
+  </section>
 
-          <label class="field">
-            <span class="f-label">When you need it <span class="f-opt">(optional)</span></span>
-            <input type="text" name="timescale" placeholder="Yesterday is a valid answer">
-          </label>
-
-          <label class="field">
-            <span class="f-label">What it has to do</span>
-            <textarea name="message" rows="6" required placeholder="Who it's for, what you want them to do when they get there, and anything that's driving you mad about the current one."></textarea>
-          </label>
-
-          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
-
-          <div class="f-actions">
-            <button class="cta cta-lg" type="submit" id="enquiry-send">Send it</button>
-            <p class="f-status" id="enquiry-status" role="status" aria-live="polite"></p>
-          </div>
-          <p class="f-privacy">We use what you write here to reply to you and nothing else. No list, no newsletter, no passing it on. <a href="/legal/privacy/">How we handle it</a>.</p>
-        </form>
-
-        <aside class="contact-aside">
-          <div class="aside-block">
-            <h2 class="aside-h">Or just email</h2>
-            <p><a href="mailto:oliver@brassneck.studio?subject=Project%20enquiry">oliver@brassneck.studio</a></p>
-          </div>
-          <div class="aside-block">
-            <h2 class="aside-h">Response</h2>
-            <p>Usually within a day. Always within three, even if the answer is no.</p>
-          </div>
-          <div class="aside-block">
-            <h2 class="aside-h">What helps</h2>
-            <ul class="aside-list">
-              <li>A link to what you have now, if anything</li>
-              <li>One sentence on who the site is for</li>
-              <li>The thing it must do that the current one doesn't</li>
-            </ul>
-          </div>
-        </aside>
-      </section>
-    
 </main>
 
   <footer class="foot">
@@ -124,18 +137,12 @@
       <a href="/" aria-label="Brassneck Studio, home">
         <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
       </a>
-      <div class="foot-cols">
-        <a href="/websites/">Websites</a>
-        <a href="/games/">Games</a>
-        <a href="/studio/">Studio</a>
-        <a href="/contact/">Contact</a>
-        <a href="/legal/privacy/">Privacy</a>
-        <a href="/legal/privacy/#cookies">Cookies</a>
-        <a href="/legal/terms/">Terms</a>
+      <div class="foot-links">
+        <a href="/websites/">Websites</a><a href="/apps/">Apps</a><a href="/games/">Games</a><a href="/studio/">Studio</a><a href="/contact/">Contact</a><a href="/legal/privacy/">Privacy</a><a href="/legal/privacy/#cookies">Cookies</a><a href="/legal/terms/">Terms</a>
       </div>
     </div>
-    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
-    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+    <p class="foot-fine"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-fine">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
   </footer>
 
   <script src="/js/site.js" defer></script>

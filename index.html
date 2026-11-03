@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Brassneck Studio: hand-built websites, apps and two games</title>
+  <title>Brassneck Studio: websites, apps and games, built by hand</title>
   <meta name="description" content="Hand-built websites, web apps and installable apps for small businesses. From £950, first year’s hosting included. Plymouth based, working internationally.">
   <link rel="canonical" href="https://brassneck.studio/">
 
@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/css/styles.css">
   <script defer src="https://cloud.umami.is/script.js" data-website-id="765c87cc-8889-4745-a637-c8597fb3c7cc"></script>
 </head>
-<body class="home">
+<body>
 <a class="skip" href="#main">Skip to content</a>
   <header class="mast">
     <a class="mast-home" href="/" aria-label="Brassneck Studio, home">
@@ -39,221 +39,188 @@
       </span>
     </a>
     <nav class="mast-nav" aria-label="Main">
-      <a href="/websites/" class="nav-tight">Websites</a>
-      <a href="/games/" class="nav-tight">Games</a>
-      <a href="/studio/" class="nav-tight">Studio</a>
-      <a href="/contact/" class="mast-cta">Get a price</a>
+      <div class="nav-drop" data-open="false">
+        <button class="nav-top" type="button" aria-expanded="false" aria-controls="nav-sites">Websites
+          <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+        </button>
+        <div class="nav-menu" id="nav-sites">
+          <a href="/websites/">Websites</a>
+          <a href="/apps/">Apps</a>
+        </div>
+      </div>
+      <a href="/games/">Games</a>
+      <a href="/studio/">Studio</a>
+      <a class="mast-cta" href="/contact/">Get in contact</a>
     </nav>
   </header>
 
 <main id="main">
-
-
-  <!-- ============ HERO ============ -->
-  <section class="h-hero">
-    <div class="h-wrap h-hero-in">
+  <!-- ============ HERO ============
+       Three things in one sentence. The previous version said "We build
+       websites. And two games.", which left the apps out and bolted the
+       games on with a count. One list gives all three equal billing and
+       needs no colour trick to do it. -->
+  <section class="hero">
+    <div class="hero-in">
       <div>
-        <span class="h-eyebrow">Plymouth · working internationally</span>
-        <h1>Every site here<br>is built <em>by hand.</em></h1>
-        <p class="h-hero-sub">No template, no page builder, no plugin that can update itself at three in the morning and take you offline. Structure, words, colour, motion, live — in two to six weeks.</p>
-        <div class="h-hero-cta">
-          <a class="h-btn" href="/websites/#costs">See what it costs</a>
-          <a class="h-btn h-ghost" href="/contact/">Tell us what you need</a>
-        </div>
-        <p class="h-hero-note">From £950. First year's hosting included.</p>
+        <h1 class="rise">We make stuff that looks and feels amazing.</h1>
+        <p class="hero-fact rise rise-2">Websites, apps and games, built by hand out of one small room in Plymouth. No template, no page builder, and nothing that updates itself at three in the morning and takes you offline.</p>
+        <p class="hero-do rise rise-3">
+          <a href="/websites/">From £950, hosting included</a>
+          <a href="/contact/">Tell us what you need</a>
+        </p>
       </div>
+      <div class="hero-mark">
+        <span class="hero-mark-in">
+          <img src="/assets/logo/icon-brass.svg" alt="" aria-hidden="true" width="333" height="461">
+        </span>
+      </div>
+    </div>
+  </section>
 
-      <div class="h-builder">
-        <div class="h-bframe">
-          <div class="h-bbar">
-            <span class="h-dot"></span><span class="h-dot"></span><span class="h-dot"></span>
-            <span class="h-burl-slot" aria-hidden="true">
-              <span class="h-u h-u-draft">yourbusiness.co.uk</span>
-              <span class="h-u h-u-live">
-                <svg viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="6" width="10" height="7" rx="1.2" fill="currentColor" stroke="none"/><path d="M3.4 6V4a2.6 2.6 0 0 1 5.2 0v2"/></svg>
-                yourbusiness.co.uk <b>Live</b>
+  <!-- ============ WEBSITES + PRICES ============
+       Panic's heading is "Panic codes Mac apps for developers." One flat
+       sentence naming the studio and what it does.
+
+       The builder animation sits here rather than in the hero. In the
+       hero it was decoration; next to the figures it is the argument —
+       this is what £950 buys and this is how it gets made. -->
+  <section class="plane p-brass" id="costs">
+    <div class="plane-in">
+
+      <div class="plane-split">
+        <div class="split-say">
+          <h2>Brassneck builds websites for small businesses.</h2>
+          <p>Structure, then words, then colour, then motion, then live. You are told which step you are on, and there is no stage where the site disappears for a fortnight and comes back finished.</p>
+        </div>
+
+        <div class="h-builder">
+          <div class="h-bframe">
+            <div class="h-bbar">
+              <span class="h-dot"></span><span class="h-dot"></span><span class="h-dot"></span>
+              <span class="h-burl-slot" aria-hidden="true">
+                <span class="h-u h-u-draft">yourbusiness.co.uk</span>
+                <span class="h-u h-u-live">
+                  <svg viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="6" width="10" height="7" rx="1.2" fill="currentColor" stroke="none"/><path d="M3.4 6V4a2.6 2.6 0 0 1 5.2 0v2"/></svg>
+                  yourbusiness.co.uk <b>Live</b>
+                </span>
               </span>
-            </span>
+            </div>
+            <div class="h-canvas" role="img" aria-label="An animation of a website being built in five stages: structure, words, colour, motion, then live">
+              <div class="h-layer h-l1" aria-hidden="true">
+                <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
+                <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
+                <div class="h-m-btn"></div>
+              </div>
+              <div class="h-layer h-l2" aria-hidden="true">
+                <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
+                <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
+                <div class="h-m-btn"></div>
+              </div>
+              <div class="h-layer h-l3" aria-hidden="true">
+                <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
+                <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
+                <div class="h-m-btn"></div>
+              </div>
+              <div class="h-layer h-fin h-l4m" aria-hidden="true">
+                <div class="h-m-bar"><i>Home</i><i>Services</i><i>About</i><i>Contact</i></div>
+                <div class="h-m-head">Clean spaces.<br><b>Confident operations.</b></div>
+                <div class="h-m-sub">Event, stadium and commercial cleaning, delivered at scale.</div>
+                <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
+                <div class="h-m-btn">Get a quote</div>
+              </div>
+              <div class="h-layer h-fin h-l5" aria-hidden="true">
+                <div class="h-m-bar"><i>Home</i><i>Services</i><i>About</i><i>Contact</i></div>
+                <div class="h-m-head">Clean spaces.<br><b>Confident operations.</b></div>
+                <div class="h-m-sub">Event, stadium and commercial cleaning, delivered at scale.</div>
+                <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
+                <div class="h-m-btn">Get a quote</div>
+              </div>
+              <div class="h-pointer" aria-hidden="true">
+                <svg viewBox="0 0 12 17" fill="var(--brass)" stroke="var(--maroon)" stroke-width="1" stroke-linejoin="round"><path d="M1 1 L1 15 L4.6 11.6 L6.9 16.2 L9.3 15.1 L7 10.6 L11.4 10.3 Z"/></svg>
+              </div>
+            </div>
           </div>
-          <div class="h-canvas" role="img" aria-label="An animation of a website being built in five stages: structure, words, colour, motion, then live">
-            <div class="h-layer h-l1" aria-hidden="true">
-              <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
-              <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
-              <div class="h-m-btn"></div>
-            </div>
-            <div class="h-layer h-l2" aria-hidden="true">
-              <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
-              <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
-              <div class="h-m-btn"></div>
-            </div>
-            <div class="h-layer h-l3" aria-hidden="true">
-              <div class="h-m-bar"></div><div class="h-m-head"></div><div class="h-m-sub"></div>
-              <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
-              <div class="h-m-btn"></div>
-            </div>
-            <div class="h-layer h-fin h-l4m" aria-hidden="true">
-              <div class="h-m-bar"><i>Home</i><i>Services</i><i>About</i><i>Contact</i></div>
-              <div class="h-m-head">Clean spaces.<br><b>Confident operations.</b></div>
-              <div class="h-m-sub">Event, stadium and commercial cleaning, delivered at scale.</div>
-              <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
-              <div class="h-m-btn">Get a quote</div>
-            </div>
-            <div class="h-layer h-fin h-l5" aria-hidden="true">
-              <div class="h-m-bar"><i>Home</i><i>Services</i><i>About</i><i>Contact</i></div>
-              <div class="h-m-head">Clean spaces.<br><b>Confident operations.</b></div>
-              <div class="h-m-sub">Event, stadium and commercial cleaning, delivered at scale.</div>
-              <div class="h-m-row"><div class="h-m-cell"></div><div class="h-m-cell"></div><div class="h-m-cell"></div></div>
-              <div class="h-m-btn">Get a quote</div>
-            </div>
-            <div class="h-pointer" aria-hidden="true">
-              <svg viewBox="0 0 12 17" fill="var(--brass)" stroke="var(--maroon)" stroke-width="1" stroke-linejoin="round"><path d="M1 1 L1 15 L4.6 11.6 L6.9 16.2 L9.3 15.1 L7 10.6 L11.4 10.3 Z"/></svg>
-            </div>
-          </div>
+          <ul class="h-stages">
+            <li>01 Structure</li><li>02 Words</li><li>03 Colour</li><li>04 Motion</li><li>05 Live</li>
+          </ul>
         </div>
-        <ul class="h-stages">
-          <li>01 Structure</li><li>02 Words</li><li>03 Colour</li><li>04 Motion</li><li>05 Live</li>
-        </ul>
       </div>
+
+      <p class="plane-go"><a href="/websites/">Prices, services and a build you can open &mdash; all on the Websites page</a></p>
     </div>
   </section>
 
-  <!-- ============ WHAT IT MEANS ============ -->
-  <section class="h-band h-black">
-    <div class="h-wrap">
-      <figure class="h-dict">
-        <h2 class="h-dict-word">Brassneck</h2>
-        <p class="h-dict-say"><span>/&#712;br&#593;&#720;snɛk/</span> noun &middot; British, informal</p>
-        <p class="h-dict-def">The nerve to do the thing you have not been given permission to do. Usually said with a degree of admiration.</p>
-        <figcaption class="h-dict-us">We had the skills to do both. So we had the audacity to do both.</figcaption>
-      </figure>
+  <!-- ============ APPS ============
+       The third thing the headline promises, which the old homepage
+       mentioned in a card and then never again. -->
+  <section class="plane p-maroon">
+    <div class="plane-in">
+      <h2 class="wide">Brassneck builds apps that open from a phone&rsquo;s home screen.</h2>
+      <p class="lede">Booking systems, client portals, dashboards, calculators, internal tools. Built for the browser and then made installable, so it opens from an icon, works offline and never queues for an app store review. Native store apps are not something we take on, and we will say so rather than take the work.</p>
+      <p class="plane-go"><a href="/apps/">What we build, and what it costs</a></p>
     </div>
   </section>
 
-  <!-- ============ WHAT WE BUILD ============ -->
-  <section class="h-band">
-    <div class="h-wrap">
-      <h2>What we build</h2>
-      <p class="h-lede">Three things, closer together than they look. A booking flow and a dialogue tree are both state machines a stranger has to be able to walk out of without help.</p>
-      <div class="h-builds">
-        <article class="h-bcard">
-          <h3>Websites</h3>
-          <p>Hand-written HTML for businesses that need to be found, believed and contacted. Fast on a phone, in a hurry, in bad light.</p>
-          <span class="h-from">From £950</span>
-        </article>
-        <article class="h-bcard">
-          <h3>Web &amp; installable apps</h3>
-          <p>Booking systems, portals, dashboards, calculators, internal tools. Built for the browser, then made installable to a phone home screen so it works offline and without an app store in the way.</p>
-          <span class="h-from">Quoted per project</span>
-        </article>
-        <article class="h-bcard">
-          <h3>Games</h3>
-          <p>Two in development. Built the same way and for the same reason: somebody has to be able to pick it up and understand it without being taught.</p>
-          <span class="h-from">Two in development</span>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PROCESS ============ -->
-  <section class="h-band h-white">
-    <div class="h-wrap">
-      <h2>How it goes</h2>
-      <p class="h-lede">The animation at the top is one page being built. This is the project around it. You are told which step you are on, every time, and there is no stage where the site disappears for a fortnight and comes back finished.</p>
-      <div class="h-flow">
-        <div class="h-fstep"><span class="h-n">01</span><h3>Free consultation</h3><p>Half an hour on what it is for. Sometimes ends with us saying you do not need one.</p></div>
-        <div class="h-fstep"><span class="h-n">02</span><h3>Planning &amp; design</h3><p>Structure first, then the look. Approved before a line is written.</p></div>
-        <div class="h-fstep"><span class="h-n">03</span><h3>Development</h3><p>Built by hand on a private link you can watch fill up.</p></div>
-        <div class="h-fstep"><span class="h-n">04</span><h3>Revisions</h3><p>Two full rounds. You try to break it before anyone else can.</p></div>
-        <div class="h-fstep"><span class="h-n">05</span><h3>Launch</h3><p>Domain, SSL and analytics from the first hour, not later.</p></div>
-        <div class="h-fstep"><span class="h-n">06</span><h3>Afterwards</h3><p>Maintenance, security, and a plain monthly note on who came.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PRICING ============ -->
-  <section class="h-band h-brass">
-    <div class="h-wrap">
-      <h2>What it costs</h2>
-      <p class="h-lede">On the page, because you were going to ask anyway, and because the half hour it takes to write a quote is a half hour neither of us gets back.</p>
-      <div class="h-tiers">
-        <div class="h-tier"><span class="h-nm">Basic</span><span class="h-pr">£950</span><p>One page, done properly. The whole story on one screen.</p></div>
-        <div class="h-tier h-pick"><span class="h-nm">Standard · most people</span><span class="h-pr">£1,650</span><p>Five to seven pages, copy shaped with you, analytics, search basics, form routing.</p></div>
-        <div class="h-tier"><span class="h-nm">Larger</span><span class="h-pr">Ask</span><p>Multiple languages, booking flows, web apps. The Ember8 shape.</p></div>
-      </div>
-      <p class="h-price-note">Hosting, domain, SSL, backups and monitoring are included for the first twelve months on every build. Looking after it afterwards is £20 to £100 a month. We are not VAT registered.</p>
-    </div>
-  </section>
-
-  <!-- ============ PROOF ============ -->
-  <section class="h-band">
-    <div class="h-wrap h-proof-grid">
-      <div class="h-shot">
-        <img src="/assets/ember8-preview-1400.webp" srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w" sizes="(min-width: 1180px) 1080px, 92vw" alt="The Ember8 homepage, a bilingual site built by Brassneck Studio" width="1400" height="791" loading="lazy">
-      </div>
-      <div>
-        <div class="h-stars">★★★★★</div>
-        <div class="h-qbody">
-          <p>“I didn't want a standard website that looks like a hundred others.”</p>
-          <p>“When I look at ember8.nl, I think: yes, this is us. And that might be the biggest compliment you can give a web designer.”</p>
-        </div>
-        <p class="h-qattr">Fatima Aboulouafa<span>Ember8 · Netherlands</span></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ROOMS ============ -->
-  <section class="h-band h-white">
-    <div class="h-wrap">
-      <h2>We also make games</h2>
-      <p class="h-lede">People ask why. There is a page about it.</p>
-      <div class="h-rooms">
-        <a class="h-room" href="/games/">
-          <h3>Games</h3>
-          <p>A point-and-click murder mystery aboard a brig called the <em>Merciful</em>, and a dry comedy about a secondary school that has lost its mind over a collectible toy.</p>
-          <span class="h-go">Two in development →</span>
+  <!-- ============ THE WORK ============
+       Panic leads with the work and says almost nothing about it. A
+       real client and a demonstration are not the same claim, so they
+       are labelled rather than presented identically. -->
+  <section class="plane p-white">
+    <div class="plane-in">
+      <h2>Two you can open right now.</h2>
+      <div class="work">
+        <a href="/work/ember8/">
+          <img src="/assets/ember8-preview-1400.webp" srcset="/assets/ember8-preview-700.webp 700w, /assets/ember8-preview-1000.webp 1000w, /assets/ember8-preview-1400.webp 1400w" sizes="(min-width: 900px) 46vw, 92vw" alt="The Ember8 homepage: a bare concrete room with BREAK THE LOOP stencilled on the wall." width="1400" height="791" loading="lazy">
+          <span class="work-tag">Client · live</span>
+          <span class="work-h">Ember8</span>
+          <span class="work-p">Trauma release therapy in the Netherlands. Two languages in full, and a booking route that had to feel calm rather than clinical.</span>
+          <span class="work-go">Read the case study</span>
         </a>
-        <a class="h-room" href="/studio/">
-          <h3>Why both?</h3>
-          <p>Structure, writing, interface, testing, measurement. The same skill in two rooms; one of them happens to have a ship in it.</p>
-          <span class="h-go">The studio →</span>
+        <a href="/demo/northwell/">
+          <img src="/assets/northwell-preview-1400.webp" srcset="/assets/northwell-preview-700.webp 700w, /assets/northwell-preview-1000.webp 1000w, /assets/northwell-preview-1400.webp 1400w" sizes="(min-width: 900px) 46vw, 92vw" alt="The Northwell Plumbing demonstration site, with its brass banner saying the business is not real." width="1400" height="875" loading="lazy">
+          <span class="work-tag">Demonstration · not a real business</span>
+          <span class="work-h">Northwell Plumbing</span>
+          <span class="work-p">A whole build, open to anybody: the site, a working quote calculator, and a month of traffic reported the way we report it.</span>
+          <span class="work-go">Open all three</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GAMES ============
+       "Panic publishes amazing video games." Same grammar as the
+       websites and the apps, so the games stop being an aside. -->
+  <section class="plane p-black">
+    <div class="plane-in">
+      <h2>Brassneck makes games. Two of them, so far.</h2>
+      <div class="work art">
+        <a href="d-games.html">
+          <img src="/assets/games/articles-key-1200.webp" srcset="/assets/games/articles-key-800.webp 800w, /assets/games/articles-key-1200.webp 1200w, /assets/games/articles-key-1600.webp 1600w" sizes="(min-width: 900px) 46vw, 92vw" alt="Key art for The Articles: hands working rope by lamplight aboard a sailing brig." width="1200" height="675" loading="lazy">
+          <span class="work-tag">April 2027 · Steam, iOS, Android</span>
+          <span class="work-h">The Articles</span>
+          <span class="work-p">A point-and-click murder mystery aboard the brig <em>Merciful</em>. The captain is dead at the mainmast and you slept ten feet from it.</span>
+          <span class="work-go">Read the devlog</span>
+        </a>
+        <a href="d-games.html">
+          <img src="/assets/games/scuttlers-key-1200.webp" srcset="/assets/games/scuttlers-key-800.webp 800w, /assets/games/scuttlers-key-1200.webp 1200w, /assets/games/scuttlers-key-1600.webp 1600w" sizes="(min-width: 900px) 46vw, 92vw" alt="Key art for Scuttlers: schoolchildren crouched around a bin lid watching two toy machines collide." width="1200" height="675" loading="lazy">
+          <span class="work-tag">No date yet</span>
+          <span class="work-h">Scuttlers</span>
+          <span class="work-p">A dry comedy about a secondary school that has lost its mind over a collectible battling toy, and the thing underneath that nobody discusses.</span>
+          <span class="work-go">Read the devlog</span>
         </a>
       </div>
     </div>
   </section>
 
   <!-- ============ CLOSER ============ -->
-  <!-- ============ LIGHTHOUSE ============ -->
-  <section class="h-band h-black h-hoe" id="hoe">
-    <div class="h-hoe-bg">
-      <img class="h-hoe-photo" src="/assets/hoe/hoe-1200.webp" srcset="/assets/hoe/hoe-800.webp 800w, /assets/hoe/hoe-1200.webp 1200w, /assets/hoe/hoe-1800.webp 1800w"
-           sizes="100vw" alt="" aria-hidden="true"
-           width="1800" height="1012" loading="lazy" decoding="async">
-      <span class="h-hoe-scrim" aria-hidden="true"></span>
-      <img class="h-hoe-lit" src="/assets/hoe/tower-1200.webp" srcset="/assets/hoe/tower-800.webp 800w, /assets/hoe/tower-1200.webp 1200w, /assets/hoe/tower-1800.webp 1800w"
-           sizes="100vw"
-           alt="Smeaton&rsquo;s Tower on Plymouth Hoe, picked out in colour against the rest of the photograph."
-           width="1800" height="1012" loading="lazy" decoding="async">
-    </div>
-
-    <div class="h-wrap h-hoe-in">
-      <div class="h-hoe-say">
-        <p class="h-hoe-k">Plymouth &middot; and the other sort of lighthouse</p>
-        <h2>Built in Plymouth.<br>Measured on Lighthouse.</h2>
-        <p class="h-hoe-p">You want your site performing as well as it possibly can. So do we, and we would rather prove that than say it.</p>
-        <p class="h-hoe-p">Every build is measured on <b>Google&rsquo;s Lighthouse</b>, the tool Google itself scores a page with, and every page on this site comes back at <b>100 for performance</b>.</p>
-        <p class="h-hoe-p">It matters because nobody waits for a slow site. They go back and click the next one, and the customer you lost is the one you never hear from.</p>
-      </div>
+  <section class="end" id="end">
+    <div class="plane-in">
+      <h2>Tell us<br>what you need.</h2>
+      <a class="end-mail" href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a>
+      <p class="end-fine">What it is for, who it is for, and what you want them to do when they get there. If it is not worth building, we will say so. Replies usually within a day.</p>
     </div>
   </section>
-
-  <section class="h-band h-closer">
-    <div class="h-wrap">
-      <h2>Got something that needs building?</h2>
-      <p>Tell us what it is for, who it is for, and what you want them to do when they get there. If it is not worth building, we will say so.</p>
-      <a class="h-btn" href="/contact/">Tell us what you need</a>
-    </div>
-  </section>
-
 
 </main>
 
@@ -262,18 +229,12 @@
       <a href="/" aria-label="Brassneck Studio, home">
         <img class="lockup" src="/assets/logo/landscape-white.svg" alt="Brassneck Studio" width="994" height="463" loading="lazy">
       </a>
-      <div class="foot-cols">
-        <a href="/websites/">Websites</a>
-        <a href="/games/">Games</a>
-        <a href="/studio/">Studio</a>
-        <a href="/contact/">Contact</a>
-        <a href="/legal/privacy/">Privacy</a>
-        <a href="/legal/privacy/#cookies">Cookies</a>
-        <a href="/legal/terms/">Terms</a>
+      <div class="foot-links">
+        <a href="/websites/">Websites</a><a href="/apps/">Apps</a><a href="/games/">Games</a><a href="/studio/">Studio</a><a href="/contact/">Contact</a><a href="/legal/privacy/">Privacy</a><a href="/legal/privacy/#cookies">Cookies</a><a href="/legal/terms/">Terms</a>
       </div>
     </div>
-    <p class="foot-mail"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
-    <p class="foot-reg">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
+    <p class="foot-fine"><a href="mailto:oliver@brassneck.studio">oliver@brassneck.studio</a> &middot; Plymouth, UK &middot; Working internationally</p>
+    <p class="foot-fine">Brassneck Studio Ltd, registered in England and Wales, company number 17431166. Registered office: 4 Earls Acre, Plymouth, PL3 4HL. Not VAT registered.</p>
   </footer>
 
   <script src="/js/site.js" defer></script>
